@@ -125,6 +125,10 @@ export default function Login_Page() {
                         >
                             Sign In
                         </button>
+                        <buttion
+                        className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer ml-4">
+                            direct
+                        </buttion>
                     </div>
                     <Link href={"/register"}  >
                         <p className="text-md font-bold text-center mt-8 font-dosisBold cursor-pointer">
