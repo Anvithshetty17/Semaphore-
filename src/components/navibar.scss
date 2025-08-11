@@ -1,0 +1,164 @@
+.navbar {
+    height: 50px;
+    border-bottom: 0.5px solid white;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    background-color: #e5e7eb;
+    margin-left: 40px; /* Smaller left margin for better centering */
+    margin-right: 40px;
+    border-radius: 10px;
+    font-family: 'Geist Mono', monospace; 
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .navbar {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+.wrapper {
+    width: calc(100% - 40px);
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .menuIcon {
+        margin: 0 20px;
+        
+        &:hover {
+            background-color: grey;
+            .menuIcon {
+                color: rgb(201, 177, 177);
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    .userInfo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .userName {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .userRole {
+        font-size: 12px;
+        color: #888888;
+    }
+
+    .items {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        .item {
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: grey;
+
+                .icon {
+                    color: white;
+                    transform: scale(1.1);
+                }
+            }
+
+            .icon {
+                font-size: 20px;
+                margin-right: 3px;
+                transition: color 0.3s ease, transform 0.3s ease;
+            }
+        }
+    }
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 480px) {
+    .navbar {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 5px;
+    }
+
+    .menuIcon {
+        margin: 0 10px;
+    }
+
+    .userName {
+        font-size: 14px; /* Smaller font for compact layout */
+    }
+
+    .userRole {
+        font-size: 10px;
+    }
+
+    .items {
+        width: 100%;
+        justify-content: space-evenly;
+        margin-top: 5px;
+    }
+
+    .items .item {
+        margin: 0 3px;
+        padding: 3px; /* Reduce padding for smaller screens */
+        .icon {
+            font-size: 18px;
+        }
+    }
+}
+
+/* For very small screens like 320px width */
+@media (max-width: 320px) {
+    .navbar {
+        height: 45px;
+        font-size: 12px;
+    }
+
+    .wrapper {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .userName {
+        font-size: 12px;
+    }
+
+    .userRole {
+        font-size: 8px;
+    }
+
+    .items {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
+    }
+
+    .items .item {
+        padding: 3px;
+        margin: 0 2px;
+    }
+
+    .icon {
+        font-size: 16px;
+    }
+}

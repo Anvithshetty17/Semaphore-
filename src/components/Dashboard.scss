@@ -1,0 +1,21 @@
+.home{
+    display: flex;
+    background-color: #d4d4d4;
+    .homeContainer{
+    
+        flex: 6;
+
+        .widgets{
+            display: flex;
+            padding: 30px;
+
+        }
+
+    }
+    .welcome{
+        border:rgb(90, 90, 90) solid 5px;
+        align-items: end;
+        padding: 10px;
+        margin:20vh;
+    }
+}

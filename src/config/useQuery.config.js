@@ -1,0 +1,18 @@
+export const useQueryConfig = {
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnError: false,
+    refetchOnActivation: false,
+    refetchOnWindowBlur: false,
+    refetchOnInterval: false,
+    refetchOnResize: false,
+    refetchOnScroll: false,
+    refetchOnMouseMove: false,
+    refetchOnMouseEnter: false,
+    refetchOnMouseLeave: false,
+    refetchOnTouchMove: false,
+    refetchOnTouchStart: false,
+    staleTime: 0,
+    retry: 0,
+}

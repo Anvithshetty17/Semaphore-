@@ -1,0 +1,54 @@
+.widget {
+    margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    padding: 10px;
+    -webkit-box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
+    -moz-box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
+    box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
+    border-radius: 10px;
+    height: 100px;
+    background-color: white;
+
+    font-family: 'Geist Mono', monospace;  /* Apply the Dosis font here */
+
+    .left, .right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 14px;
+        color: rgb(163, 81, 81);
+    }
+    .counter {
+        font-size: 50px;
+        font-weight: 500;
+    }
+    .link {
+        width: max-content;
+        font-size: 12px;
+        border-bottom: 1px solid grey;
+    }
+    .percentage {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        &.positive {
+            color: green;
+        }
+        &.negative {
+            color: red;
+        }
+    }
+    .icon {
+        font-size: 18px;
+        padding: 5px;
+        background-color: rgb(50, 119, 129);
+        border-radius: 5px;
+        align-self: flex-end;
+    }
+}
