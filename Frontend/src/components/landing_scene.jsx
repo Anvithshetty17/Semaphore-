@@ -2,19 +2,21 @@
 
 
 import { Float, PerspectiveCamera, Text, useGLTF, useScroll } from '@react-three/drei';
-import { Moon } from './moon';
-import { Mars } from './mars';
+import { CyberpunkCity } from './cyberpunk_city';
+import { NeonGrid } from './neon_grid';
 import { useFrame, useThree } from '@react-three/fiber';
-import { SpaceShuttle } from './space_shuttle';
+import { CyberVehicle } from './cyber_vehicle';
 import { Suspense, useMemo, useRef, useState } from 'react';
 import * as THREE from "three"
-import { Earth } from './earth';
+import { CyberpunkSphere } from './cyberpunk_sphere';
 import { SemaphoreTitle } from './semaphore_title';
 import { EventCard } from './event_card';
 import { useMediaQuery } from 'react-responsive';
 import { useRouter } from 'next/navigation';
-import { Button3D } from './button_3d';
+import { CyberButton3D } from './cyber_button_3d';
 import { toast } from 'react-toastify';
+import { ParticleField } from './particle_field';
+import { HolographicRings } from './holographic_rings';
 
 const LINE_NB_POINTS = 2000;
 
@@ -32,16 +34,16 @@ const LandingScene = ({ eventsData }) => {
         }
         return new THREE.CatmullRomCurve3([
             new THREE.Vector3(0, -2, 0),
-            new THREE.Vector3(0.5, -2, -25),
-            new THREE.Vector3(-1, -2, -50),
-            new THREE.Vector3(1.5, -2, -75),
-            new THREE.Vector3(-1, -2, -100),
-            new THREE.Vector3(1, -2, -125),
-            new THREE.Vector3(-1, -2, -150),
-            new THREE.Vector3(1, -2, -175),
-            new THREE.Vector3(-1, -2, -200),
-            new THREE.Vector3(1, -2, -225),
-            new THREE.Vector3(-1, -2, -250),
+            new THREE.Vector3(2, -2, -25),
+            new THREE.Vector3(-2, -2, -50),
+            new THREE.Vector3(3, -2, -75),
+            new THREE.Vector3(-2, -2, -100),
+            new THREE.Vector3(2, -2, -125),
+            new THREE.Vector3(-3, -2, -150),
+            new THREE.Vector3(2, -2, -175),
+            new THREE.Vector3(-2, -2, -200),
+            new THREE.Vector3(3, -2, -225),
+            new THREE.Vector3(-2, -2, -250),
             new THREE.Vector3(-1, -2, -275),
             new THREE.Vector3(-1, -2, -290),
         ],
@@ -104,26 +106,53 @@ const LandingScene = ({ eventsData }) => {
 
     return (
         <>
-            <ambientLight intensity={1} />
-            <Earth />
-            <Moon />
+            {/* Cyberpunk Lighting Setup */}
+            <ambientLight intensity={0.3} color="#0a0a2e" />
+            <directionalLight 
+                position={[10, 10, 5]} 
+                intensity={0.5} 
+                color="#ff00ff" 
+                castShadow 
+            />
+            <pointLight position={[-10, -10, -10]} intensity={0.8} color="#00ffff" />
+            <pointLight position={[10, -5, -20]} intensity={0.6} color="#ff0080" />
+            
+            {/* Cyberpunk Scene Elements */}
+            <CyberpunkSphere />
+            <CyberpunkCity />
+            <NeonGrid />
+            <ParticleField />
+            <HolographicRings />
+            
             <SemaphoreTitle />
-            <Button3D label={'Login'} position={[isMobile ? 0.6 : 4.3, isMobile ? 0.3 : 0.7, -6]} scale={[1, 1, 1]} onClick={() => {
-                toast.info("Loading Login Page .. please wait")
-                router.push(`/login`)
-            }} />
-            <Button3D label={'Register Now'} position={[-1, isMobile ? -1.2 : -1.6, -300]} onClick={() => {
-                toast.info("Loading Register Page .. please wait")
-                router.push(`/register`)
-            }} />
+            
+            <CyberButton3D 
+                label={'>> LOGIN'} 
+                position={[isMobile ? 0.6 : 4.3, isMobile ? 0.3 : 0.7, -6]} 
+                scale={[1, 1, 1]} 
+                onClick={() => {
+                    toast.info("Accessing Neural Network... Please wait")
+                    router.push(`/login`)
+                }} 
+            />
+            
+            <CyberButton3D 
+                label={'>> JACK IN NOW'} 
+                position={[-1, isMobile ? -1.2 : -1.6, -300]} 
+                onClick={() => {
+                    toast.info("Entering The Matrix... Please wait")
+                    router.push(`/register`)
+                }} 
+            />
 
-            <Mars position={[-1, -5, -300]} />
+            <CyberpunkCity position={[-1, -8, -300]} />
+            
             <group position={[0, isMobile ? -3.7 : -3.9, -6]}>
                 <Text
                     textAlign="center"
                     fontSize={isMobile ? 0.09 : 0.1}
                     font={'./fonts/funkrocker.ttf'}
-                    color={"white"}
+                    color={"#00ffff"}
                     anchorX={"center"}
                     anchorY={"middle"}
                     maxWidth={isMobile ? 1.3 : 4}
@@ -131,8 +160,17 @@ const LandingScene = ({ eventsData }) => {
                     letterSpacing={0.1}
                     lineHeight={1.2}
                 >
-                    Start Scrolling to navigate through the website
+                    {`> SCROLL TO NAVIGATE THE CYBERNET <`}
                 </Text>
+                <mesh position={[0, 0, -0.1]}>
+                    <planeGeometry args={[isMobile ? 1.5 : 4.5, 0.8]} />
+                    <meshBasicMaterial 
+                        color="#00ffff" 
+                        transparent 
+                        opacity={0.1}
+                        side={THREE.DoubleSide}
+                    />
+                </mesh>
             </group>
             <group ref={cardGroupRef} scale={cardGroupScale}>
 
@@ -147,16 +185,14 @@ const LandingScene = ({ eventsData }) => {
                 <group ref={airplane}>
                     {/* <Suspense fallback={<></>}> */}
 
-                    <Float intensity={1} speed={1}>
-
-                        <SpaceShuttle
+                    <Float intensity={2} speed={2}>
+                        <CyberVehicle
                             ref={spaceShuttleRef}
                             rotation-y={-Math.PI / 2}
                             scale={spaceShuttleScale}
                             position-y={-0.15}
                             position-x={0}
                         />
-
                     </Float>
                     {/* </Suspense> */}
                 </group>
@@ -174,7 +210,13 @@ const LandingScene = ({ eventsData }) => {
                             },
                         ]}
                     />
-                    <meshStandardMaterial color={"white"} opacity={0} transparent />
+                    <meshStandardMaterial 
+                        color={"#00ffff"} 
+                        opacity={0.3} 
+                        transparent 
+                        emissive={"#001122"}
+                        emissiveIntensity={0.2}
+                    />
                 </mesh>
             </group>
         </>

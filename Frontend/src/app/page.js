@@ -4,6 +4,7 @@ import { LandingPageLoader } from "@/components/landing_page_loader";
 import { LandingScene } from "@/components/landing_scene";
 import { RocketLoader } from "@/components/model_components/rocket_loader";
 import { Stars } from "@/components/stars";
+import { LoadingManager } from "@/components/loading_manager";
 import { useQueryConfig } from "@/config/useQuery.config";
 import { useGetData } from "@/hooks/useGetData";
 import { Html, ScrollControls, useScroll } from "@react-three/drei";
@@ -38,15 +39,14 @@ export default function Home() {
   );
   return (
     <>
-
-      <Suspense fallback={<LandingPageLoader />} >
+      <LoadingManager fallback={<LandingPageLoader />}>
         <Canvas>
           <ScrollControls pages={10} >
             <LandingScene eventsData={eventsData} />
             <Stars />
           </ScrollControls>
         </Canvas >
-      </Suspense>
+      </LoadingManager>
     </>
   );
 }
