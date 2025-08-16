@@ -1,9 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from "react-toastify";
-import QueryProvider from "./query-provider";
-import Head from "next/head";
+import "react-toastify/dist/ReactToastify.css";
+import Providers from "./providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -19,35 +17,16 @@ const geistMono = localFont({
 export const metadata = {
   title: "Semaphore 2K24",
   description: "",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">\
-      <Head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </Head>
-
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          className={"font-dosisRegular"}
-        />
-        <QueryProvider>
-
-          {children}
-        </QueryProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
