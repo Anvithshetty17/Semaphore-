@@ -58,22 +58,23 @@ const LandingScene = ({ eventsData }) => {
   }, [curve]);
 
   // Camera roaming path: list of { position, lookAt }
+  // Camera path: top view at center, then circular top views at ends
   const cameraPath = useMemo(() => {
-    // Center of the city
-    const lookAt = [0, 30, -10];
-    // 360-degree circle around the city
+    const center = [0, 0, 0];
+    const topHeight = 200;
     const radius = 120;
-    const height = 90;
-    const N = 8; // number of points
-    const positions = [];
-    for (let i = 0; i < N; i++) {
-      const angle = (2 * Math.PI * i) / N + Math.random() * 0.2; // add a little randomness
-      const x = lookAt[0] + Math.cos(angle) * (radius + Math.random() * 30);
-      const y = height + (Math.random() - 0.5) * 30;
-      const z = lookAt[2] + Math.sin(angle) * (radius + Math.random() * 30);
-      positions.push([x, y, z]);
-    }
-    return positions.map((pos) => ({ position: pos, lookAt }));
+    const N = 8;
+    // Top view at center
+    const middle = { position: [0, topHeight, 0], lookAt: center };
+    // Circle around center (top views from sides)
+    const circle = Array.from({ length: N }, (_, i) => {
+      const angle = (2 * Math.PI * i) / N;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      return { position: [x, topHeight, z], lookAt: center };
+    });
+    // Path: start at one side, go to center, then to other sides
+    return [circle[0], middle, ...circle.slice(1), circle[0]];
   }, []);
 
   // Helper to interpolate between two vectors
@@ -90,8 +91,9 @@ const LandingScene = ({ eventsData }) => {
       setCardGroupScale([0, 0, 0]);
     }
 
-    // Camera roaming logic
+    // Camera logic: top view at center (middle scroll), circular top views at ends
     if (cameraRef.current && cameraPath.length > 1) {
+      // Map scroll.offset: 0 = first side, 0.5 = center, 1 = last side
       const n = cameraPath.length - 1;
       const t = scroll.offset * n;
       const idx = Math.floor(t);
@@ -102,8 +104,6 @@ const LandingScene = ({ eventsData }) => {
       const look = lerpVec3(from.lookAt, to.lookAt, lerpT);
       cameraRef.current.position.set(...pos);
       cameraRef.current.lookAt(...look);
-      // Log camera position
-      //console.log("Camera position:", pos);
     }
 
     // Airplane logic (unchanged)
