@@ -128,16 +128,7 @@ const LandingScene = ({ eventsData }) => {
   return (
     <>
       <ambientLight intensity={1} />
-      {/* Central city */}
-      <CityNeonModel position={[0.22, 0.4, -0.01]} scale={[2, 2, 2]} />
-      {/* Duplicate city model in 8 directions around the center, spaced farther and scaled up */}
-      {[...Array(8)].map((_, i) => {
-        const angle = (2 * Math.PI * i) / 8;
-        const radius = 120; // increased distance from center
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        return <CityNeonModel key={i} position={[x + 0.22, 0.4, z - 0.01]} scale={[2, 2, 2]} />;
-      })}
+      <CityNeonModel position={[0.22, 0.4, -0.01]} />
       <Button3D
         label={"Login"}
         position={[isMobile ? 0.6 : 4.3, isMobile ? 0.3 : 0.7, -6]}
