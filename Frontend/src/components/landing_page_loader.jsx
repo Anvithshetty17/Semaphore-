@@ -89,8 +89,8 @@ const CyberpunkLoader = ({ onLoadComplete }) => {
   )
 
   // Image paths
-  const bgImg = isMobile ? "/images/loading_bg_mobile.png" : "/images/loading_bg.png"
-  const logoImg = "/images/semaphore_text.png"
+  const bgImg = isMobile ? "/images/loading_bg_mobile.png" : "/images/loading_bg_pc.png"
+  const logoImg = "/images/semaphore_logo.png"
 
   return (
     <AnimatePresence>
@@ -165,8 +165,8 @@ const CyberpunkLoader = ({ onLoadComplete }) => {
                 <Image 
                   src={logoImg}
                   alt="SEMAPHORE"
-                  width={isMobile ? 220 : 400}
-                  height={isMobile ? 60 : 110}
+                  width={isMobile ? 200 : 380}
+                  height={isMobile ? 40 : 90}
                   priority
                   style={{ filter: 'drop-shadow(0 0 30px #00ffff88)' }}
                 />
@@ -287,4 +287,9 @@ const CyberpunkLoader = ({ onLoadComplete }) => {
   )
 }
 
-export { CyberpunkLoader }
+// Backwards compatibility exports
+// Named export originally expected by page.js: LandingPageLoader
+const LandingPageLoader = CyberpunkLoader
+
+export { CyberpunkLoader, LandingPageLoader }
+export default CyberpunkLoader

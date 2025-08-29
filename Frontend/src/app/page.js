@@ -1,6 +1,6 @@
 'use client'
 
-import { LandingPageLoader } from "@/components/landing_page_loader";
+import CyberpunkLoader, { LandingPageLoader } from "@/components/landing_page_loader";
 import { LandingScene } from "@/components/landing_scene";
 import { RocketLoader } from "@/components/model_components/rocket_loader";
 import { Stars } from "@/components/stars";
@@ -9,7 +9,8 @@ import { useGetData } from "@/hooks/useGetData";
 import { Html, ScrollControls, useScroll } from "@react-three/drei";
 import { Canvas, extend, useFrame } from "@react-three/fiber";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
+import { useProgress } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
 
 // const LandingScene = dynamic(() => import('@/components/landing_scene'), {
@@ -36,17 +37,35 @@ export default function Home() {
     `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/FindAll`,
     useQueryConfig,
   );
+  // real asset loading progress from drei
+  const { progress: gltfProgress, active } = useProgress();
+  const [showLoader, setShowLoader] = useState(true);
+
+  useEffect(() => {
+    if (gltfProgress >= 100 && !active) {
+      // small delay for smooth exit
+      const t = setTimeout(() => setShowLoader(false), 400);
+      return () => clearTimeout(t);
+    }
+  }, [gltfProgress, active]);
+
   return (
     <>
-
-      <Suspense fallback={<LandingPageLoader />} >
-        <Canvas>
-          <ScrollControls pages={10} >
+      {showLoader && (
+        <CyberpunkLoader
+          externalProgress={gltfProgress}
+          onLoadComplete={() => setShowLoader(false)}
+          active={showLoader}
+        />
+      )}
+      <Canvas>
+        <ScrollControls pages={10} >
+          <Suspense fallback={null}>
             <LandingScene eventsData={eventsData} />
             <Stars />
-          </ScrollControls>
-        </Canvas >
-      </Suspense>
+          </Suspense>
+        </ScrollControls>
+      </Canvas>
     </>
   );
 }
