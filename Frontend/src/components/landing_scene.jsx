@@ -175,6 +175,7 @@ const LandingScene = ({ eventsData }) => {
           );
         })}
       </group> */}
+      
       {/* Camera roaming: controlled by scroll */}
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
       <group ref={airplane}>
