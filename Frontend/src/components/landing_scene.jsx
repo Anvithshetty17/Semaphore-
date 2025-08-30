@@ -11,25 +11,38 @@ const LandingScene = ({ eventsData }) => {
   const scroll = useScroll();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  // Camera roaming path: list of { position, lookAt }
-  // Camera path: top view at center, then circular top views at ends
-  const cameraPath = useMemo(() => {
-    const center = [0, 0, 0];
-    const topHeight = 200;
-    const radius = 120;
-    const N = 8;
-    // Top view at center
-    const middle = { position: [0, topHeight, 0], lookAt: center };
-    // Circle around center (top views from sides)
-    const circle = Array.from({ length: N }, (_, i) => {
-      const angle = (2 * Math.PI * i) / N;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      return { position: [x, topHeight, z], lookAt: center };
-    });
-    // Path: start at one side, go to center, then to other sides
-    return [circle[0], middle, ...circle.slice(1), circle[0]];
-  }, []);
+  // Easy to modify camera positions
+  const cameraPositions = [
+    // Position 1: Front view
+    { position: [120, 100, 0], lookAt: [0, 50, 0] },
+
+    // Position 2: Right side view
+    { position: [85, 200, 85], lookAt: [0, 0, 0] },
+
+    // Position 3: Back-right view
+    { position: [0, 200, 120], lookAt: [0, 0, 0] },
+
+    // Position 4: Back view
+    { position: [-85, 200, 85], lookAt: [0, 0, 0] },
+
+    // Position 5: Back-left view
+    { position: [-120, 200, 0], lookAt: [0, 0, 0] },
+
+    // Position 6: Left side view
+    { position: [-85, 200, -85], lookAt: [0, 0, 0] },
+
+    // Position 7: Front-left view
+    { position: [0, 200, -120], lookAt: [0, 0, 0] },
+
+    // Position 8: Front-right view
+    { position: [85, 200, -85], lookAt: [0, 0, 0] },
+
+    // Position 9: Top center view
+    { position: [0, 200, 0], lookAt: [0, 0, 0] },
+
+    // Position 10: Return to front view (smooth loop)
+    { position: [120, 200, 0], lookAt: [0, 0, 0] },
+  ];
 
   // Helper to interpolate between two vectors
   function lerpVec3(a, b, t) {
@@ -37,17 +50,23 @@ const LandingScene = ({ eventsData }) => {
   }
 
   useFrame((_state, delta) => {
-    // Camera logic: top view at center (middle scroll), circular top views at ends
-    if (cameraRef.current && cameraPath.length > 1) {
-      // Map scroll.offset: 0 = first side, 0.5 = center, 1 = last side
-      const n = cameraPath.length - 1;
-      const t = scroll.offset * n;
-      const idx = Math.floor(t);
-      const lerpT = t - idx;
-      const from = cameraPath[idx];
-      const to = cameraPath[Math.min(idx + 1, n)];
-      const pos = lerpVec3(from.position, to.position, lerpT);
-      const look = lerpVec3(from.lookAt, to.lookAt, lerpT);
+    // Camera logic: smoothly interpolate between positions based on scroll
+    if (cameraRef.current && cameraPositions.length > 1) {
+      // Map scroll.offset to camera positions
+      const totalPositions = cameraPositions.length - 1;
+      const t = scroll.offset * totalPositions;
+      const currentIndex = Math.floor(t);
+      const lerpFactor = t - currentIndex;
+
+      // Get current and next camera positions
+      const fromPos = cameraPositions[currentIndex];
+      const toPos = cameraPositions[Math.min(currentIndex + 1, totalPositions)];
+
+      // Interpolate camera position and lookAt
+      const pos = lerpVec3(fromPos.position, toPos.position, lerpFactor);
+      const look = lerpVec3(fromPos.lookAt, toPos.lookAt, lerpFactor);
+
+      // Apply to camera
       cameraRef.current.position.set(...pos);
       cameraRef.current.lookAt(...look);
     }
