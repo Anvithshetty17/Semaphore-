@@ -16,20 +16,20 @@ const ParticipantRegistrationPage = () => {
     const router = useRouter()
 
     const { data: isPaymentPending, isLoading: isPaymentPendingLoading } = useGetData(
-        `isPaymentPending`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/IsPaymentPending?userId=${cached?.userId}`,
+        isPaymentPending,
+        ${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/IsPaymentPending?userId=${cached?.userId},
         useQueryConfig
     )
 
     const { data: eventList, isLoading: isEventListLoading } = useGetData(
-        `registrationEventList`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventsForRegistration`,
+        registrationEventList,
+        ${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventsForRegistration,
         useQueryConfig
     )
 
     const { data: isAlreadyRegistered, isLoading: isRegistrationChecking } = useGetData(
-        `${cached?.userId}IsAlreadyRegistered`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/IsAlreadyRegistred?userId=${cached?.userId}`,
+        ${cached?.userId}IsAlreadyRegistered,
+        ${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/IsAlreadyRegistred?userId=${cached?.userId},
         useQueryConfig
     )
 
@@ -38,14 +38,14 @@ const ParticipantRegistrationPage = () => {
     if (isLoading) return <Loading />
 
     return (
-        <>
-            {isPaymentPending === true && isAlreadyRegistered === true && <>
-                <div className="flex flex-col space-y-3 border p-4 bg-white rounded-lg mb-3">
-                    <h3 className="text-red-600 font-dosisBold">Payment Pending !</h3>
-                    <p> Please complete your payment procedure for successful registration </p>
+        <div className="min-h-screen bg-gradient-to-br from-[#0a0a1a] via-[#1a0033] to-[#0d0d2b] text-white px-6 py-10">
+            {isPaymentPending === true && isAlreadyRegistered === true && (
+                <div className="flex flex-col space-y-3 border border-[#FF00FF]/40 bg-[#0a0a1a]/80 p-6 rounded-xl shadow-[0_0_20px_#FF00FF] mb-6">
+                    <h3 className="text-[#FF00FF] font-dosisBold text-xl">⚠ Payment Pending!</h3>
+                    <p className="text-gray-300"> Please complete your payment procedure for successful registration. </p>
                     <div className="flex justify-start font-dosisMedium px-2">
                         <button
-                            className="bg-blue-950 text-white py-2 rounded-md text-md font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer px-6"
+                            className="bg-gradient-to-r from-[#FF00FF] to-[#00FFFF] text-black py-2 px-6 rounded-md font-semibold shadow-[0_0_15px_#FF00FF] hover:shadow-[0_0_25px_#00FFFF] transition"
                             type="submit"
                             onClick={() => router.push('/participant/make-payment')}
                         >
@@ -53,9 +53,9 @@ const ParticipantRegistrationPage = () => {
                         </button>
                     </div>
                 </div>
-            </>}
+            )}
             {isAlreadyRegistered === true ? <AlreadyRegisteredSection /> : <RegisterSection eventList={eventList} />}
-        </>
+        </div>
     )
 }
 
@@ -158,7 +158,7 @@ const RegisterSection = ({ eventList }) => {
                 return
             }
             const { data } = await handleSubmit(
-                `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/CompleteRegistration`,
+                ${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/CompleteRegistration,
                 {
                     userId: cached?.userId,
                     eventRegistrationDetails: inputData,
@@ -169,7 +169,7 @@ const RegisterSection = ({ eventList }) => {
             if (data) {
                 toast.success('Event registration successful')
                 setTimeout(() => {
-                    router.push(`/participant/make-payment`)
+                    router.push(/participant/make-payment)
                 })
             }
         } catch (error) {
@@ -178,139 +178,117 @@ const RegisterSection = ({ eventList }) => {
     }
 
     return (
-        <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
-                <h3 className="font-dosisBold mb-3"> Enter Participant Details </h3>
-                <form className="flex flex-col space-y-3" onSubmit={handleCompleteRegistration}>
-
-                    {inputData?.map((ele, index) => {
-                        return (
-                            <>
-                                <div className="flex flex-col space-y-3">
-                                    <p className="font-dosisMedium">{ele?.eventName}</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                        {ele?.memberList?.map((_, ind) => {
-                                            return (
-                                                <>
-                                                    <TextInput
-                                                        name={`${ele?.eventId}_${ind}_memberName`}
-                                                        label={`Member ${ind + 1} Participant Name`}
-                                                        placeholder="Enter Name"
-                                                        type="text"
-                                                        // isRequired={ind < 4 ? true : false}
-                                                        isRequired={false}
-                                                        value={ele?.memberName}
-                                                        onChange={(e) => handleInputChange(index, ind, 'memberName', e.target.value)}
-                                                    />
-                                                    <TextInput
-                                                        name={`${ele?.eventId}_${ind}_memberPhoneNumber`}
-                                                        label={`Member ${ind + 1} Phone Number`}
-                                                        placeholder="Enter Phone Number"
-                                                        type="number"
-                                                        // isRequired={ind < 4 ? true : false}
-                                                        isRequired={false}
-                                                        value={ele?.memberPhoneNumber}
-                                                        onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value)}
-                                                    />
-                                                </>
-                                            )
-                                        })}
-                                    </div>
-                                    {index != eventList.length - 1 && <hr />}
-                                </div>
-                            </>
-                        )
-                    })}
-                    <div className="flex justify-center w-full font-dosisMedium">
-                        <button
-                            className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-dosisBold hover:bg-blue-700 transition duration-300 cursor-pointer"
-                            type="submit"
-                        >
-                            {isSubmitting ? 'Processing ... Please wait' : 'Save & Proceed to Payment'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </>
+        <div className="flex flex-col space-y-4 border border-[#FF00FF]/40 rounded-xl bg-[white] p-6 ">
+            <h3 className="font-dosisBold mb-4 text-2xl bg-gradient-to-r from-[#FF00FF] via-[#8A2BE2] to-[#00FFFF] text-transparent bg-clip-text drop-shadow-[0_0_15px_#FF00FF]">
+                Enter Participant Details
+            </h3>
+            <form className="flex flex-col space-y-4" onSubmit={handleCompleteRegistration}>
+                {inputData?.map((ele, index) => {
+                    return (
+                        <div key={index} className="flex flex-col space-y-3">
+                            <p className="font-dosisMedium text-[#00FFFF] text-lg">{ele?.eventName}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {ele?.memberList?.map((_, ind) => {
+                                    return (
+                                        <div key={ind} className="flex flex-col space-y-2">
+                                            <TextInput
+                                                name={${ele?.eventId}_${ind}_memberName}
+                                                label={Member ${ind + 1} Participant Name}
+                                                placeholder="Enter Name"
+                                                type="text"
+                                                isRequired={false}
+                                                value={ele?.memberName}
+                                                onChange={(e) => handleInputChange(index, ind, 'memberName', e.target.value)}
+                                                className="bg-[#0a0a1a] text-[#00FFFF] border border-[#FF00FF]/50 focus:ring-2 focus:ring-[#FF00FF] rounded-md shadow-[0_0_10px_#FF00FF]"
+                                            />
+                                            <TextInput
+                                                name={${ele?.eventId}_${ind}_memberPhoneNumber}
+                                                label={Member ${ind + 1} Phone Number}
+                                                placeholder="Enter Phone Number"
+                                                type="number"
+                                                isRequired={false}
+                                                value={ele?.memberPhoneNumber}
+                                                onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value)}
+                                                className="bg-[#0a0a1a] text-[#00FFFF] border border-[#00FFFF]/50 focus:ring-2 focus:ring-[#00FFFF] rounded-md shadow-[0_0_10px_#00FFFF]"
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            {index != eventList.length - 1 && <hr className="border-[#FF00FF]/30" />}
+                        </div>
+                    )
+                })}
+                <div className="flex justify-center w-full font-dosisMedium mt-6">
+                    <button
+                        className="w-1/2 bg-gradient-to-r from-[#FF00FF] to-[#9500ff] text-black py-3 rounded-md text-lg font-dosisBold shadow-[0_0_20px_#FF00FF] "
+                        type="submit"
+                    >
+                        {isSubmitting ? 'Processing ... Please wait' : 'Save & Proceed to Payment'}
+                    </button>
+                </div>
+            </form>
+        </div>
     )
 }
 
 const AlreadyRegisteredSection = () => {
     const { cached } = useCached('isAuthenticated')
-    const router = useRouter();
-    const { data: registrationData, isLoading: isRegistrationDataLoading } = useGetData(
-        `registrationDetails`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetRegistrationDetails?userId=${cached?.userId}`,
+    const { data: registrationData } = useGetData(
+        registrationDetails,
+        ${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetRegistrationDetails?userId=${cached?.userId},
         useQueryConfig,
     )
 
     return (
-        <>
-            <div className="w-full min-h-full border rounded-lg bg-white p-4 space-y-6">
-                <h3 className="font-dosisBold mb-3"> Registration Details </h3>
-                <div className="flex flex-col space-y-10">
-                    <div className="flex flex-col space-y-2">
-                        <RegistrationDetailCard1 name="College Name" value={registrationData?.college?.collegeName} />
-                        <RegistrationDetailCard1 name="Registered User Name" value={registrationData?.user.fullName} />
-                        <RegistrationDetailCard1 name="Email" value={registrationData?.user.email} />
-                        <RegistrationDetailCard1 name="Phone Number" value={registrationData?.user.phoneNumber} />
-                        <RegistrationDetailCard1 name="Status" value={registrationData?.status?.status} />
-                    </div>
-                    <p className="font-dosisBold">Event & Participants Details</p>
-                    {registrationData?.eventTeams?.map((ele, index) => {
-                        return (
-                            <>
-                                <div className="flex flex-col space-y-3 font-dosisMedium">
-                                    <p>{ele?.event.eventName}</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                                        {ele.eventMembers?.map((el, ind) => {
-                                            return (
-                                                <>
-                                                    <MemberCard name={el.memberName} phoneNumber={el.memberPhoneNumber} />
-                                                </>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            </>
-                        )
-                    })}
+        <div className="w-full min-h-full border border-[#00FFFF]/40 rounded-xl bg-[#0a0a1a]/80 p-6 space-y-6 shadow-[0_0_20px_#00FFFF]">
+            <h3 className="font-dosisBold mb-3 text-2xl bg-gradient-to-r from-[#00FFFF] via-[#8A2BE2] to-[#FF00FF] text-transparent bg-clip-text drop-shadow-[0_0_15px_#00FFFF]">
+                Registration Details
+            </h3>
+            <div className="flex flex-col space-y-10">
+                <div className="flex flex-col space-y-2">
+                    <RegistrationDetailCard1 name="College Name" value={registrationData?.college?.collegeName} />
+                    <RegistrationDetailCard1 name="Registered User Name" value={registrationData?.user.fullName} />
+                    <RegistrationDetailCard1 name="Email" value={registrationData?.user.email} />
+                    <RegistrationDetailCard1 name="Phone Number" value={registrationData?.user.phoneNumber} />
+                    <RegistrationDetailCard1 name="Status" value={registrationData?.status?.status} />
                 </div>
-                {/* <div className="flex justify-center w-full font-dosisMedium">
-                    <button
-                        className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-dosisBold hover:bg-blue-700 transition duration-300 cursor-pointer"
-                        type="button"
-                        onClick={() => router.push('/participant/edit-team-details')}
-                    >
-                        Update Details
-                    </button>
-                </div> */}
+                <p className="font-dosisBold text-[#FF00FF] text-lg">Event & Participants Details</p>
+                {registrationData?.eventTeams?.map((ele, index) => {
+                    return (
+                        <div key={index} className="flex flex-col space-y-3 font-dosisMedium">
+                            <p className="text-[#00FFFF]">{ele?.event.eventName}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {ele.eventMembers?.map((el, ind) => {
+                                    return (
+                                        <MemberCard key={ind} name={el.memberName} phoneNumber={el.memberPhoneNumber} />
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
-        </>
+        </div>
     )
 }
 
 const MemberCard = ({ name, phoneNumber }) => {
     return (
-        <>
-            <div className="flex flex-col space-y-1 border rounded-lg p-3">
-                <RegistrationDetailCard1 name="FullName" value={name} />
-                <RegistrationDetailCard1 name="Phone Number" value={phoneNumber} />
-            </div>
-        </>
+        <div className="flex flex-col space-y-1 border border-[#FF00FF]/40 rounded-lg p-3 shadow-[0_0_15px_#FF00FF]">
+            <RegistrationDetailCard1 name="FullName" value={name} />
+            <RegistrationDetailCard1 name="Phone Number" value={phoneNumber} />
+        </div>
     )
 }
 
 const RegistrationDetailCard1 = ({ name, value }) => {
     return (
-        <>
-            <div className="flex flex-row space-x-2">
-                <p className="font-dosisRegular">{name}</p>
-                <p className="font-dosisMedium">:</p>
-                <p className="font-dosisMedium">{value}</p>
-
-            </div>
-        </>
+        <div className="flex flex-row space-x-2 text-gray-300">
+            <p className="font-dosisRegular">{name}</p>
+            <p className="font-dosisMedium">:</p>
+            <p className="font-dosisMedium text-[#00FFFF]">{value}</p>
+        </div>
     )
 }
 
