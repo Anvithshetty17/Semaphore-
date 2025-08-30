@@ -1,8 +1,9 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
-import { PerspectiveCamera, useScroll, Image, Billboard, Html } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useRef, useState, useCallback } from "react";
+import * as THREE from "three";
 import { useMediaQuery } from "react-responsive";
 
 const LandingScene = ({ eventsData }) => {
@@ -36,42 +37,103 @@ const LandingScene = ({ eventsData }) => {
     }
   });
 
-  // Image + info button
-  const infoPosition = [90, 15, 15];
+  // Dynamic placement with Raycaster (defaults)
+  const [infoPosition, setInfoPosition] = useState([90, 15, 15]);
   const infoLookAt = [-10, 10, 0];
   const infoGroupRef = useRef();
+  const { camera, gl } = useThree();
+  const raycasterRef = useRef(new THREE.Raycaster());
+  const planeRef = useRef(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)); // Ground plane Y=0
+  const intersectionPoint = useRef(new THREE.Vector3());
 
   useFrame(() => {
     if (infoGroupRef.current) infoGroupRef.current.lookAt(...infoLookAt);
   });
+
+  // Manual raycast from raw pointer event to ground plane (Y=0)
+  const handleCanvasClick = useCallback(
+    (e) => {
+      // Allow both pointer events from R3F or native DOM events
+      const clientX = e.clientX ?? (e?.nativeEvent?.clientX || 0);
+      const clientY = e.clientY ?? (e?.nativeEvent?.clientY || 0);
+      const rect = gl.domElement.getBoundingClientRect();
+      const ndc = new THREE.Vector2(
+        ((clientX - rect.left) / rect.width) * 2 - 1,
+        -((clientY - rect.top) / rect.height) * 2 + 1
+      );
+      raycasterRef.current.setFromCamera(ndc, camera);
+      const hit = raycasterRef.current.ray.intersectPlane(planeRef.current, intersectionPoint.current);
+      if (hit) {
+        // Raise slightly above ground so it's visible
+        const newPos = [intersectionPoint.current.x, intersectionPoint.current.y + 2, intersectionPoint.current.z];
+        setInfoPosition(newPos);
+        console.log("Clicked world position (manual raycast):", {
+          x: Number(newPos[0].toFixed(3)),
+          y: Number(newPos[1].toFixed(3)),
+          z: Number(newPos[2].toFixed(3)),
+        });
+      }
+    },
+    [camera, gl]
+  );
+
+  // Simpler alternative using R3F's built-in raycasting on an invisible ground mesh
+  const handleGroundPointerDown = useCallback(
+    (e) => {
+      // e.point already is intersection with the plane mesh
+      const newPos = [e.point.x, e.point.y + 2, e.point.z];
+      setInfoPosition(newPos);
+      console.log("Clicked world position (mesh intersection):", {
+        x: Number(newPos[0].toFixed(3)),
+        y: Number(newPos[1].toFixed(3)),
+        z: Number(newPos[2].toFixed(3)),
+      });
+    },
+    []
+  );
 
   return (
     <>
       <ambientLight intensity={1} />
       <CityNeonModel position={[0.22, 0.4, -0.01]} />
 
-      <group ref={infoGroupRef} position={infoPosition}>
-        <Billboard follow={false} lockX={false} lockY={false} lockZ={false}>
+      {/* Invisible giant plane to catch clicks for placement (optional). */}
+      <mesh
+        position={[0, 0, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        onPointerDown={handleGroundPointerDown}
+        onClick={handleCanvasClick}
+      >
+        <planeGeometry args={[1000, 1000]} />
+        <meshBasicMaterial visible={false} />
+      </mesh>
+
+      {/* Info group (image + 3D button) that can be repositioned by clicking the ground */}
+      <group ref={infoGroupRef} position={infoPosition}>        
+        <Billboard follow lockX={false} lockY={false} lockZ={false}>          
+          {/* 3D Image plane (drei <Image> is already a textured plane) */}
           <Image url="/images/event_logos/coding.png" scale={[10, 6, 1]} transparent toneMapped={false} />
+          {/* 3D Button */}
+          <group position={[0, -4.2, 0]}>            
+            <RoundedBox args={[4, 1.2, 0.5]} radius={0.25} smoothness={4} onClick={() => console.log("Info button clicked")}>              
+              <meshStandardMaterial color="#0ea5e9" emissive="#065c80" emissiveIntensity={0.2} />
+            </RoundedBox>
+            <Text
+              position={[0, 0, 0.3]}
+              fontSize={0.6}
+              color="white"
+              anchorX="center"
+              anchorY="middle"
+              outlineWidth={0.02}
+              outlineColor="#000"
+            >
+              Info
+            </Text>
+          </group>
         </Billboard>
-        <Html distanceFactor={20} position={[0, 4, 0]} center>
-          <button
-            style={{
-              padding: "6px 12px",
-              background: "#0ea5e9",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontSize: "12px",
-            }}
-            onClick={() => console.log("Info button clicked")}>
-            Info
-          </button>
-        </Html>
       </group>
 
-      <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
+  <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
     </>
   );
 };
