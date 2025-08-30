@@ -26,9 +26,9 @@ export class UsersController {
   @Get('/v1/test-email')
   async testEmail() {
     return await this.emailService.sendEmailVerificationMail(
-      'nnm23mc174@nmamit.in',
-      'Vikas Rai',
-      'vikasrai19',
+      'nnm24mc052@nmamit.in',
+      'Harshith P',
+      'e258bad7-40bf-4afe-bd78-584588d91464',
     );
   }
 
