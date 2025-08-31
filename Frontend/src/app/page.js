@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import CyberpunkLoader, { LandingPageLoader } from "@/components/landing_page_loader";
 import { LandingScene } from "@/components/landing_scene";
+import { NavigationButtons } from "@/components/navigation_buttons";
 import { RocketLoader } from "@/components/model_components/rocket_loader";
 import { Stars } from "@/components/stars";
 import { useQueryConfig } from "@/config/useQuery.config";
@@ -27,15 +28,13 @@ import { useMediaQuery } from "react-responsive";
 
 // extend({ LandingScene, Stars })
 
-
 export default function Home() {
-
-  const isMobile = useMediaQuery({ maxWidth: 768 })
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const { data: eventsData, isLoading: isEventsLoading } = useGetData(
-    'eventsList',
+    "eventsList",
     `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/FindAll`,
-    useQueryConfig,
+    useQueryConfig
   );
   // real asset loading progress from drei
   const { progress: gltfProgress, active } = useProgress();
@@ -58,8 +57,12 @@ export default function Home() {
           active={showLoader}
         />
       )}
+
+      {/* 2D Navigation Buttons Overlay */}
+      {!showLoader && <NavigationButtons />}
+
       <Canvas>
-        <ScrollControls pages={10} >
+        <ScrollControls pages={10}>
           <Suspense fallback={null}>
             <LandingScene eventsData={eventsData} />
             <Stars />

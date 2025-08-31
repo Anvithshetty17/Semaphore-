@@ -10,7 +10,7 @@ const TextInput = ({ name, label, value, placeholder, onChange, icon, type = 'te
                 <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden px-2">
                     {icon}
                     <input
-                        className="w-full px-3 py-2 outline-none font-dosisRegular"
+                        className="w-full px-3 py-2 outline-none font-dosisRegular bg-transparent"
 
                         type={type}
                         name={name}
@@ -38,7 +38,7 @@ const MultiLineText = ({ name, label, value, placeholder, onChange, icon, type =
                 <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden px-2">
                     {icon}
                     <textarea
-                        className="w-full px-3 py-2 outline-none font-dosisRegular"
+                        className="w-full px-3 py-2 outline-none font-dosisRegular bg-transparent"
 
                         type={type}
                         name={name}
@@ -75,7 +75,7 @@ const PasswordTextInput = ({ name, label, value, placeholder, onChange, icon, is
                     <img src="/icons/email.svg" alt="Email Icon" />
                 </span> */}
                     <input
-                        className="w-full px-3 py-2 outline-none font-dosisRegular text-[16px]"
+                        className="w-full px-3 py-2 outline-none font-dosisRegular text-[16px] bg-transparent"
                         type={isPassword === true ? 'password' : 'text'}
                         name={name}
                         value={value}

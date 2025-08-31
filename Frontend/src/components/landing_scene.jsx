@@ -1,217 +1,84 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
-import { Float, PerspectiveCamera, Text, useGLTF, useScroll } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import { Suspense, useMemo, useRef, useState } from "react";
-import * as THREE from "three";
+import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
-import { useRouter } from "next/navigation";
-import { Button3D } from "./button_3d";
-import { toast } from "react-toastify";
-
-const LINE_NB_POINTS = 2000;
 
 const LandingScene = ({ eventsData }) => {
-  const router = useRouter();
-  // Camera ref for direct control
   const cameraRef = useRef();
   const scroll = useScroll();
-  const cardGroupRef = useRef();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  const curve = useMemo(() => {
-    if (scroll.offset > 0.2) {
-      airplane.current.opacity = 1;
-    }
-    return new THREE.CatmullRomCurve3(
-      [
-        new THREE.Vector3(0, -2, 0),
-        new THREE.Vector3(0.5, -2, -25),
-        new THREE.Vector3(-1, -2, -50),
-        new THREE.Vector3(1.5, -2, -75),
-        new THREE.Vector3(-1, -2, -100),
-        new THREE.Vector3(1, -2, -125),
-        new THREE.Vector3(-1, -2, -150),
-        new THREE.Vector3(1, -2, -175),
-        new THREE.Vector3(-1, -2, -200),
-        new THREE.Vector3(1, -2, -225),
-        new THREE.Vector3(-1, -2, -250),
-        new THREE.Vector3(-1, -2, -275),
-        new THREE.Vector3(-1, -2, -290),
-      ],
-      false,
-      "catmullrom",
-      0.5
-    );
-  }, []);
+  const cameraPositions = [
+    { position: [110, 60, -10], lookAt: [0, 50, 0] },
+    { position: [70, 60, -10], lookAt: [-10, 60, 0] },
+    { position: [60, 60, -10], lookAt: [-10, -10, 0] },
+    { position: [200, 15, 15], lookAt: [-10, 10, 0] },
+  ];
 
-  const linePoints = useMemo(() => {
-    return curve.getPoints(LINE_NB_POINTS);
-  }, [curve]);
-
-  const shape = useMemo(() => {
-    const shape = new THREE.Shape();
-    shape.moveTo(0, -0.2);
-    shape.lineTo(0, 0.2);
-
-    return shape;
-  }, [curve]);
-
-  // Camera roaming path: list of { position, lookAt }
-  // Camera path: top view at center, then circular top views at ends
-  const cameraPath = useMemo(() => {
-    const center = [0, 0, 0];
-    const topHeight = 200;
-    const radius = 120;
-    const N = 8;
-    // Top view at center
-    const middle = { position: [0, topHeight, 0], lookAt: center };
-    // Circle around center (top views from sides)
-    const circle = Array.from({ length: N }, (_, i) => {
-      const angle = (2 * Math.PI * i) / N;
-      const x = Math.cos(angle) * radius;
-      const z = Math.sin(angle) * radius;
-      return { position: [x, topHeight, z], lookAt: center };
-    });
-    // Path: start at one side, go to center, then to other sides
-    return [circle[0], middle, ...circle.slice(1), circle[0]];
-  }, []);
-
-  // Helper to interpolate between two vectors
   function lerpVec3(a, b, t) {
     return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   }
 
-  useFrame((_state, delta) => {
-    if (scroll.offset > 0.014 && scroll.offset < 0.985) {
-      setSpaceShuttleScale([0.3, 0.3, 0.3]);
-      setCardGroupScale([1, 1, 1]);
-    } else {
-      setSpaceShuttleScale([0, 0, 0]);
-      setCardGroupScale([0, 0, 0]);
-    }
-
-    // Camera logic: top view at center (middle scroll), circular top views at ends
-    if (cameraRef.current && cameraPath.length > 1) {
-      // Map scroll.offset: 0 = first side, 0.5 = center, 1 = last side
-      const n = cameraPath.length - 1;
-      const t = scroll.offset * n;
-      const idx = Math.floor(t);
-      const lerpT = t - idx;
-      const from = cameraPath[idx];
-      const to = cameraPath[Math.min(idx + 1, n)];
-      const pos = lerpVec3(from.position, to.position, lerpT);
-      const look = lerpVec3(from.lookAt, to.lookAt, lerpT);
+  useFrame(() => {
+    if (cameraRef.current && cameraPositions.length > 1) {
+      const total = cameraPositions.length - 1;
+      const t = scroll.offset * total; // 0..total
+      const currentIndex = Math.floor(t);
+      const lerpFactor = t - currentIndex;
+      const fromPos = cameraPositions[currentIndex];
+      const toPos = cameraPositions[Math.min(currentIndex + 1, total)];
+      const pos = lerpVec3(fromPos.position, toPos.position, lerpFactor);
+      const look = lerpVec3(fromPos.lookAt, toPos.lookAt, lerpFactor);
       cameraRef.current.position.set(...pos);
       cameraRef.current.lookAt(...look);
     }
-
-    // Airplane logic (unchanged)
-    const curPointIndex = Math.min(Math.round(scroll.offset * linePoints.length), linePoints.length - 1);
-    const curPoint = linePoints[curPointIndex];
-    const pointHead = linePoints[Math.min(curPointIndex + 1, linePoints.length - 1)];
-    if (curPoint) {
-      const xDisplacement = (pointHead.x - curPoint.x) * 80;
-      const angleRotation = (xDisplacement < 0 ? 1 : -1) * Math.min(Math.abs(xDisplacement), Math.PI / 3);
-      const targetAirplaneQuaternion = new THREE.Quaternion().setFromEuler(
-        new THREE.Euler(airplane.current.rotation.x, airplane.current.rotation.y, angleRotation)
-      );
-      airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
-    }
   });
 
-  const airplane = useRef();
-  const spaceShuttleRef = useRef();
-  const [spaceShuttleScale, setSpaceShuttleScale] = useState([0, 0, 0]);
-  const [cardGroupScale, setCardGroupScale] = useState([0, 0, 0]);
+  // Static info element position
+  const infoPosition = [90, 15, 15];
+  const infoLookAt = [-10, 10, 0];
+  const infoGroupRef = useRef();
+
+  useFrame(() => {
+    if (infoGroupRef.current) infoGroupRef.current.lookAt(...infoLookAt);
+  });
 
   return (
     <>
       <ambientLight intensity={1} />
-      {/* Central city */}
-      <CityNeonModel position={[0.22, 0.4, -0.01]} scale={[2, 2, 2]} />
-      {/* Duplicate city model in 8 directions around the center, spaced farther and scaled up */}
-      {[...Array(8)].map((_, i) => {
-        const angle = (2 * Math.PI * i) / 8;
-        const radius = 120; // increased distance from center
-        const x = Math.cos(angle) * radius;
-        const z = Math.sin(angle) * radius;
-        return <CityNeonModel key={i} position={[x + 0.22, 0.4, z - 0.01]} scale={[2, 2, 2]} />;
-      })}
-      <Button3D
-        label={"Login"}
-        position={[isMobile ? 0.6 : 4.3, isMobile ? 0.3 : 0.7, -6]}
-        scale={[1, 1, 1]}
-        onClick={() => {
-          toast.info("Loading Login Page .. please wait");
-          router.push(`/login`);
-        }}
-      />
-      <Button3D
-        label={"Register Now"}
-        position={[-1, isMobile ? -1.2 : -1.6, -300]}
-        onClick={() => {
-          toast.info("Loading Register Page .. please wait");
-          router.push(`/register`);
-        }}
-      />
+      <CityNeonModel position={[0.22, 0.4, -0.01]} />
 
-      {/* <Mars position={[-1, -5, -300]} />
-      <group position={[0, isMobile ? -3.7 : -3.9, -6]}>
-        <Text
-          textAlign="center"
-          fontSize={isMobile ? 0.09 : 0.1}
-          font={"./fonts/funkrocker.ttf"}
-          color={"white"}
-          anchorX={"center"}
-          anchorY={"middle"}
-          maxWidth={isMobile ? 1.3 : 4}
-          position={[0, 0, 0]}
-          letterSpacing={0.1}
-          lineHeight={1.2}>
-          Start Scrolling to navigate through the website
-        </Text>
+      {/* Info group (image + 3D button) that can be repositioned by clicking the ground */}
+      <group ref={infoGroupRef} position={infoPosition}>
+        <Billboard follow lockX={false} lockY={false} lockZ={false}>
+          {/* 3D Image plane (drei <Image> is already a textured plane) */}
+          <Image url="/images/event_logos/coding.png" scale={[10, 6, 1]} transparent toneMapped={false} />
+          {/* 3D Button */}
+          <group position={[0, -4.2, 0]}>
+            <RoundedBox
+              args={[4, 1.2, 0.5]}
+              radius={0.25}
+              smoothness={4}
+              onClick={() => console.log("Info button clicked")}>
+              <meshStandardMaterial color="#0ea5e9" emissive="#065c80" emissiveIntensity={0.2} />
+            </RoundedBox>
+            <Text
+              position={[0, 0, 0.3]}
+              fontSize={0.6}
+              color="white"
+              anchorX="center"
+              anchorY="middle"
+              outlineWidth={0.02}
+              outlineColor="#000">
+              Info
+            </Text>
+          </group>
+        </Billboard>
       </group>
-      <group ref={cardGroupRef} scale={cardGroupScale}>
-        {eventsData?.map((ele, index) => {
-          return (
-            <EventCard
-              key={index}
-              data={ele}
-              index={index}
-              cardPosition={[index % 2 == 0 ? (isMobile ? 2 : 5.0) : isMobile ? -2 : -5, -3, -27 * (index + 1)]}
-            />
-          );
-        })}
-      </group> */}
-      {/* Camera roaming: controlled by scroll */}
+
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
-      <group ref={airplane}>
-        <Float intensity={1} speed={1}>
-          {/* <SpaceShuttle
-            ref={spaceShuttleRef}
-            rotation-y={-Math.PI / 2}
-            scale={spaceShuttleScale}
-            position-y={-0.15}
-            position-x={0}
-          /> */}
-        </Float>
-      </group>
-      {/* <group position-y={-2}>
-        <mesh>
-          <extrudeGeometry
-            args={[
-              shape,
-              {
-                steps: LINE_NB_POINTS,
-                bevelEnabled: false,
-                extrudePath: curve,
-              },
-            ]}
-          />
-          <meshStandardMaterial color={"white"} opacity={0} transparent />
-        </mesh>
-      </group> */}
     </>
   );
 };
