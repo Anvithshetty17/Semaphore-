@@ -37,7 +37,7 @@ const LandingScene = ({ eventsData }) => {
   });
 
   // Static info element position
-  const infoPosition = [90, 15, 15];
+  const infoPosition = [80, 20, 15];
   const infoLookAt = [-10, 10, 0];
   const infoGroupRef = useRef();
 
