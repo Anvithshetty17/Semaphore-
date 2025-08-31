@@ -13,13 +13,13 @@ const NavBar = ({ showSidebar, setShowSidebar }) => {
 
     return (
         <>
-            <div className="flex flex-row justify-between bg-white p-3 h-[10vh] w-full rounded-lg items-center">
+            <div className="flex flex-row justify-between  bg-[#FF00FFFF]  p-3 h-[10vh] w-full rounded-lg items-center shadow-[0_0_20px_#FF00FF]  border border-[#FF00FF]/60">
                 <div className="flex lg:hidden">
                     <Menu03Icon color="#000" onClick={function () {
                         setShowSidebar(!showSidebar)
                     }} />
                 </div>
-                <div className="flex flex-col space-y-1">
+                <div className="flex flex-col space-y-1 text-[#0a000a]">
                     <p className="text-md font-dosisBold lg:text-[20px]">{cached?.fullName}</p>
                     <p className="text-xs font-dosisMedium lg:text-[14px]">{cached?.userType?.userType}</p>
                 </div>
