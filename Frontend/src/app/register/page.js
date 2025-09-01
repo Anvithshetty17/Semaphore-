@@ -5,173 +5,201 @@ import { PasswordTextInput, TextInput } from "@/components/input";
 import { useQueryConfig } from "@/config/useQuery.config";
 import { useGetData } from "@/hooks/useGetData";
 import { useSubmit } from "@/hooks/useSubmit";
-import { Mail01Icon, LockPasswordIcon, BankIcon, UserGroupIcon, SmartPhone01Icon, UserAccountIcon } from "hugeicons-react";
-import Image from "next/image";
+import {
+  Mail01Icon,
+  LockPasswordIcon,
+  SmartPhone01Icon,
+  UserAccountIcon,
+} from "hugeicons-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 export default function Register_Page() {
-    //state to list selectable colleges
-    const [colleges, setColleges] = useState([]);
-    const router = useRouter()
-    const { submitData: registerUser, isLoading: isRegistering } = useSubmit()
+  const [colleges, setColleges] = useState([]);
+  const router = useRouter();
+  const { submitData: registerUser, isLoading: isRegistering } = useSubmit();
 
-    const { data: collegeList, isLoading: isCollegeListLoading } = useGetData(
-        `collegeList`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetCollegeList`,
-        useQueryConfig
-    )
+  const { data: collegeList } = useGetData(
+    `collegeList`,
+    `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetCollegeList`,
+    useQueryConfig
+  );
 
-    //states
-    const [formData, setformData] = useState({
-        email: "",
-        password: "",
-        college: "",
-        phoneNumber: "",
-        teamName: "",
-        fullName: ''
-    })
+  const [formData, setformData] = useState({
+    email: "",
+    password: "",
+    college: "",
+    phoneNumber: "",
+    fullName: "",
+  });
 
-    //Handling input change
-    const handleInputChange = async (e) => {
-        const { name, value } = e.target;
-        if (name == "email") {
-            setformData({ email: value })
-        } else if (name == "password") {
-            setformData({ password: value })
-        } else if (name == "college") {
-            setformData({ college: value })
-        } else if (name == 'teamName') {
-            setformData({ teamName: value })
-        } else if (name == 'phoneNumber') {
-            setformData({ phoneNumber: value })
-        } else if (name == 'fullName') {
-            setformData({ fullName: value })
-        }
+  // Handle Input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setformData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Demo fallback colleges
+  useEffect(() => {
+    setColleges(["NMAMIT Nitte", "St. Philomena", "Vivekananda College"]);
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.target);
+      const body = Object.fromEntries(formData);
+      if (body?.phoneNumber?.toString().length != 10) {
+        toast.info("Phone Number should be exactly 10 digits");
+        return;
+      }
+      const { data } = await registerUser(
+        `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/RegisterParticipant`,
+        body
+      );
+      if (data) {
+        toast.success("Account created successfully");
+        toast.info("Please check your email for account verification");
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ?? error?.message ?? "Registration failed"
+      );
     }
+  };
 
-    //TODO: Fetch college list
-    useEffect(() => {
-        async function fetchData() {
-            setColleges(["NMAMIT Nitte", "St. Philomena", "Vivekananda College"]);
-        }
-        fetchData();
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center font-orbitron 
+                 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/login.png')" }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-md mx-4 p-10 rounded-2xl 
+                   backdrop-blur-xl bg-black/70 border border-pink-500/40 
+                   shadow-[0_0_40px_rgba(255,0,255,0.4)]"
+      >
+        {/* Neon border animated glow */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-pink-500/80 
+                        shadow-[0_0_40px_10px_rgba(255,0,255,0.6)] pointer-events-none 
+                        animate-pulse"></div>
 
-    }, []);
+        {/* Heading */}
+        <h2 className="text-3xl font-extrabold text-center mb-10 text-pink-400 tracking-widest drop-shadow-lg">
+          CREATE PROFILE
+        </h2>
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
+        {/* Full Name */}
+        <div className="mb-4">
+          <TextInput
+            label="Full Name"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleInputChange}
+            icon={<UserAccountIcon color="#fff" />}
+            placeholder="Enter Full Name"
+            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+          />
+        </div>
 
-            const formData = new FormData(e.target);
-            const body = Object.fromEntries(formData);
-            if (body?.phoneNumber?.toString().length != 10) {
-                toast.info("Phone Number should be exactly 10 digits")
-                return
-            }
-            const { data } = await registerUser(
-                `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/RegisterParticipant`,
-                body,
-            )
-            if (data) {
-                toast.success('Account created successfully');
-                toast.info("Please check your email for account verification");
-                setTimeout(() => {
-                    router.push('/login')
-                }, 1500)
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.message ?? error?.message ?? 'Registration failed')
-        }
+        {/* Email */}
+        <div className="mb-4">
+          <TextInput
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            icon={<Mail01Icon color="#fff" />}
+            placeholder="user@domain.com"
+            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-4">
+          <PasswordTextInput
+            label="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            icon={<LockPasswordIcon color="#fff" />}
+            placeholder="Enter Password"
+            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+          />
+        </div>
+
+        {/* Phone Number */}
+        <div className="mb-4">
+          <TextInput
+            label="Phone Number"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            type="number"
+            icon={<SmartPhone01Icon color="#fff" />}
+            placeholder="Enter Phone Number"
+            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+          />
+        </div>
+
+<div className="mt-4">
+  <DropDown
+    name="collegeId"
+    label="Select College"
+    DropDownItems={
+      (collegeList && collegeList.length > 0
+        ? collegeList.map((ele) => ({
+            label: ele?.collegeName,
+            value: ele?.collegeId,
+          }))
+        : colleges.map((c, i) => ({
+            label: c,
+            value: i, // temporary value for fallback
+          })))
     }
+    placeholder={
+      !collegeList || collegeList.length === 0
+        ? "Loading colleges..."
+        : "Select College"
+    }
+    className="w-full bg-transparent border border-gray-600 text-white placeholder-gray-400 
+               rounded-lg px-3 py-2 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
+  />
+</div>
 
-    return (
-        <>
-            {/* <C>
-                <ambientLight intensity={0.5} />
-                <Stars />
-                </C */}
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#000080] to-[#00001A]">
+        {/* Register Button */}
+        <div className="flex justify-center w-full mt-4">
+          <button
+            className="w-full py-3 rounded-lg text-lg font-bold bg-pink-600 
+                       text-white tracking-wider shadow-[0_0_20px_5px_rgba(255,0,255,0.5)] 
+                       hover:bg-pink-700 hover:shadow-[0_0_30px_10px_rgba(255,0,255,0.6)] 
+                       transition-all duration-300"
+            type="submit"
+            disabled={isRegistering}
+          >
+            ⚡ {isRegistering ? "Registering..." : "REGISTER"}
+          </button>
+        </div>
 
-
-                <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-sm mx-4 lg:mx-auto bg-white p-8 rounded-lg shadow-lg relative">
-                    <Image
-                        className="absolute -top-9 -left-8 rounded-full"
-
-                        src={'/images/semaphore_logo.jpeg'}
-                        width={120}
-                        height={120}
-                        alt="Sempahore Logo"
-                    />
-                    <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold">Register</h2>
-
-                    <TextInput
-                        label={"Full Name"}
-                        name={'fullName'}
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        icon={<UserAccountIcon color="#000" />}
-                        placeholder={'Enter Full Name'}
-                    />
-
-                    <TextInput
-                        label={"Email"}
-                        name={'email'}
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        icon={<Mail01Icon color="#000" />}
-                        placeholder={'Enter Email'}
-                    />
-
-                    {/*Password*/}
-                    <PasswordTextInput
-                        label={"Password"}
-                        name={'password'}
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        icon={<LockPasswordIcon color="#000" />}
-                        placeholder={'Enter Password'}
-                    />
-                    <TextInput
-                        label={"Phone Number"}
-                        name={'phoneNumber'}
-                        value={formData.phoneNumber}
-                        onChange={handleInputChange}
-                        type="number"
-                        icon={<SmartPhone01Icon color="#000" />}
-                        placeholder={'Enter Phone Number'}
-                    />
-                    {/* <TextInput
-                        label={"Team Name"}
-                        name={'teamName'}
-                        value={formData.teamName}
-                        onChange={handleInputChange}
-                        icon={<UserGroupIcon color="#000" />}
-                        placeholder={'Enter Team Name'}
-                    /> */}
-                    <DropDown
-                        name={'collegeId'}
-                        label="Select College"
-                        DropDownItems={collegeList?.map((ele, index) => {
-                            return {
-                                label: ele?.collegeName,
-                                value: ele?.collegeId,
-                            }
-                        })}
-                        placeholder={'Select College'}
-                    />
-                    <div className="flex justify-center w-full mt-4">
-                        <button
-                            className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 font-dosisMedium"
-                            type="submit"
-                        >
-                            Register
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </>
-    )
+        {/* Login Link */}
+        <p className="mt-6 text-center text-pink-400 text-sm">
+          ALREADY HAVE AN ACCOUNT?{" "}
+          <a
+            href="/login"
+            className="font-semibold hover:underline hover:text-pink-300 transition"
+          >
+            LOGIN
+          </a>
+        </p>
+      </form>
+    </div>
+  );
 }

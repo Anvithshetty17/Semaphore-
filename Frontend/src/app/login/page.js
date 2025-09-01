@@ -3,7 +3,6 @@
 import { useSubmit } from "@/hooks/useSubmit";
 import { useState } from "react";
 import { Mail01Icon, LockPasswordIcon } from "hugeicons-react";
-import { PasswordTextInput, TextInput } from "@/components/input";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/store";
 import { useGetData } from "@/hooks/useGetData";
@@ -65,37 +64,33 @@ export default function Login_Page() {
   };
 
   return (
-   <div className="flex items-center justify-center min-h-screen bg-[#0f0c29] relative overflow-hidden">
-      {/* Background Image */}
-      <Image
-        src="/images/login.png"
-        alt="Cyberpunk City"
-        fill
-        className="object-cover opacity-50"
-        priority
-      />
-
-      {/* Neon Glow Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-700/20 via-transparent to-cyan-700/20 mix-blend-screen" />
-
-      {/* Form Container */}
+    <div
+      className="flex items-center justify-center min-h-screen font-orbitron 
+                 bg-cover bg-center bg-no-repeat relative"
+      style={{ backgroundImage: "url('/images/login.png')" }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-md bg-black/60 backdrop-blur-xl 
-        border border-fuchsia-500/60 shadow-[0_0_30px_rgba(236,72,153,0.9)] 
-        rounded-2xl p-10 flex flex-col items-center"
+        className="relative w-full max-w-md mx-4 p-10 rounded-2xl 
+                   backdrop-blur-xl bg-black/70 border border-pink-500/40 
+                   shadow-[0_0_40px_rgba(255,0,255,0.4)]"
       >
+        {/* Neon border animated glow */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-pink-500/80 
+                        shadow-[0_0_40px_10px_rgba(255,0,255,0.6)] pointer-events-none 
+                        animate-pulse"></div>
+
         {/* Heading */}
-        <h2 className="text-3xl font-extrabold text-center mb-10 tracking-[0.15em] text-fuchsia-400 drop-shadow-[0_0_25px_rgba(236,72,153,0.9)]">
+        <h2 className="text-3xl font-extrabold text-center mb-10 text-pink-400 tracking-widest drop-shadow-lg">
           ACCESS NEXUS
         </h2>
 
         {/* Email */}
-        <div className="w-full mb-6">
-          <label className="block text-fuchsia-400 text-sm font-semibold mb-2">
+        <div className="mb-6">
+          <label className="block text-pink-400 text-sm font-semibold mb-2">
             PLAYER EMAIL
           </label>
-          <div className="flex items-center bg-black/40 border border-fuchsia-400/40 rounded-lg px-3">
+          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-3">
             <Mail01Icon color="#ec4899" className="mr-2" />
             <input
               type="email"
@@ -103,17 +98,17 @@ export default function Login_Page() {
               value={formData.email}
               onChange={handleInputChange}
               placeholder="email"
-              className="flex-1 bg-transparent text-white placeholder-fuchsia-300/50 py-3 outline-none"
+              className="flex-1 bg-transparent text-white placeholder-pink-300/50 py-3 outline-none"
             />
           </div>
         </div>
 
         {/* Password */}
-        <div className="w-full mb-6">
-          <label className="block text-fuchsia-400 text-sm font-semibold mb-2">
+        <div className="mb-6">
+          <label className="block text-pink-400 text-sm font-semibold mb-2">
             PASSWORD
           </label>
-          <div className="flex items-center bg-black/40 border border-fuchsia-400/40 rounded-lg px-3">
+          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-3">
             <LockPasswordIcon color="#ec4899" className="mr-2" />
             <input
               type="password"
@@ -121,7 +116,7 @@ export default function Login_Page() {
               value={formData.password}
               onChange={handleInputChange}
               placeholder="password"
-              className="flex-1 bg-transparent text-white placeholder-fuchsia-300/50 py-3 outline-none"
+              className="flex-1 bg-transparent text-white placeholder-pink-300/50 py-3 outline-none"
             />
           </div>
         </div>
@@ -129,17 +124,18 @@ export default function Login_Page() {
         {/* Login Button */}
         <button
           type="submit"
-          className="w-full bg-fuchsia-600 text-white py-3 rounded-xl 
-          font-bold text-lg shadow-[0_0_25px_rgba(236,72,153,0.9)] 
-          hover:shadow-[0_0_40px_rgba(236,72,153,1)] hover:bg-fuchsia-500 
-          transition duration-300 flex items-center justify-center gap-2"
+          disabled={isLoading}
+          className="w-full bg-pink-600 text-white py-3 rounded-xl 
+                     font-bold text-lg shadow-[0_0_25px_rgba(236,72,153,0.9)] 
+                     hover:shadow-[0_0_40px_rgba(236,72,153,1)] hover:bg-pink-500 
+                     transition duration-300 flex items-center justify-center gap-2"
         >
-          ⚡ LOG IN
+          ⚡ {isLoading ? "Logging in..." : "LOG IN"}
         </button>
 
         {/* Register Link */}
-        <Link href="/register" className="mt-8">
-          <p className="text-sm font-semibold text-fuchsia-300 hover:text-cyan-300 transition duration-300 cursor-pointer drop-shadow-[0_0_15px_rgba(236,72,153,0.7)]">
+        <Link href="/register" className="mt-8 block text-center">
+          <p className="text-sm font-semibold text-pink-300 hover:text-cyan-300 transition duration-300 cursor-pointer drop-shadow-[0_0_15px_rgba(236,72,153,0.7)]">
             CREATE PROFILE →
           </p>
         </Link>
