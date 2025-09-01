@@ -1,7 +1,7 @@
 const SuperUserPage = () => {
     return (
         <>
-            Super user
+            Super user 
         </>
     )
 }

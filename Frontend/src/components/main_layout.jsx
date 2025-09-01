@@ -15,6 +15,7 @@ const MainLayout = ({
 
 
     const [showSidebar, setShowSidebar] = useState(false);
+    const [backgroundImage, setBackgroundImage] = useState('/images/loading_bg_mobile.png');
     const { token } = useAuthStore()
     const { setAccountName, setUserType } = useAccountStore()
     const router = useRouter()
@@ -23,6 +24,25 @@ const MainLayout = ({
         `${process.env.NEXT_PUBLIC_URL}/web/api/auth/v1/IsAuthenticated?token=${token}`,
         useQueryConfig
     )
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setBackgroundImage('/images/loading_bg_pc.png');
+            } else {
+                setBackgroundImage('/images/loading_bg_mobile.png');
+            }
+        };
+
+        // Set initial background
+        handleResize();
+
+        // Add event listener
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
 
 
@@ -49,7 +69,12 @@ const MainLayout = ({
 
         return (
             <>
-                <div className="flex flex-row space-x-1 lg:space-x-3 h-screen w-screen overflow-hidden py-3 px-2 lg:p-3 bg-[#F2F2F2]">
+                <div 
+                    className="flex flex-row space-x-1 lg:space-x-3 h-screen w-screen overflow-hidden py-3 px-2 lg:p-3 bg-[#F2F2F2] bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: `url(${backgroundImage})`
+                    }}
+                >
                     <Sidebar menuList={menuItems} setShowSideBar={setShowSidebar} />
                     {showSidebar === true && <MobileSideBar setShowSideBar={setShowSidebar} menuList={menuItems} />}
                     <div className="flex flex-col h-full w-full space-y-3">

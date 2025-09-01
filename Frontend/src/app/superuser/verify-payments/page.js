@@ -131,45 +131,45 @@ const VerifyPaymentsPage = () => {
                     </div>
                 </div>
             </div>}
-            <div className="w-full min-h-full border rounded-lg bg-white p-4 space-y-6">
-                <h3 className="font-dosisBold mb-3"> Payment List </h3>
+            <div className="w-full min-h-full border border-cyan-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm p-4 space-y-6">
+                <h3 className="font-dosisBold mb-3 text-cyan-100 tracking-wide"> Payment List </h3>
                 {paymentList?.length > 0 ? <CustomTable rows={['S.I. No', 'College Name', 'Account Holder Name', 'Phone Number', 'Amount', 'UPI ID', 'Transaction ID', 'Status', 'Action']} >
                     {paymentList?.map((ele, index) => {
                         return (
                             <>
                                 <tr
-                                    className={`bg-white ${index != paymentList?.length - 1 && 'border-b'
-                                        } text-[13px]`}
+                                    className={`bg-slate-800/50 ${index != paymentList?.length - 1 && 'border-b border-cyan-400/20'
+                                        } text-[13px] text-cyan-100`}
                                 >
                                     <td className="px-2 py-3">{index + 1}</td>
                                     <td className="px-2 py-3">{ele?.registration?.college?.collegeName}</td>
                                     <th
                                         scope="row"
-                                        className="p-2 font-medium text-gray-900 whitespace-nowrap"
+                                        className="p-2 font-medium text-cyan-100 whitespace-nowrap"
                                     >
                                         {ele?.accountHolderName}
                                     </th>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap">
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">
                                         {ele?.phoneNumber}
                                     </td>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap">
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">
                                         Rs. 1500.00 /-
                                     </td>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap">
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">
                                         {ele?.upiId}
                                     </td>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap">
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">
                                         {ele?.transactionId}
                                     </td>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap">
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">
                                         {ele?.status.status}
                                     </td>
-                                    <td className="px-2 py-3 font-medium text-gray-700 whitespace-nowrap flex flex-row space-x-3 justify-center">
-                                        <Cancel02Icon color="#000" className="cursor-pointer" onClick={() => {
+                                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap flex flex-row space-x-3 justify-center">
+                                        <Cancel02Icon color="#ef4444" className="cursor-pointer hover:text-red-400 transition-colors duration-200 hover:drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]" onClick={() => {
                                             setSelectPaymentId(ele?.paymentDetailsId)
                                             setShowRejectPopup(true)
                                         }} />
-                                        <CheckmarkBadge03Icon color="#000" className="cursor-pointer" onClick={() => {
+                                        <CheckmarkBadge03Icon color="#22c55e" className="cursor-pointer hover:text-green-400 transition-colors duration-200 hover:drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]" onClick={() => {
                                             setSelectPaymentId(ele?.paymentDetailsId)
                                             setShowAcceptPopup(true)
                                         }} />
