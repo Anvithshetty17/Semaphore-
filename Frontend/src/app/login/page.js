@@ -1,175 +1,149 @@
-"use client"
-import React, { useState, useEffect } from 'react';
+"use client";
 
-// Custom components with inline SVG icons for a self-contained app
-const MailIcon = (props) => (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>);
-const Lock = (props) => (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>);
-const Zap = (props) => (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>);
-const ChevronRight = (props) => (<svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"></path></svg>);
-const Eye = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-);
+import { useSubmit } from "@/hooks/useSubmit";
+import { useState } from "react";
+import { Mail01Icon, LockPasswordIcon } from "hugeicons-react";
+import { PasswordTextInput, TextInput } from "@/components/input";
+import { toast } from "react-toastify";
+import { useAuthStore } from "@/store";
+import { useGetData } from "@/hooks/useGetData";
+import { useQueryConfig } from "@/config/useQuery.config";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
-const EyeOff = (props) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-10-8-10-8a10.07 10.07 0 0 1 4.06-5.94"></path>
-    <path d="M1 1l22 22"></path>
-  </svg>
-);
+export default function Login_Page() {
+  const router = useRouter();
+  const { submitData: loginUser, isLoading } = useSubmit();
+  const { setLoginToken, token } = useAuthStore();
+  const { data: authData } = useGetData(
+    `isAuthenticted`,
+    `${process.env.NEXT_PUBLIC_URL}/web/api/auth/v1/IsAuthenticated?token=${token}`,
+    useQueryConfig
+  );
 
-// Reusable CyberFrame Component
-const CyberFrame = ({ children }) => (
-  <div className="relative w-full p-8 pb-12 bg-black/30 backdrop-blur-[8px] border-2 border-[#FF00FF]/50 rounded-lg shadow-[0_0_20px_#FF00FF] animate-border-flow">
-    {/* Corner Decorations */}
-    <div className="absolute -top-1 -left-1 w-12 h-12 border-t-4 border-l-4 border-[#FF00FF] filter drop-shadow-[0_0_8px_#FF00FF]" />
-    <div className="absolute -top-1 -right-1 w-12 h-12 border-t-4 border-r-4 border-[#FF00FF] filter drop-shadow-[0_0_8px_#FF00FF]" />
-    <div className="absolute -bottom-1 -left-1 w-12 h-12 border-b-4 border-l-4 border-[#FF00FF] filter drop-shadow-[0_0_8px_#FF00FF]" />
-    <div className="absolute -bottom-1 -right-1 w-12 h-12 border-b-4 border-r-4 border-[#FF00FF] filter drop-shadow-[0_0_8px_#FF00FF]" />
-    {/* Content */}
-    <div className="relative z-10">{children}</div>
-  </div>
-);
-
-// TerminalHeader Component
-const TerminalHeader = ({ text }) => (
-  <h1 className="text-4xl font-bold text-white mb-8 text-center uppercase tracking-wide animate-glitch filter drop-shadow-[0_0_8px_#FF00FF]">
-    {text}
-  </h1>
-);
-
-// LabeledInput Component
-const LabeledInput = ({ label, name, type, value, onChange, icon, placeholder, setActiveField, showPassword, setShowPassword, isFocused }) => (
-  <div className="relative w-full mb-6">
-    <label htmlFor={name} className={`flex items-center space-x-2 text-sm font-semibold tracking-wide transition-colors duration-200 ${isFocused ? 'text-[#00FFFF] drop-shadow-[0_0_5px_#00FFFF]' : 'text-gray-200'}`}>
-      <span>{label}</span>
-      {isFocused && <div className="w-1 h-1 bg-[#00FFFF] rounded-full animate-pulse-fast" />}
-    </label>
-    <div className="relative group/field">
-      <div className={`relative bg-black/20 backdrop-blur-sm border-2 transition-all duration-300 rounded-lg overflow-hidden ${isFocused ? 'border-[#00FFFF] holographic-glow-focus' : 'border-white/40'}`}>
-        {icon && React.cloneElement(icon, { className: `absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${isFocused ? 'text-[#00FFFF]' : 'text-white/70'}` })}
-        <input
-          type={type}
-          id={name}
-          name={name}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setActiveField(name)}
-          onBlur={() => setActiveField(null)}
-          placeholder={placeholder}
-          className="w-full pl-14 pr-4 py-3 bg-transparent text-gray-100 placeholder-white/50 focus:outline-none focus:placeholder-white/80 transition-all duration-300"
-        />
-        {name === "password" && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-[#00FFFF] transition-all duration-300 hover:scale-110"
-          >
-            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-          </button>
-        )}
-      </div>
-    </div>
-  </div>
-);
-
-export default function App() {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeField, setActiveField] = useState(null);
-  const [isBooting, setIsBooting] = useState(true);
-
-  useEffect(() => {
-    const bootTimer = setTimeout(() => {
-      setIsBooting(false);
-    }, 1500);
-    return () => clearTimeout(bootTimer);
-  }, []);
+  const [formData, setformData] = useState({
+    email: "",
+    password: "",
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setformData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Form submitted with:", formData);
-    }, 2500);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const body = Object.fromEntries(formData);
+    try {
+      const { data } = await loginUser(
+        `${process.env.NEXT_PUBLIC_URL}/web/api/auth/v1/Login`,
+        body
+      );
+      if (data) {
+        toast.success("Login Success");
+        await setLoginToken(data);
+        handleRouting(data);
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ?? error?.message ?? "Login failed"
+      );
+    }
+  };
+
+  const handleRouting = (data) => {
+    const userType = data?.userType?.toLowerCase();
+    if (userType == "participant") router.push("/participant");
+    else if (userType == "super user") router.push("/superuser");
+    else if (userType == "event head") router.push("/event-heads");
+    else if (userType === "admin") router.push("/admin");
+    else if (userType === "registration committe") router.push("/registrations");
+    else if (userType === "accolades") router.push("/accolades");
+    else router.push("/error");
   };
 
   return (
-    <div className="min-h-screen bg-black overflow-hidden flex items-center justify-center p-4 relative font-sans">
+   <div className="flex items-center justify-center min-h-screen bg-[#0f0c29] relative overflow-hidden">
       {/* Background Image */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0" style={{ backgroundImage: `url('/images/login.png')` }} />
-      {/* Glitch & Scanline Overlay */}
-      <div className="absolute inset-0 z-10 scanline-effect" />
-      <div className="absolute inset-0 bg-black/60 z-20" />
-      {/* Main Content */}
-      <div className={`relative z-30 w-full max-w-sm ${isBooting ? 'opacity-0' : 'animate-fadeIn'}`}>
-        <CyberFrame>
-          <TerminalHeader text="ACCESS NEXUS" />
-          <div className="space-y-6">
-            <LabeledInput
-              label="PLAYER ID"
-              name="email"
+      <Image
+        src="/images/login.png"
+        alt="Cyberpunk City"
+        fill
+        className="object-cover opacity-50"
+        priority
+      />
+
+      {/* Neon Glow Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-700/20 via-transparent to-cyan-700/20 mix-blend-screen" />
+
+      {/* Form Container */}
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-md bg-black/60 backdrop-blur-xl 
+        border border-fuchsia-500/60 shadow-[0_0_30px_rgba(236,72,153,0.9)] 
+        rounded-2xl p-10 flex flex-col items-center"
+      >
+        {/* Heading */}
+        <h2 className="text-3xl font-extrabold text-center mb-10 tracking-[0.15em] text-fuchsia-400 drop-shadow-[0_0_25px_rgba(236,72,153,0.9)]">
+          ACCESS NEXUS
+        </h2>
+
+        {/* Email */}
+        <div className="w-full mb-6">
+          <label className="block text-fuchsia-400 text-sm font-semibold mb-2">
+            PLAYER EMAIL
+          </label>
+          <div className="flex items-center bg-black/40 border border-fuchsia-400/40 rounded-lg px-3">
+            <Mail01Icon color="#ec4899" className="mr-2" />
+            <input
               type="email"
+              name="email"
               value={formData.email}
               onChange={handleInputChange}
-              icon={<MailIcon />}
-              placeholder="user@domain.corp"
-              setActiveField={setActiveField}
-              isFocused={activeField === 'email'}
+              placeholder="email"
+              className="flex-1 bg-transparent text-white placeholder-fuchsia-300/50 py-3 outline-none"
             />
-            <LabeledInput
-              label="PASSWORD"
+          </div>
+        </div>
+
+        {/* Password */}
+        <div className="w-full mb-6">
+          <label className="block text-fuchsia-400 text-sm font-semibold mb-2">
+            PASSWORD
+          </label>
+          <div className="flex items-center bg-black/40 border border-fuchsia-400/40 rounded-lg px-3">
+            <LockPasswordIcon color="#ec4899" className="mr-2" />
+            <input
+              type="password"
               name="password"
-              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleInputChange}
-              icon={<Lock />}
-              placeholder="••••••••••••••••"
-              setActiveField={setActiveField}
-              showPassword={showPassword}
-              setShowPassword={setShowPassword}
-              isFocused={activeField === 'password'}
+              placeholder="password"
+              className="flex-1 bg-transparent text-white placeholder-fuchsia-300/50 py-3 outline-none"
             />
-            <button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="w-full py-4 bg-[#FF00FF] text-white font-bold uppercase tracking-wider rounded-lg overflow-hidden transition-all duration-300 hover:bg-[#FF00FF]/80 active:scale-95 disabled:opacity-50 relative group filter drop-shadow-[0_0_10px_#FF00FF] hover:drop-shadow-[0_0_15px_#FF00FF] animate-flicker"
-            >
-              <div className="relative z-10 flex items-center justify-center space-x-2">
-                {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>CONNECTING...</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-5 h-5 group-hover:animate-pulse-fast" />
-                    <span>LOG IN</span>
-                  </>
-                )}
-              </div>
-            </button>
-            <div className="text-center pt-4">
-              <button
-                type="button"
-                className="group inline-flex items-center space-x-1 text-sm text-[#FF00FF]/70 hover:text-[#FF00FF] transition-all duration-300 filter drop-shadow-[0_0_5px_#FF00FF]"
-              >
-                <span>CREATE PROFILE</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
           </div>
-        </CyberFrame>
-      </div>
+        </div>
+
+        {/* Login Button */}
+        <button
+          type="submit"
+          className="w-full bg-fuchsia-600 text-white py-3 rounded-xl 
+          font-bold text-lg shadow-[0_0_25px_rgba(236,72,153,0.9)] 
+          hover:shadow-[0_0_40px_rgba(236,72,153,1)] hover:bg-fuchsia-500 
+          transition duration-300 flex items-center justify-center gap-2"
+        >
+          ⚡ LOG IN
+        </button>
+
+        {/* Register Link */}
+        <Link href="/register" className="mt-8">
+          <p className="text-sm font-semibold text-fuchsia-300 hover:text-cyan-300 transition duration-300 cursor-pointer drop-shadow-[0_0_15px_rgba(236,72,153,0.7)]">
+            CREATE PROFILE →
+          </p>
+        </Link>
+      </form>
     </div>
   );
 }
