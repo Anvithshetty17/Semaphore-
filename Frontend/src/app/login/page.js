@@ -206,7 +206,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeField, setActiveField] = useState(null);
   const [isBooting, setIsBooting] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const bootTimer = setTimeout(() => {
@@ -222,7 +222,7 @@ export default function App() {
 
   const handleSubmit = async () => {
     if (isLoading) return;
-    setErrorMessage(''); // Clear previous errors
+    setErrorMessage(""); // Clear previous errors
 
     // Frontend validation check
     if (!formData.email.trim() || !formData.password.trim()) {
@@ -235,7 +235,7 @@ export default function App() {
     const backendUrl = process.env.NEXT_PUBLIC_URL;
     const loginEndpoint = "/web/api/auth/v1/Login";
     const fullUrl = `${backendUrl}${loginEndpoint}`;
-    
+
     try {
       const response = await fetch(fullUrl, {
         method: "POST",
@@ -249,7 +249,7 @@ export default function App() {
 
       if (response.ok) {
         console.log("Login successful:", data.user);
-        router.push("/participant/r");
+        router.push("/participant/registration");
       } else {
         setErrorMessage(data.message || "Invalid Player ID or Password.");
         console.error("Login failed:", data.message);
@@ -294,7 +294,7 @@ export default function App() {
               value={formData.email}
               onChange={handleInputChange}
               icon={<MailIcon />}
-              placeholder="user@domain.corp"
+              placeholder=""
               setActiveField={setActiveField}
               isFocused={activeField === "email"}
             />
@@ -305,7 +305,7 @@ export default function App() {
               value={formData.password}
               onChange={handleInputChange}
               icon={<Lock />}
-              placeholder="••••••••••••••••"
+              placeholder=""
               setActiveField={setActiveField}
               showPassword={showPassword}
               setShowPassword={setShowPassword}
@@ -314,7 +314,7 @@ export default function App() {
             <button
               onClick={handleSubmit}
               disabled={isLoading || !formData.email || !formData.password}
-              className="w-full py-4 bg-[#FF00FF] text-white font-bold uppercase tracking-wider rounded-lg overflow-hidden transition-all duration-300 hover:bg-[#FF00FF]/80 active:scale-95 disabled:opacity-50 relative group filter drop-shadow-[0_0_10px_#FF00FF] hover:drop-shadow-[0_0_15px_#FF00FF] animate-flicker"
+              className={`w-full py-4 bg-gradient-to-r from-[#FF00FF] to-[#8000FF] text-white font-bold uppercase tracking-wider rounded-lg transition-all duration-300 hover:from-[#E000E0] hover:to-[#6000E0] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               <div className="relative z-10 flex items-center justify-center space-x-2">
                 {isLoading ? (
@@ -324,7 +324,7 @@ export default function App() {
                   </>
                 ) : (
                   <>
-                    <Zap className="w-5 h-5 group-hover:animate-pulse-fast" />
+                    <Zap className="w-5 h-5" />
                     <span>LOG IN</span>
                   </>
                 )}
@@ -334,7 +334,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={navigateToCreateProfile}
-                className="group inline-flex items-center space-x-1 text-sm text-[#FF00FF]/70 hover:text-[#FF00FF] transition-all duration-300 filter drop-shadow-[0_0_5px_#FF00FF]"
+                className="group inline-flex items-center space-x-1 text-sm text-[#FF00FF]/70 hover:text-[#FF00FF] transition-all duration-300"
               >
                 <span>CREATE PROFILE</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
