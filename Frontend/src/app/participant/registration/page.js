@@ -287,7 +287,7 @@ const RegistrationDetailCard1 = ({ name, value }) => {
         <div className="flex flex-row space-x-2 text-gray-300">
             <p className="font-dosisRegular">{name}</p>
             <p className="font-dosisMedium">:</p>
-            <p className="font-dosisMedium text-[#00FFFF]">{value}</p>
+            <p className="font-dosisMedium text-[#f3f5f5]">{value}</p>
         </div>
     )
 }

@@ -23,17 +23,16 @@ const RequestPasswordChange = () => {
         } catch (error) {
             toast.error(error?.response?.data?.message ?? error?.message ?? 'Password change failed')
         }
-    }
-
+    } 
     return (
         <>
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#000080] to-[#00001A]">
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  ">
                 <div className="flex flex-col items-center w-full max-w-sm mx-auto bg-white p-8 rounded-lg shadow-lg relative">
-                    <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold">Request Password Change</h2>
-                    <p>Click the below button to recieve a link to change the password for your account !</p>
+                    <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold text-black">Request Password Change</h2>
+                    <p className="text-black text-center">Click the below button to recieve a link to change the password for your account !</p>
                     <div className="flex justify-center w-full font-dosisMedium mt-10">
                         <button
-                            className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer"
+                            className="w-1/2 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer"
                             type="button"
                             onClick={handleClick}
                         >

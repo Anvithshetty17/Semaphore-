@@ -61,7 +61,7 @@ const CreateUser = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4">
                 <h3 className="font-dosisBold mb-3"> Create User </h3>
                 <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -123,7 +123,7 @@ const CreateUser = () => {
                 </form>
             </div>
 
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4 mt-3">
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4 mt-3">
                 <h3 className="font-dosisBold mb-3"> Status List </h3>
                 <CustomTable rows={['S.I No', 'Full Name', 'Username', 'Email', 'Phone Number', 'User Type', 'Action']} >
                     {userList?.map((ele, index) => {

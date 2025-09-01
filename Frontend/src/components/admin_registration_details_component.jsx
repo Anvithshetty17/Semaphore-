@@ -20,7 +20,7 @@ const AdminRegistrationDetailsComponent = () => {
     if (isRegistrationDataLoading) return <Loading />
     return (
         <>
-            <div className="w-full min-h-full border rounded-lg bg-white p-4 space-y-6">
+            <div className="w-full min-h-full border rounded-lg   bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4 space-y-6">
                 <h3 className="font-dosisBold mb-3"> Registration Details </h3>
                 <div className="flex flex-col space-y-10">
                     <div className="flex flex-col space-y-2">
@@ -36,7 +36,7 @@ const AdminRegistrationDetailsComponent = () => {
                             <>
                                 <div className="flex flex-col space-y-3 font-dosisMedium">
                                     <p>{ele?.event.eventName}</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 text-white">
                                         {ele.eventMembers?.map((el, ind) => {
                                             return (
                                                 <>
