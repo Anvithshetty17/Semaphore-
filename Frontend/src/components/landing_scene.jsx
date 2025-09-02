@@ -4,6 +4,7 @@ import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html 
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+// import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 const LandingScene = ({ eventsData }) => {
   const cameraRef = useRef();
@@ -15,11 +16,7 @@ const LandingScene = ({ eventsData }) => {
     { position: [110, 60, -10], lookAt: [0, 50, 0] },
     { position: [70, 60, -10], lookAt: [-10, 60, 0] },
     { position: [60, 60, -10], lookAt: [-10, -10, 0] },
-    { position: [90, 15, -20], lookAt: [70, 10, 20] },
-     { position: [70, 15, 0], lookAt: [110, 80, -150] },
-    { position: [80, 15, -5], lookAt: [-10, 10, -160] },
-
-
+    { position: [90, 15, 15], lookAt: [-10, 10, 0] },
   ];
 
   // Info button guided waypoints
@@ -92,7 +89,27 @@ const LandingScene = ({ eventsData }) => {
 
   return (
     <>
-      <ambientLight intensity={1} />
+     {/* Dark background */}
+<color attach="background" args={["#000000"]} />
+
+{/* Minimal ambient light (almost dark) */}
+<ambientLight intensity={0.02} />
+
+{/* Neon-style lights */}
+<pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
+<pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
+<pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
+
+<fog attach="fog" args={["#000000", 10, 80]} />
+
+
+{/* Slight rim light so model edges are visible */}
+<directionalLight
+  position={[5, 15, 10]}
+  intensity={0.05}
+  color="#ffffff"
+/>
+
       <CityNeonModel position={[0.22, 0.4, -0.01]} />
 
       {/* Scroll Down Indicator (HTML overlay) */}
@@ -151,6 +168,16 @@ const LandingScene = ({ eventsData }) => {
       </group>
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
+
+      {/* Add bloom post-processing effect
+      <EffectComposer multisampling={8}>
+        <Bloom 
+          intensity={1.0}
+          kernelSize={3}
+          luminanceThreshold={0.3}
+          luminanceSmoothing={0.4}
+        />
+      </EffectComposer> */}
     </>
   );
 };
