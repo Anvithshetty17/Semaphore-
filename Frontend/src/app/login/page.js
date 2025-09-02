@@ -65,58 +65,58 @@ export default function Login_Page() {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen font-orbitron 
-                 bg-cover bg-center bg-no-repeat relative px-2 sm:px-4"
+      className="fixed inset-0 flex items-center justify-center font-orbitron 
+                 bg-cover bg-center bg-no-repeat px-2 overflow-hidden"
       style={{ backgroundImage: "url('/images/login.png')" }}
     >
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-2 sm:mx-4 p-6 sm:p-10 rounded-2xl 
-                 backdrop-blur-xl bg-black/70 border border-pink-500/40 
-                 shadow-[0_0_40px_rgba(255,0,255,0.4)]"
+        className="relative w-full max-w-sm mx-auto p-5 sm:p-7 rounded-2xl
+                   backdrop-blur-xl bg-black/80 border border-pink-500/40 
+                   shadow-[0_0_30px_rgba(255,0,255,0.25)] max-h-[95vh] overflow-y-auto"
       >
         {/* Neon border animated glow */}
         <div className="absolute inset-0 rounded-2xl border-2 border-pink-500/80 
-                        shadow-[0_0_40px_10px_rgba(255,0,255,0.6)] pointer-events-none 
+                        shadow-[0_0_30px_8px_rgba(255,0,255,0.4)] pointer-events-none 
                         animate-pulse"></div>
 
         {/* Heading */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-8 sm:mb-10 text-pink-400 tracking-widest drop-shadow-lg">
+        <h2 className="text-2xl font-extrabold text-center mb-7 text-pink-400 tracking-widest drop-shadow-lg">
           ACCESS NEXUS
         </h2>
 
         {/* Email */}
-        <div className="mb-4 sm:mb-6">
-          <label className="block text-pink-400 text-xs sm:text-sm font-semibold mb-2">
+        <div className="mb-4">
+          <label className="block text-white text-xs font-semibold mb-2">
             PLAYER EMAIL
           </label>
-          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-2 sm:px-3">
-            <Mail01Icon color="#ec4899" className="mr-2" />
+          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-2">
+            <Mail01Icon color="" className="mr-2" />
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="email"
-              className="flex-1 bg-transparent text-white placeholder-pink-300/50 py-2 sm:py-3 outline-none"
+              className="flex-1 bg-transparent text-white placeholder-pink-gray-400 py-2 outline-none text-sm"
             />
           </div>
         </div>
 
         {/* Password */}
-        <div className="mb-4 sm:mb-6">
-          <label className="block text-pink-400 text-xs sm:text-sm font-semibold mb-2">
+        <div className="mb-4">
+          <label className="block text-white text-xs font-semibold mb-2">
             PASSWORD
           </label>
-          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-2 sm:px-3">
-            <LockPasswordIcon color="#ec4899" className="mr-2" />
+          <div className="flex items-center bg-black/40 border border-pink-400/40 rounded-lg px-2">
+            <LockPasswordIcon color="" className="mr-2" />
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               placeholder="password"
-              className="flex-1 bg-transparent text-white placeholder-pink-300/50 py-2 sm:py-3 outline-none"
+              className="flex-1 bg-transparent text-white placeholder-gray-400 py-2 outline-none text-sm"
             />
           </div>
         </div>
@@ -125,20 +125,23 @@ export default function Login_Page() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-pink-600 text-white py-2 sm:py-3 rounded-xl 
-                   font-bold text-base sm:text-lg shadow-[0_0_25px_rgba(236,72,153,0.9)] 
-                   hover:shadow-[0_0_40px_rgba(236,72,153,1)] hover:bg-pink-500 
-                   transition duration-300 flex items-center justify-center gap-2"
+          className="w-full bg-pink-600 text-white py-2 rounded-xl 
+                     font-bold text-base shadow-[0_0_20px_rgba(236,72,153,0.7)] 
+                     hover:shadow-[0_0_30px_rgba(236,72,153,0.9)] hover:bg-pink-500 
+                     transition duration-300 flex items-center justify-center gap-2"
         >
-          ⚡ {isLoading ? "Logging in..." : "LOG IN"}
+           {isLoading ? "Logging in..." : "LOG IN"}
         </button>
 
-        {/* Register Link */}
-        <Link href="/register" className="mt-6 sm:mt-8 block text-center">
-          <p className="text-xs sm:text-sm font-semibold text-pink-300 hover:text-cyan-300 transition duration-300 cursor-pointer drop-shadow-[0_0_15px_rgba(236,72,153,0.7)]">
-            CREATE PROFILE →
-          </p>
-        </Link>
+        <Link href="/register" className="mt-5 block text-center group">
+  <p className="text-xs font-semibold text-pink-400 cursor-pointer 
+     drop-shadow-[0_0_10px_rgba(236,72,153,0.5)] 
+     transition duration-300 group-hover:text-cyan-300 relative inline-block">
+    CREATE PROFILE 
+    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+  </p>
+</Link>
+
       </form>
     </div>
   );

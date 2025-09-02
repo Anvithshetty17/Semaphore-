@@ -65,7 +65,26 @@ module.exports = {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
-			}
+			},
+			// 👇 Added glitch animations
+			keyframes: {
+				glitch1: {
+					'0%, 100%': { clip: 'rect(0, 9999px, 0, 0)' },
+					'10%': { clip: 'rect(10px, 9999px, 40px, 0)' },
+					'20%': { clip: 'rect(20px, 9999px, 60px, 0)' },
+					'30%': { clip: 'rect(40px, 9999px, 20px, 0)' },
+				},
+				glitch2: {
+					'0%, 100%': { clip: 'rect(30px, 9999px, 80px, 0)' },
+					'15%': { clip: 'rect(5px, 9999px, 60px, 0)' },
+					'25%': { clip: 'rect(15px, 9999px, 40px, 0)' },
+					'50%': { clip: 'rect(0, 9999px, 20px, 0)' },
+				},
+			},
+			animation: {
+				glitch1: 'glitch1 2s infinite linear alternate-reverse',
+				glitch2: 'glitch2 2s infinite linear alternate-reverse',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
