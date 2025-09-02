@@ -1,6 +1,6 @@
 "use client";
 
-import { DropDown } from "@/components/dropdown";
+import { RegDropDown } from "@/components/RegDropDown";
 import { PasswordTextInput, TextInput } from "@/components/input";
 import { useQueryConfig } from "@/config/useQuery.config";
 import { useGetData } from "@/hooks/useGetData";
@@ -45,7 +45,7 @@ export default function Register_Page() {
 
   // Demo fallback colleges
   useEffect(() => {
-    setColleges(["NMAMIT Nitte", "St. Philomena", "Vivekananda College"]);
+    setColleges([""]);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -77,84 +77,81 @@ export default function Register_Page() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center font-orbitron 
-                 bg-cover bg-center bg-no-repeat px-2 sm:px-4"
+      className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
       style={{ backgroundImage: "url('/images/login.png')" }}
     >
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-2 sm:mx-4 p-6 sm:p-10 rounded-2xl 
-                   backdrop-blur-xl bg-black/70 border border-pink-500/40 
-                   shadow-[0_0_40px_rgba(255,0,255,0.4)]"
+        className="relative w-full max-w-sm mx-auto p-4 rounded-2xl
+                   backdrop-blur-xl bg-black/80 border border-pink-500/30 
+                   shadow-[0_0_20px_rgba(255,0,255,0.18)] max-h-[95vh] overflow-y-auto"
+        style={{ minHeight: "auto" }}
       >
         {/* Neon border animated glow */}
-        <div className="absolute inset-0 rounded-2xl border-2 border-pink-500/80 
-                        shadow-[0_0_40px_10px_rgba(255,0,255,0.6)] pointer-events-none 
+        <div className="absolute inset-0 rounded-2xl border border-pink-500/60 
+                        shadow-[0_0_20px_4px_rgba(255,0,255,0.22)] pointer-events-none 
                         animate-pulse"></div>
 
         {/* Heading */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-8 sm:mb-10 text-pink-400 tracking-widest drop-shadow-lg">
+        <h2 className="text-lg font-extrabold text-center mb-4 text-pink-400 tracking-widest drop-shadow">
           CREATE PROFILE
         </h2>
 
         {/* Full Name */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-3">
           <TextInput
             label="Full Name"
             name="fullName"
             value={formData.fullName}
             onChange={handleInputChange}
             icon={<UserAccountIcon color="#fff" />}
-            placeholder="Enter Full Name"
-            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+            placeholder="Full Name"
           />
         </div>
 
         {/* Email */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-3">
           <TextInput
             label="Email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             icon={<Mail01Icon color="#fff" />}
-            placeholder="user@domain.com"
-            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+            placeholder="Email"
           />
         </div>
 
         {/* Password */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-3">
           <PasswordTextInput
             label="Password"
             name="password"
             value={formData.password}
             onChange={handleInputChange}
             icon={<LockPasswordIcon color="#fff" />}
-            placeholder="Enter Password"
-            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+            placeholder="Password"
           />
         </div>
 
         {/* Phone Number */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-3">
           <TextInput
-            label="Phone Number"
+            label="Phone"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleInputChange}
             type="number"
             icon={<SmartPhone01Icon color="#fff" />}
-            placeholder="Enter Phone Number"
-            className="bg-transparent border border-gray-500 focus:border-pink-500 transition text-white placeholder-gray-400"
+            placeholder="Phone"
+            
           />
         </div>
 
         {/* College Dropdown */}
-        <div className="mt-4 sm:mt-6">
-          <DropDown
+        <div className="mb-3">
+          <RegDropDown
             name="collegeId"
-            label="Select College"
+            label="College"
             DropDownItems={
               (collegeList && collegeList.length > 0
                 ? collegeList.map((ele) => ({
@@ -168,34 +165,30 @@ export default function Register_Page() {
             }
             placeholder={
               !collegeList || collegeList.length === 0
-                ? "Loading colleges..."
-                : "Select College"
+                ? "Loading..."
+                : "College"
             }
-            className="w-full bg-transparent border border-gray-600 text-white placeholder-gray-400 
-                       rounded-lg px-3 py-2 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
           />
         </div>
 
         {/* Register Button */}
-        <div className="flex justify-center w-full mt-4 sm:mt-6">
-          <button
-            className="w-full py-2 sm:py-3 rounded-lg text-base sm:text-lg font-bold bg-pink-600 
-                       text-white tracking-wider shadow-[0_0_20px_5px_rgba(255,0,255,0.5)] 
-                       hover:bg-pink-700 hover:shadow-[0_0_30px_10px_rgba(255,0,255,0.6)] 
-                       transition-all duration-300"
-            type="submit"
-            disabled={isRegistering}
-          >
-            ⚡ {isRegistering ? "Registering..." : "REGISTER"}
-          </button>
-        </div>
+        <button
+          className="w-full py-2 rounded-lg text-sm font-bold bg-pink-600 
+                     text-white tracking-wider shadow-[0_0_10px_2px_rgba(255,0,255,0.2)] 
+                     hover:bg-pink-700 hover:shadow-[0_0_20px_4px_rgba(255,0,255,0.3)] 
+                     transition-all duration-300 mb-3"
+          type="submit"
+          disabled={isRegistering}
+        >
+           {isRegistering ? "Registering..." : "REGISTER"}
+        </button>
 
         {/* Login Link */}
-        <p className="mt-6 sm:mt-8 text-center text-pink-400 text-xs sm:text-sm">
+        <p className="mt-2 text-center text-pink-400 text-xs">
           ALREADY HAVE AN ACCOUNT?{" "}
           <a
             href="/login"
-            className="font-semibold hover:underline hover:text-pink-300 transition"
+            className="font-semibold underline hover:text-pink-400 transition"
           >
             LOGIN
           </a>
