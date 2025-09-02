@@ -1,6 +1,6 @@
 "use client";
 
-import { DropDown } from "@/components/dropdown";
+import { RegDropDown } from "@/components/RegDropDown";
 import { PasswordTextInput, TextInput } from "@/components/input";
 import { useQueryConfig } from "@/config/useQuery.config";
 import { useGetData } from "@/hooks/useGetData";
@@ -149,7 +149,7 @@ export default function Register_Page() {
 
         {/* College Dropdown */}
         <div className="mb-3">
-          <DropDown
+          <RegDropDown
             name="collegeId"
             label="College"
             DropDownItems={
