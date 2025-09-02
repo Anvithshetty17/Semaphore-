@@ -12,10 +12,10 @@ const LandingScene = ({ eventsData }) => {
 
   // Camera waypoints
   const cameraPositions = [
-    { position: [110, 60, -10], lookAt: [0, 50, 0] },
+    { position: [150, 60, -10], lookAt: [0, 50, 0] },
     { position: [70, 60, -10], lookAt: [-10, 60, 0] },
     { position: [60, 60, -10], lookAt: [-10, -10, 0] },
-    { position: [90, 15, 15], lookAt: [-10, 10, 0] },
+    { position: [110, 15, 15], lookAt: [-10, 10, 0] },
   ];
 
   // Info button guided waypoints

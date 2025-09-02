@@ -116,7 +116,7 @@ export class EmailService {
     <p style='margin:0 0 18px;font-size:14px;color:#b7c2de;'>If the neon button glitches, jump through this link instead:<br><span style='word-break:break-all;color:#00eaff;'>${verificationLink}</span></p>
     <h3 style='margin:30px 0 12px;font-size:17px;color:#ff70ff;'>Event Briefing</h3>
     <ul style='padding:0 0 0 18px;margin:0 0 20px;'>
-      <li style='margin:4px 0;'>📅 9 & 19 Oct 2025</li>
+      <li style='margin:4px 0;'>📅 9 & 10 Oct 2025</li>
       <li style='margin:4px 0;'>📍 NMAMIT Campus, Nitte, Karkala</li>
       <li style='margin:4px 0;'>⏰ 09:00 – 18:00 IST</li>
     </ul>
@@ -155,7 +155,7 @@ export class EmailService {
     <p>Your payment has <span style='color:#00eaff;'>cleared the system</span>. Your slot is now <strong style='color:#ff70ff;'>officially confirmed</strong> for <strong>Semaphore 2k25</strong>.</p>
     <h3 style='margin:26px 0 12px;font-size:17px;color:#ff70ff;'>Event Coordinates</h3>
     <ul style='padding:0 0 0 18px;margin:0 0 18px;'>
-      <li>📅 9 & 19 Oct 2025</li>
+      <li>📅 9 & 10 Oct 2025</li>
       <li>📍 NMAMIT Campus, Nitte, Karkala</li>
       <li>⏰ 09:00 – 18:00 IST</li>
     </ul>
@@ -165,7 +165,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmailId,
       subject,
-  text: `Your Semaphore 2k25 registration is confirmed. Event: 9 & 19 Oct 2025 @ NMAMIT.`,
+  text: `Your Semaphore 2k25 registration is confirmed. Event: 9 & 10 Oct 2025 @ NMAMIT.`,
       html: this.wrapTemplate(inner, 'Registration Confirmed'),
     };
 
@@ -194,7 +194,7 @@ export class EmailService {
     </ol>
     <h3 style='margin:0 0 12px;font-size:17px;color:#00eaff;'>Event Snapshot</h3>
     <ul style='padding:0 0 0 18px;margin:0 0 20px;'>
-      <li>📅 9 & 19 Oct 2025</li>
+      <li>📅 9 & 10 Oct 2025</li>
       <li>📍 NMAMIT Campus, Nitte</li>
       <li>⏰ 09:00 – 18:00 IST</li>
     </ul>
@@ -204,7 +204,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmailId,
       subject,
-  text: `Payment issue for Semaphore 2k25 (Event: 9 & 19 Oct 2025). Reason: ${remarks}. Please retry with correct details.`,
+  text: `Payment issue for Semaphore 2k25 (Event: 9 & 10 Oct 2025). Reason: ${remarks}. Please retry with correct details.`,
       html: this.wrapTemplate(inner, 'Payment Rejected'),
     };
 
