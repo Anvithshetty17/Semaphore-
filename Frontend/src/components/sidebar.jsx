@@ -6,7 +6,7 @@ const Sidebar = ({ menuList, setShowSideBar }) => {
   return (
     <>
       <div className='hidden lg:flex flex-col z-[99] w-[90vw] lg:w-[20vw] h-[100vh] bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 border border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm py-10 items-center font-dosisMedium rounded-lg '>
-        <p className='font-dosisBold text-3xl text-cyan-100 tracking-widest'>2K24</p>
+        <p className='font-dosisBold text-3xl text-cyan-100 tracking-widest'>2K25</p>
         <div className='flex flex-col space-y-6 w-[75%] mt-10 justify-center'>
           {menuList?.map((ele, index) => {
             return (
