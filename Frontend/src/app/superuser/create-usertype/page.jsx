@@ -49,8 +49,8 @@ const CreateUserType = () => {
     return (
         <>
 
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
-                <h3 className="font-dosisBold mb-3"> Create User Type </h3>
+            <div className="flex flex-col space-y-3 border rounded-lg p-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm">
+                <h3 className="font-dosisBold mb-3 text-white"> Create User Type </h3>
                 <form className="flex flex-col space-y-3" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                         <TextInput
@@ -73,8 +73,8 @@ const CreateUserType = () => {
                     <PrimaryButton name={'Create'} onClick={() => { }} isLoading={isLoading} />
                 </form>
             </div>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4 mt-3">
-                <h3 className="font-dosisBold mb-3"> User Type List </h3>
+            <div className="flex flex-col space-y-3 border rounded-lg p-4 mt-3 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm">
+                <h3 className="font-dosisBold mb-3 text-white"> User Type List </h3>
                 <CustomTable rows={['S.I No', 'User Type', 'Order No', 'Action']} >
                     {userTypeList?.map((ele, index) => {
                         return (
