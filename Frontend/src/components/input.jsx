@@ -4,7 +4,7 @@ const TextInput = ({ name, label, value, placeholder, onChange, icon, type = 'te
     return (
         <>
             <div className="mb-4 w-full">
-                <label className="block text-gray-700 text-sm mb-2 font-dosisMedium" htmlFor={name}>
+                <label className="block text-white text-sm mb-2 font-dosisMedium" htmlFor={name}>
                     {label}
                 </label>
                 <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden px-2">

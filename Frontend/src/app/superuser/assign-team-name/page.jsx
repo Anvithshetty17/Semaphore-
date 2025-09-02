@@ -27,8 +27,8 @@ const AssignTeamName = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
-                <h3 className="font-dosisBold mb-3"> Assign Team Name </h3>
+            <div className="flex flex-col space-y-3 border rounded-lg p-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-cyan-400/30 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm">
+                <h3 className="font-dosisBold mb-3 text-white"> Assign Team Name </h3>
                 {registrationList?.map((ele, index) => {
                     return (
                         <>

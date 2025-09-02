@@ -56,7 +56,7 @@ const ChangePasswordComponent = () => {
         <>
             <div className="flex items-center justify-center min-h-screen">
                 <Image src="/images/change-password-bg.jpg" alt="Background" fill className="absolute z-0 opacity-50 object-cover" priority/> 
-                    <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-sm mx-auto bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-8 rounded-lg shadow-lg relative">
+                    <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-sm mx-auto min-h-[450px] bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-8 rounded-lg shadow-lg relative">
                     <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold ">Change Password</h2>
                     <PasswordTextInput
                         name={'oldPassword'}
