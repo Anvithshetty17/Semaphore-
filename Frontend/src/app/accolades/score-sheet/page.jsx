@@ -36,9 +36,9 @@ export default function Accolades() {
 
 
   return (
-    <div className="p-8 bg-white shadow rounded-lg w-full">
+    <div className="p-8 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  shadow rounded-lg w-full">
       <div className="mb-6">
-        <h2 className="text-2xl font-dosisBold text-gray-800">Top Rankings</h2>
+        <h2 className="text-2xl font-dosisBold ">Top Rankings</h2>
       </div>
 
       <div className="mb-4 grid grid-cols-4">
