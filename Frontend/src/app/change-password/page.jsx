@@ -6,6 +6,7 @@ import { useSubmit } from "@/hooks/useSubmit"
 import { useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react"
 import { toast } from "react-toastify"
+import Image from "next/image";
 
 const ChangePasswordPage = () => {
     return (
@@ -53,9 +54,10 @@ const ChangePasswordComponent = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[#000080] to-[#00001A]">
-                <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-sm mx-auto bg-white p-8 rounded-lg shadow-lg relative">
-                    <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold">Change Password</h2>
+            <div className="flex items-center justify-center min-h-screen">
+                <Image src="/images/change-password-bg.jpg" alt="Background" fill className="absolute z-0 opacity-50 object-cover" priority/> 
+                    <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-sm mx-auto bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-8 rounded-lg shadow-lg relative">
+                    <h2 className="text-2xl font-bold text-center mb-8 font-dosisBold ">Change Password</h2>
                     <PasswordTextInput
                         name={'oldPassword'}
                         label={'Old Password'}
