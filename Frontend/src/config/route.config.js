@@ -94,11 +94,11 @@ export const superUserMenu = [
     link: `/superuser/registration-list`,
     icon: <Note04Icon color="#000" />,
   },
-  {
-    name: "Assign Team Names",
-    link: `/superuser/assign-team-name`,
-    icon: <UserSwitchIcon color="#000" />,
-  },
+  // {
+  //   name: "Assign Team Names",
+  //   link: `/superuser/assign-team-name`,
+  //   icon: <UserSwitchIcon color="#000" />,
+  // },
   {
     name: "Create User",
     link: `/superuser/create-user`,

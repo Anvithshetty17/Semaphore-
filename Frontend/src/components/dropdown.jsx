@@ -18,7 +18,7 @@ function DropDown({
     name,
     firstValue,
     isRequired = false,
-    textColor = 'text-gray-600',
+    textColor = 'text-white',
     className = '',
     readOnly = false,
     placeholder,
