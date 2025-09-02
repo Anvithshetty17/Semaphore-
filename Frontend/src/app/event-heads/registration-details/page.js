@@ -17,7 +17,7 @@ export default function Page() {
   if (isEventLoading) return <Loading />
 
   return (
-    <div className="p-8 bg-gray-50">
+    <div className="p-8 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 ">
       <h2 className="font-dosisBold text-2xl font-bold mb-6">Registration List</h2>
       {registrationDetails?.map((registration) => (
         <div

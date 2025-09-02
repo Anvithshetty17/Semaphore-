@@ -47,7 +47,7 @@ const UpdateCurrentRound = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-6 border rounded-lg p-3 bg-white">
+            <div className="flex flex-col space-y-6 border rounded-lg p-3 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
                 <h3 className="font-dosisBold mb-3"> Update Current Round Status </h3>
                 <div className="flex flex-col space-y-3">
                     <div className="grid grid-cols-4 gap-4">

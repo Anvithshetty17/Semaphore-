@@ -89,8 +89,8 @@ export default function UpdateScores() {
     if (isTotalRoundsLoading) return <Loading />;
 
     return (
-        <div className="bg-gray-100 flex items-center justify-center font-dosisRegular">
-            <div className="bg-white w-full p-8 rounded-lg shadow-md">
+        <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center font-dosisRegular">
+            <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 w-full p-8 rounded-lg shadow-md">
                 {/* Select Round */}
                 <div className="mb-8 w-48">
                     <DropDown
@@ -107,7 +107,7 @@ export default function UpdateScores() {
                     />
                 </div>
                 {/* Table Header */}
-                <div className="grid grid-cols-4 gap-8 text-center font-dosisBold text-black mb-4">
+                <div className="grid grid-cols-4 gap-8 text-center font-dosisBold text-white mb-4">
                     <div>S.I No</div>
                     <div>Team Name</div>
                     <div>College Name</div>
