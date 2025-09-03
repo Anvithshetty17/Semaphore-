@@ -4,7 +4,7 @@ import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html 
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
-// import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 const LandingScene = ({ eventsData }) => {
   const cameraRef = useRef();
@@ -17,6 +17,9 @@ const LandingScene = ({ eventsData }) => {
     { position: [70, 60, -10], lookAt: [-10, 60, 0] },
     { position: [60, 60, -10], lookAt: [-10, -10, 0] },
     { position: [90, 15, 15], lookAt: [-10, 10, 0] },
+    { position: [78, 15, -20], lookAt: [80, 25, 70] },
+
+
   ];
 
   // Info button guided waypoints
@@ -169,15 +172,15 @@ const LandingScene = ({ eventsData }) => {
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
-      {/* Add bloom post-processing effect
+      {/* Add bloom post-processing effect */}
       <EffectComposer multisampling={8}>
         <Bloom 
-          intensity={1.0}
-          kernelSize={3}
+          intensity={1.2}
+          kernelSize={2}
           luminanceThreshold={0.3}
           luminanceSmoothing={0.4}
         />
-      </EffectComposer> */}
+      </EffectComposer>
     </>
   );
 };
