@@ -14,14 +14,23 @@ const LandingScene = ({ eventsData }) => {
 
   // Camera waypoints
   const cameraPositions = [
-    { position: [110, 60, -10], lookAt: [0, 50, 0] },
-    { position: [70, 60, -10], lookAt: [-10, 60, 0] },
-    { position: [60, 60, -10], lookAt: [-10, -10, 0] },
-    { position: [90, 15, 15], lookAt: [-10, 10, 0] },
-    { position: [78, 15, -20], lookAt: [80, 25, 70] },
+    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore
+    { position: [70, 63, -10], lookAt: [0, 52, 0] }, //starting from semaphore
+    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down
+    { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down
+    
+    
+    
+    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom
+    { position: [76, 15, -20], lookAt: [80, 85, 120] }, //IT quiz building bottom
+    
 
-
-  ];
+    
+    
+    //surprise event buiding
+    // { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view
+    // { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view
+  ];  
 
   // Info button guided waypoints
   const infoWaypoints = [
