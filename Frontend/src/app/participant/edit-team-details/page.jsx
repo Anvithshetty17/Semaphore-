@@ -141,7 +141,7 @@ const EditTeamDetails = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4">
                 <h3 className="font-dosisBold mb-3"> Edit Team Details </h3>
                 <form className="flex flex-col space-y-3" onSubmit={handleUpdate}>
                     {inputData?.map((ele, index) => {
