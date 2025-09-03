@@ -1,6 +1,6 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
-import { RobotModel } from "./"
+// import { RobotModel } from "./"
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
@@ -18,19 +18,23 @@ const LandingScene = ({ eventsData }) => {
     { position: [70, 63, -10], lookAt: [0, 52, 0] }, //starting from semaphore
     { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down
-    
-    
-    
-    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom
-    { position: [76, 15, -20], lookAt: [80, 85, 120] }, //IT quiz building bottom
-    
 
-    
-    
+
+
+    // { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom
+    // { position: [76, 15, -20], lookAt: [80, 85, 120] }, //IT quiz building top1
+    { position: [76.5, 12, -20], lookAt: [80, 45, 120] }, //IT quiz building top1
+    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //IT quiz building top1
+
     //surprise event buiding
-    // { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view
-    // { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view
-  ];  
+    { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view
+    { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view
+
+    //Photography Cyber scope
+    { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view
+    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //far view
+
+  ];
 
   // Info button guided waypoints
   const infoWaypoints = [
@@ -102,26 +106,26 @@ const LandingScene = ({ eventsData }) => {
 
   return (
     <>
-     {/* Dark background */}
-<color attach="background" args={["#000000"]} />
+      {/* Dark background */}
+      <color attach="background" args={["#000000"]} />
 
-{/* Minimal ambient light (almost dark) */}
-<ambientLight intensity={0.02} />
+      {/* Minimal ambient light (almost dark) */}
+      <ambientLight intensity={0.02} />
 
-{/* Neon-style lights */}
-<pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
-<pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
-<pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
+      {/* Neon-style lights */}
+      <pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
+      <pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
+      <pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
 
-<fog attach="fog" args={["#000000", 10, 80]} />
+      <fog attach="fog" args={["#000000", 10, 80]} />
 
 
-{/* Slight rim light so model edges are visible */}
-<directionalLight
-  position={[5, 15, 10]}
-  intensity={0.05}
-  color="#ffffff"
-/>
+      {/* Slight rim light so model edges are visible */}
+      <directionalLight
+        position={[5, 15, 10]}
+        intensity={0.05}
+        color="#ffffff"
+      />
 
       <CityNeonModel position={[0.22, 0.4, -0.01]} />
 
@@ -184,7 +188,7 @@ const LandingScene = ({ eventsData }) => {
 
       {/* Add bloom post-processing effect */}
       <EffectComposer multisampling={8}>
-        <Bloom 
+        <Bloom
           intensity={1.2}
           kernelSize={2}
           luminanceThreshold={0.3}
