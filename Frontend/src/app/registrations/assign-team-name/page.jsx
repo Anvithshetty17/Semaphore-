@@ -56,7 +56,7 @@ const AssignTeamName = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4">
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-4">
                 <h3 className="font-dosisBold mb-3"> Assign Team Name </h3>
                 {regCollegeNames?.map((ele, index) => {
                     return (

@@ -1,11 +1,13 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
+import { RobotModel } from "./robotModel"
 // import { RobotModel } from "./"
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { info } from "sass";
 
 const LandingScene = ({ eventsData }) => {
   const cameraRef = useRef();
@@ -39,9 +41,9 @@ const LandingScene = ({ eventsData }) => {
   // Info button guided waypoints
   const infoWaypoints = [
     { position: [80, 20, 15], lookAt: [-10, 10, 0] },
-    { position: [78, 22, 18], lookAt: [-10, 10, 0] },
-    { position: [82, 19, 14], lookAt: [-10, 10, 0] },
-    { position: [85, 21, 12], lookAt: [-10, 10, 0] },
+    // { position: [78, 22, 18], lookAt: [-10, 10, 0] },
+    // { position: [82, 19, 14], lookAt: [-10, 10, 0] },
+    // { position: [85, 21, 12], lookAt: [-10, 10, 0] },
   ];
 
   function lerpVec3(a, b, t) {
@@ -128,6 +130,13 @@ const LandingScene = ({ eventsData }) => {
       />
 
       <CityNeonModel position={[0.22, 0.4, -0.01]} />
+      
+      {/* Robot Model positioned to be visible during camera journey */}
+      <RobotModel 
+        position={[-15, 8, 15]} 
+        scale={[0, 0, 2]} 
+        rotation={[0, Math.PI / 4, 0]} 
+      />
 
       {/* Scroll Down Indicator (HTML overlay) */}
       <Html
@@ -160,11 +169,14 @@ const LandingScene = ({ eventsData }) => {
       </Html>
 
       {/* Guided info button that moves & bounces */}
-      <group ref={infoGroupRef} position={infoWaypoints[0].position}>
-        <group position={[0, -4.2, 0]}>
-          <RoundedBox
-            args={[4, 1.2, 0.5]}
-            radius={0.25}
+      {infoWaypoints.length > 0 && infoWaypoints.map((waypoint, index) => {
+        const { position } = waypoint;
+        return (
+          <group key={index} ref={infoGroupRef} position={position}>
+            <group position={[0, -4.2, 0]}>
+              <RoundedBox
+                args={[4, 1.2, 0.5]}
+                radius={0.25}
             smoothness={4}
             onClick={() => console.log("Info button clicked")}
           >
@@ -183,7 +195,7 @@ const LandingScene = ({ eventsData }) => {
           </Text>
         </group>
       </group>
-
+        )})}
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
       {/* Add bloom post-processing effect */}

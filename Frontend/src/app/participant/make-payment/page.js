@@ -41,11 +41,11 @@ const MakePayment = () => {
 
     return (
         <>
-            <div className="flex flex-col space-y-3 border rounded-lg bg-white p-4 w-full min-h-full lg:h-full">
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4 min-h-screen">
                 <h3 className="font-dosisBold mb-3"> Payment Details Page</h3>
                 <div className="flex flex-col w-full h-full justify-around items-center">
                     <Image
-                        src="/images/payment_qr_code.jpeg"
+                        src="/images/kiran_qr_code.jpg"
                         alt="Payment QR Code"
                         width={300}
                         height={300}

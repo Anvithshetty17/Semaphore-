@@ -63,13 +63,13 @@ const Page = () => {
             return (
               <>
                 <tr
-                  className={`bg-white ${index != regCollegeNames?.length - 1 && 'border-b border-cyan-400/30'} text-[13px] text-black-600 hover:bg-gray-100 transition-all`}
+                  className={` bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  text-white ${index != regCollegeNames?.length - 1 && 'border-b border-white-400/30'} text-[13px] text-black-600 hover:bg-gray-100 transition-all`}
                 >
                   <td className="px-2 py-3">{index + 1}</td>
                   <td className="px-2 py-3 ">{ele?.teamName}</td>
                   <th
                     scope="row"
-                    className="p-2 font-medium text-cyan-300 whitespace-nowrap"
+                    className="p-2 font-medium text-white whitespace-nowrap"
                   >
                     {ele?.college.collegeName}
                   </th>
@@ -97,7 +97,7 @@ const Page = () => {
             <div className="flex justify-end space-x-4">
               <button
                 onClick={handleDialogClose}
-                className="bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded-lg"
+                className="bg-white text-black py-2 px-4 rounded-lg"
               >
                 Cancel
               </button>
