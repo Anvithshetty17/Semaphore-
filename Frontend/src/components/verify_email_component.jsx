@@ -43,11 +43,11 @@ const VerifyEmailComponent = () => {
             <div
                 className="flex flex-col items-center w-full max-w-sm mx-4 lg:mx-auto bg-white p-8 rounded-lg shadow-lg"
             >
-                {isEmailVerified === false ? <><h3 className="font-dosisBold text-[25px]"> Verify Email </h3>
-                    <p className="font-dosisMedium text-md text-center mt-4">Click the button below to complete your email verification. This will confirm your registration and give you full access to our event details.</p>
+                {isEmailVerified === false ? <><h3 className="font-dosisBold text-[25px] text-black"> Verify Email </h3>
+                    <p className="font-dosisMedium text-md text-center mt-4 text-black">Click the button below to complete your email verification. This will confirm your registration and give you full access to our event details.</p>
                     <div className="flex justify-center w-full mt-10">
                         <button
-                            className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 font-dosisMedium"
+                            className="w-1/2 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 text-white py-2 rounded-md text-lg font-semibold  transition duration-300 font-dosisMedium"
                             type="submit"
                             onClick={handleVerify}
                         >
