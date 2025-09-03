@@ -56,26 +56,25 @@ const Page = () => {
   if (isEventLoading) return <Loading />
   return (
     <>
-      <div className="p-8 bg-gray-50 rounded-lg">
-        <h2 className="font-dosisBold text-2xl font-bold mb-6">Registrations List</h2>
+      <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-8">
+        <h2 className="font-dosisBold text-2xl font-bold mb-6 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]">Registrations List</h2>
         <CustomTable rows={['S.I. No', 'Team Name', 'College Name', 'Fees', 'Status Of Arrival']} centerIndex={[4]}>
           {regCollegeNames?.map((ele, index) => {
             return (
               <>
                 <tr
-                  className={`bg-white ${index != regCollegeNames?.length - 1 && 'border-b'
-                    } text-[13px]`}
+                  className={`bg-white ${index != regCollegeNames?.length - 1 && 'border-b border-cyan-400/30'} text-[13px] text-black-600 hover:bg-gray-100 transition-all`}
                 >
                   <td className="px-2 py-3">{index + 1}</td>
-                  <td className="px-2 py-3">{ele?.teamName}</td>
+                  <td className="px-2 py-3 ">{ele?.teamName}</td>
                   <th
                     scope="row"
-                    className="p-2 font-medium text-gray-900 whitespace-nowrap"
+                    className="p-2 font-medium text-cyan-300 whitespace-nowrap"
                   >
                     {ele?.college.collegeName}
                   </th>
 
-                  <td className="px-2 py-3">{ele?.isPaid ? "Paid" : "Pending"}</td>
+                  <td className={`px-2 py-3 font-dosisBold ${ele?.isPaid ? 'text-green-400' : 'text-yellow-300'}`}>{ele?.isPaid ? "Paid" : "Pending"}</td>
                   <td className="px-2 py-3 flex flex-row justify-center">
                     {ele?.isTeamReported === false && <button
                       onClick={() => handleButtonClick(ele?.registrationId)}
@@ -92,9 +91,9 @@ const Page = () => {
 
       {showDialog && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-5 rounded-lg shadow-lg w-1/3">
-            <h3 className="font-dosisBold text-lg mb-4">Confirm Action</h3>
-            <p className="mb-4">Are you sure you want to mark this as reported?</p>
+          <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-5 rounded-lg shadow-lg w-1/3 border border-cyan-400/30">
+            <h3 className="font-dosisBold text-lg mb-4 text-white">Confirm Action</h3>
+            <p className="mb-4 text-cyan-200">Are you sure you want to mark this as reported?</p>
             <div className="flex justify-end space-x-4">
               <button
                 onClick={handleDialogClose}

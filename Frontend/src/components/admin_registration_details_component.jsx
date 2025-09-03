@@ -20,8 +20,8 @@ const AdminRegistrationDetailsComponent = () => {
     if (isRegistrationDataLoading) return <Loading />
     return (
         <>
-            <div className="w-full min-h-full border rounded-lg   bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4 space-y-6">
-                <h3 className="font-dosisBold mb-3"> Registration Details </h3>
+            <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-6">
+                <h3 className="font-dosisBold mb-3 text-white text-lg tracking-wider drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]">Registration Details</h3>
                 <div className="flex flex-col space-y-10">
                     <div className="flex flex-col space-y-2">
                         <RegistrationDetailCard1 name="College Name" value={registrationData?.college?.collegeName} />
@@ -30,12 +30,12 @@ const AdminRegistrationDetailsComponent = () => {
                         <RegistrationDetailCard1 name="Phone Number" value={registrationData?.user?.phoneNumber} />
                         <RegistrationDetailCard1 name="Status" value={registrationData?.status?.status} />
                     </div>
-                    <p className="font-dosisBold">Event & Participants Details</p>
+                    <p className="font-dosisBold text-cyan-300">Event & Participants Details</p>
                     {registrationData?.eventTeams?.map((ele, index) => {
                         return (
                             <>
                                 <div className="flex flex-col space-y-3 font-dosisMedium">
-                                    <p>{ele?.event.eventName}</p>
+                                    <p className="text-purple-300">{ele?.event.eventName}</p>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 text-white">
                                         {ele.eventMembers?.map((el, ind) => {
                                             return (
