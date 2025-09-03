@@ -1,5 +1,6 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
+import { RobotModel } from "./"
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
