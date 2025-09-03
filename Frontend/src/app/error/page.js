@@ -11,10 +11,10 @@ const Error = () => {
     style={{ backgroundImage: 'url("/images/error.gif")' }}
 >
     <div
-        className="flex flex-col items-center w-80 sm:w-96 mx-auto p-8 rounded-xl shadow-xl border-t-4 border-[#ff00ff] transform transition-all duration-300 bg-white/30 backdrop-blur-md"
+        className="flex flex-col items-center w-70 sm:w-96 mx-auto p-9 rounded-xl shadow-xl border-t-4 border-[#ff00ff] transform transition-all duration-300 bg-white/30 backdrop-blur-md"
     >
         {/* Heading and Message */}
-        <h3 className="font-dosisBold text-3xl text-[#ff00ff] text-center mb-3">
+        <h3 className="font-dosisBold text-10xl text-[#ff00ff] text-center mb-3">
             Error !
         </h3>
         <p className="font-dosisMedium text-base text-center text-[#000000] leading-relaxed">

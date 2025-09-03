@@ -78,7 +78,7 @@ export default function Register_Page() {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
-      style={{ backgroundImage: "url('/images/login.png')" }}
+      style={{ backgroundImage: "url('/images/login.gif')" }}
     >
       <form
         onSubmit={handleSubmit}
