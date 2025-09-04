@@ -82,7 +82,7 @@ export default function Register_Page() {
     >
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-sm mx-auto p-4 rounded-2xl
+        className="relative w-full max-w-sm mx-auto p-4 rounded-2xl text-white
                    backdrop-blur-xl bg-black/80 border border-pink-500/30 
                    shadow-[0_0_20px_rgba(255,0,255,0.18)] max-h-[95vh] overflow-y-auto"
         style={{ minHeight: "auto" }}

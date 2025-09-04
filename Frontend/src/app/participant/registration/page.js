@@ -180,7 +180,7 @@ const RegisterSection = ({ eventList }) => {
     return (
         <>
             <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4">
-                <h3 className="font-dosisBold mb-3"> Enter Participant Details </h3>
+                <h3 className="font-dosisBold mb-3 text-white"> Enter Participant Details </h3>
                 <form className="flex flex-col space-y-3" onSubmit={handleCompleteRegistration}>
 
                     {inputData?.map((ele, index) => {
