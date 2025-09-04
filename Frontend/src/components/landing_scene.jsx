@@ -1,7 +1,6 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
 import { RobotModel } from "./robotModel"
-// import { RobotModel } from "./"
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
@@ -14,7 +13,6 @@ const LandingScene = ({ eventsData }) => {
   const scroll = useScroll();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  // Camera waypoints
   const cameraPositions = [
     { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore
     { position: [70, 63, -10], lookAt: [0, 52, 0] }, //starting from semaphore
@@ -37,7 +35,6 @@ const LandingScene = ({ eventsData }) => {
     { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //far view
 
   ];
-
   // Info button guided waypoints
   const infoWaypoints = [
     { position: [80, 20, 15], lookAt: [-10, 10, 0] },
@@ -108,35 +105,29 @@ const LandingScene = ({ eventsData }) => {
 
   return (
     <>
-      {/* Dark background */}
-      <color attach="background" args={["#000000"]} />
+     {/* Dark background */}
+<color attach="background" args={["#000000"]} />
 
-      {/* Minimal ambient light (almost dark) */}
-      <ambientLight intensity={0.02} />
+{/* Minimal ambient light (almost dark) */}
+<ambientLight intensity={0.02} />
 
-      {/* Neon-style lights */}
-      <pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
-      <pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
-      <pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
+{/* Neon-style lights */}
+<pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
+<pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
+<pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
 
-      <fog attach="fog" args={["#000000", 10, 80]} />
+<fog attach="fog" args={["#000000", 10, 80]} />
 
 
-      {/* Slight rim light so model edges are visible */}
-      <directionalLight
-        position={[5, 15, 10]}
-        intensity={0.05}
-        color="#ffffff"
-      />
+{/* Slight rim light so model edges are visible */}
+<directionalLight
+  position={[5, 15, 10]}
+  intensity={0.05}
+  color="#ffffff"
+/>
 
       <CityNeonModel position={[0.22, 0.4, -0.01]} />
-      
-      {/* Robot Model positioned to be visible during camera journey */}
-      <RobotModel 
-        position={[-15, 8, 15]} 
-        scale={[0, 0, 2]} 
-        rotation={[0, Math.PI / 4, 0]} 
-      />
+     
 
       {/* Scroll Down Indicator (HTML overlay) */}
       <Html
@@ -168,39 +159,30 @@ const LandingScene = ({ eventsData }) => {
         </div>
       </Html>
 
-      {/* Guided info button that moves & bounces */}
+      {/* Robot Model positioned at the IT quiz building */}
+      <RobotModel 
+        position={[80, 25, 120]} 
+        scale={[3, 3, 3]} 
+        rotation={[0, Math.PI, 0]} 
+      />
+
+      {/* Guided robot that moves & bounces instead of info button */}
       {infoWaypoints.length > 0 && infoWaypoints.map((waypoint, index) => {
         const { position } = waypoint;
         return (
           <group key={index} ref={infoGroupRef} position={position}>
-            <group position={[0, -4.2, 0]}>
-              <RoundedBox
-                args={[4, 1.2, 0.5]}
-                radius={0.25}
-            smoothness={4}
-            onClick={() => console.log("Info button clicked")}
-          >
-            <meshStandardMaterial color="#0ea5e9" emissive="#065c80" emissiveIntensity={0.2} />
-          </RoundedBox>
-          <Text
-            position={[0, 0, 0.3]}
-            fontSize={0.6}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-            outlineWidth={0.02}
-            outlineColor="#000"
-          >
-            Info
-          </Text>
-        </group>
-      </group>
+            <RobotModel 
+              position={[0, 0, 0]} 
+              scale={[1.5, 1.5, 1.5]} 
+              rotation={[0, Math.PI / 4, 0]} 
+            />
+          </group>
         )})}
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
       {/* Add bloom post-processing effect */}
       <EffectComposer multisampling={8}>
-        <Bloom
+        <Bloom 
           intensity={1.2}
           kernelSize={2}
           luminanceThreshold={0.3}
