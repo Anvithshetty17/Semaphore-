@@ -1,12 +1,10 @@
 "use client";
 import { CityNeonModel } from "./cityneon2";
-import { RobotModel } from "./robotModel"
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, RoundedBox, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { info } from "sass";
 
 const LandingScene = ({ eventsData }) => {
   const cameraRef = useRef();
@@ -195,22 +193,45 @@ const LandingScene = ({ eventsData }) => {
         rotation={[0, Math.PI, 0]} 
       /> */}
 
-      {/* Guided robot that moves & bounces instead of info button
-      {infoWaypoints.length > 0 && infoWaypoints.map((waypoint, index) => {
-        const { position } = waypoint;
-        return (
-          <group key={index} ref={infoGroupRef} position={position}>
-            <RobotModel 
-              position={[0, 0, 0]} 
-              scale={[0.02, 0.02, 0.02]} 
-              rotation={[0, 0, 0]} 
+      {/* Info icon that moves & bounces */}
+      <group ref={infoGroupRef}>
+        <Billboard>
+          <RoundedBox args={[3, 3, 0.5]} radius={0.3}>
+            <meshStandardMaterial 
+              color="#00ffff" 
+              emissive="#00ffff"
+              emissiveIntensity={0.5}
+              transparent
+              opacity={0.8}
             />
-          </group>
-        )})} */}
+          </RoundedBox>
+          <Text
+            position={[0, 0, 0.3]}
+            fontSize={2}
+            color="#ffffff"
+            anchorX="center"
+            anchorY="middle"
+            font="/fonts/Dosis-Bold.ttf"
+          >
+            i
+          </Text>
+          {/* Glow effect */}
+        <RoundedBox args={[3.5, 3.5, 0.1]} radius={0.4} position={[0, 0, -0.1]}>
+            <meshStandardMaterial 
+              color="#00ffff"
+              emissive="#00ffff"
+              emissiveIntensity={0.3}
+              transparent
+              opacity={0.3}
+            />
+          </RoundedBox> 
+        </Billboard>
+      </group>
+
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
       {/* Add bloom post-processing effect */}
-       <EffectComposer multisampling={8}>
+       <EffectComposer multisampling={4}>
         <Bloom 
           intensity={1.2}
           kernelSize={2}
@@ -221,5 +242,4 @@ const LandingScene = ({ eventsData }) => {
     </>
   );
 };
-
 export { LandingScene };
