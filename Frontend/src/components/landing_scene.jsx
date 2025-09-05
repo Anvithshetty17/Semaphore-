@@ -13,28 +13,57 @@ const LandingScene = ({ eventsData }) => {
   const scroll = useScroll();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
+  // Camera waypoints 
   const cameraPositions = [
-    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore
-    { position: [70, 63, -10], lookAt: [0, 52, 0] }, //starting from semaphore
-    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down
-    { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down
+    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+    { position: [70, 63, -10], lookAt: [0, 52, 0] },//starting from semaphore 
+    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down 
+    { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
+
+    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom 
+    // { position: [76, 15, -20], lookAt: [80, 85, 120] }, 
+    //IT quiz building top1 
+
+    { position: [76.5, 12, -20], lookAt: [80, 45, 120] }, //IT quiz building top1 
+    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //IT quiz building top1 
+
+
+    //surprise event buiding 
+    { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
+    { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view 
+
+    //Photography Cyber scope 
+    { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
+    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //far view 
+
+    //Cyborg recruit IT manager 
+    { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
+    { position: [61, 27, 11], lookAt: [67, 40, -60] }, //far view 
+
+    //Rythm Hack dance event 
+    { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
+    { position: [75, 16, 4], lookAt: [27, 30, -60] }, //far view 
+
+    //Hyper Launch Startup 
+    { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
+    { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
+
+    //Rampage Horizon Gaming far view 
+    { position: [32, 22, -10], lookAt: [-25, 70, -40] }, //far view 
+    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
+    { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
 
 
 
-    // { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom
-    // { position: [76, 15, -20], lookAt: [80, 85, 120] }, //IT quiz building top1
-    { position: [76.5, 12, -20], lookAt: [80, 45, 120] }, //IT quiz building top1
-    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //IT quiz building top1
+    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
 
-    //surprise event buiding
-    { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view
-    { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view
 
-    //Photography Cyber scope
-    { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view
-    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //far view
+    // { position: [45, 16, -14], lookAt: [-70, 30, 20] }, far view 
 
+    // { position: [25, 16, -14], lookAt: [-70, 30, 20] }, //far view 
   ];
+
+  
   // Info button guided waypoints
   const infoWaypoints = [
     { position: [75, 35, 15], lookAt: [-10, 10, 0] },
