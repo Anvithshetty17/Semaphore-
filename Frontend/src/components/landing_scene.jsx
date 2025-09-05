@@ -251,10 +251,10 @@ const LandingScene = ({ eventsData }) => {
       {/* Add bloom post-processing effect */}
        <EffectComposer multisampling={4}>
         <Bloom 
-          intensity={0.2}
+          intensity={1.2}
           kernelSize={2}
-          luminanceThreshold={1.3}
-          luminanceSmoothing={1.4}
+          luminanceThreshold={0.3}
+          luminanceSmoothing={0.4}
         />
       </EffectComposer>
     </>
