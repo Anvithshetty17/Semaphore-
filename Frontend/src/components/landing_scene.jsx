@@ -21,7 +21,6 @@ const LandingScene = ({ eventsData }) => {
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
 
     { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom 
-    // { position: [76, 15, -20], lookAt: [80, 85, 120] }, 
     //IT quiz building top1 
 
     { position: [76.5, 12, -20], lookAt: [80, 45, 120] }, //IT quiz building top1 
@@ -55,24 +54,29 @@ const LandingScene = ({ eventsData }) => {
 
 
 
-    // { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
-    // { position: [45, 16, -15], lookAt: [-70, 30, -5] }, //far view 
-    // { position: [15, 16, 0], lookAt: [8, 20, -10] }, //far view 
     { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
-    /* dummy */ { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
 
 
-    { position: [26, 34, 4], lookAt: [-7, 48, -50] }, //far view 
-    { position: [42, 44, -14], lookAt: [40, 48, 10] }, //far view 
+    { position: [27, 34, 14], lookAt: [6, 48, -50] }, //far view 
     
-    // { position: [26, 34, 4], lookAt: [7, 48, -50] }, //far view 
+    
+    { position: [35, 39, 9], lookAt: [-4, 42, -50] }, //far view 
+    
+    { position: [42, 34, -12], lookAt: [6, 17, -11] }, //far view 
+    
+    { position: [42, 34, -12], lookAt: [43, 57, 10] }, //far view 
+    
+    { position: [42, 45, -12], lookAt: [43, 43, 10] }, //far view 
 
-    // { position: [75, 34, -4], lookAt: [-55, 35, -50] }, //far view 
+    { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far view 
+    
+    
+    
    
    
-    // { position: [40, 34, -24], lookAt: [-55, 35, -50] }, //far view 
-    // { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //far view 
-    // { position: [60, 34, -54], lookAt: [-55, 25, 0] }, //far view 
+    { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //far view 
+    { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //far view 
+    { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
     
 
 
@@ -226,10 +230,10 @@ const LandingScene = ({ eventsData }) => {
       {/* Add bloom post-processing effect */}
        <EffectComposer multisampling={8}>
         <Bloom 
-          intensity={1.2}
+          intensity={0.2}
           kernelSize={2}
-          luminanceThreshold={0.3}
-          luminanceSmoothing={0.4}
+          luminanceThreshold={1.3}
+          luminanceSmoothing={1.4}
         />
       </EffectComposer>
     </>
