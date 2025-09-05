@@ -55,14 +55,28 @@ const LandingScene = ({ eventsData }) => {
 
 
 
-    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
+    // { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
+    // { position: [45, 16, -15], lookAt: [-70, 30, -5] }, //far view 
+    // { position: [15, 16, 0], lookAt: [8, 20, -10] }, //far view 
+    { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
+    /* dummy */ { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
 
 
-    // { position: [45, 16, -14], lookAt: [-70, 30, 20] }, far view 
+    { position: [26, 34, 4], lookAt: [-7, 48, -50] }, //far view 
+    { position: [42, 44, -14], lookAt: [40, 48, 10] }, //far view 
+    
+    // { position: [26, 34, 4], lookAt: [7, 48, -50] }, //far view 
 
-    // { position: [25, 16, -14], lookAt: [-70, 30, 20] }, //far view 
+    // { position: [75, 34, -4], lookAt: [-55, 35, -50] }, //far view 
+   
+   
+    // { position: [40, 34, -24], lookAt: [-55, 35, -50] }, //far view 
+    // { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //far view 
+    // { position: [60, 34, -54], lookAt: [-55, 25, 0] }, //far view 
+    
+
+
   ];
-
   
   // Info button guided waypoints
   const infoWaypoints = [
