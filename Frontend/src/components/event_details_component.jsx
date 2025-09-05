@@ -168,7 +168,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [] }) => {
                     <div>
                       <div className="text-gray-500 mb-1">NEURAL_HASH:</div>
                       <div className="text-gray-400 font-mono text-xs break-all">
-                        {currentEvent.eventId?.replace(/-/g, '').slice(0, 16).toUpperCase()}...
+                        {eventData.eventId?.replace(/-/g, '').slice(0, 16).toUpperCase()}...
                       </div>
                     </div>
                   </div>

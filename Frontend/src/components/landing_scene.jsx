@@ -44,8 +44,9 @@ const LandingScene = ({ eventsData }) => {
 
   // Camera waypoints 
   const cameraPositions = [
-    isMobile && { position: [110, 65, -16], lookAt: [0, 55, 0] }, //starting from semaphore 
-   !isMobile && { position: [80, 65, -15], lookAt: [0, 52, 0] }, //starting from semaphore 
+    isMobile 
+      ? { position: [110, 65, -16], lookAt: [0, 55, 0] } //starting from semaphore mobile
+      : { position: [80, 65, -15], lookAt: [0, 52, 0] }, //starting from semaphore desktop 
     { position: [70, 63, -10], lookAt: [0, 52, 0] },//starting from semaphore 
     { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down 
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
@@ -114,14 +115,14 @@ const LandingScene = ({ eventsData }) => {
   
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' },
-    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: 'it-quiz-event-id' },
-    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'surprise-event-id' },
-    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: 'photography-event-id' },
-    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: 'cyborg-recruit-id' },
-    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: 'rhythm-hack-id' },
-    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: 'hyper-launch-id' },
-    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: 'rampage-horizon-id' },
+    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
+    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
+    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
+    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
+    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
+    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
+    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: 'ad630e52-bc20-40ce-abe0-18644eddacc2' }, // Cyborg Recruit
+    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
   ];
 
   function lerpVec3(a, b, t) {
