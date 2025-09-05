@@ -37,7 +37,7 @@ const LandingScene = ({ eventsData }) => {
   ];
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [80, 20, 15], lookAt: [-10, 10, 0] },
+    { position: [75, 35, 15], lookAt: [-10, 10, 0] },
     // { position: [78, 22, 18], lookAt: [-10, 10, 0] },
     // { position: [82, 19, 14], lookAt: [-10, 10, 0] },
     // { position: [85, 21, 12], lookAt: [-10, 10, 0] },
@@ -160,11 +160,11 @@ const LandingScene = ({ eventsData }) => {
       </Html>
 
       {/* Robot Model positioned at the IT quiz building */}
-      <RobotModel 
+      {/* <RobotModel 
         position={[80, 25, 120]} 
-        scale={[3, 3, 3]} 
+        scale={[0.2, 0.2, 0.2]} 
         rotation={[0, Math.PI, 0]} 
-      />
+      /> */}
 
       {/* Guided robot that moves & bounces instead of info button */}
       {infoWaypoints.length > 0 && infoWaypoints.map((waypoint, index) => {
@@ -173,7 +173,7 @@ const LandingScene = ({ eventsData }) => {
           <group key={index} ref={infoGroupRef} position={position}>
             <RobotModel 
               position={[0, 0, 0]} 
-              scale={[1.5, 1.5, 1.5]} 
+              scale={[0.02, 0.02, 0.02]} 
               rotation={[0, Math.PI / 4, 0]} 
             />
           </group>
