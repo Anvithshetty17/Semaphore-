@@ -5,15 +5,47 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import CyberpunkDrawer from "./event_details_component";
+
+// AnimatedPulseCircle: sonar/halogen pulse effect for the billboard button
+function AnimatedPulseCircle() {
+  const meshRef = useRef();
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
+    const pulse = (t % 1.5) / 1.5; // 0..1
+    meshRef.current.scale.setScalar(1.5 + pulse * 1.8);
+    if (meshRef.current.material) {
+      meshRef.current.material.opacity = 0.25 * (1 - pulse);
+    }
+  });
+  return (
+    <mesh ref={meshRef} position={[0, 0, -0.05]}>
+      <circleGeometry args={[1.7, 64]} />
+      <meshStandardMaterial
+        color="#00eaff"
+        emissive="#00eaff"
+        emissiveIntensity={0.7}
+        transparent
+        opacity={0.25}
+        metalness={0.7}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
 
 const LandingScene = ({ eventsData }) => {
   const cameraRef = useRef();
   const scroll = useScroll();
   const isMobile = useMediaQuery({ maxWidth: 768 });
+  const [loading, setLoading] = useState(true);
+  console.log("Events Data in LandingScene:", eventsData);
 
   // Camera waypoints 
   const cameraPositions = [
-    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+    isMobile && { position: [110, 65, -16], lookAt: [0, 55, 0] }, //starting from semaphore 
+   !isMobile && { position: [80, 65, -15], lookAt: [0, 52, 0] }, //starting from semaphore 
     { position: [70, 63, -10], lookAt: [0, 52, 0] },//starting from semaphore 
     { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down 
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
@@ -82,19 +114,23 @@ const LandingScene = ({ eventsData }) => {
   
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [73, 33, 15], lookAt: [10, 20, 60] },
-    // { position: [78, 22, 18], lookAt: [-10, 10, 0] },
-    // { position: [82, 19, 14], lookAt: [-10, 10, 0] },
-    // { position: [85, 21, 12], lookAt: [-10, 10, 0] },
+    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' },
+    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: 'it-quiz-event-id' },
+    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'surprise-event-id' },
+    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: 'photography-event-id' },
+    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: 'cyborg-recruit-id' },
+    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: 'rhythm-hack-id' },
+    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: 'hyper-launch-id' },
+    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: 'rampage-horizon-id' },
   ];
 
   function lerpVec3(a, b, t) {
     return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   }
 
-  const infoGroupRef = useRef();
   const scrollIndicatorRef = useRef();
   const [hideIndicator, setHideIndicator] = useState(false);
+  const [drawerEventId, setDrawerEventId] = useState(null);
 
   useFrame((state) => {
     const offset = scroll.offset; // 0..1
@@ -113,36 +149,10 @@ const LandingScene = ({ eventsData }) => {
       cameraRef.current.lookAt(...look);
     }
 
-    // Info button interpolation + bounce
-    if (infoGroupRef.current && infoWaypoints.length > 0) {
-      const totalInfo = infoWaypoints.length - 1;
-      const tInfo = offset * totalInfo;
-      const idxInfo = Math.floor(tInfo);
-      const lerpInfo = tInfo - idxInfo;
-      const fromInfo = infoWaypoints[idxInfo];
-      const toInfo = infoWaypoints[Math.min(idxInfo + 1, totalInfo)];
-      const basePos = toInfo ? lerpVec3(fromInfo.position, toInfo.position, lerpInfo) : fromInfo.position;
-      const look = toInfo ? lerpVec3(fromInfo.lookAt, toInfo.lookAt, lerpInfo) : fromInfo.lookAt;
-
-      const time = state.clock.getElapsedTime();
-      const bounceAmplitude = 0.6;
-      const bounceSpeed = 3;
-      const bounce = Math.sin(time * bounceSpeed) * bounceAmplitude;
-
-      infoGroupRef.current.position.set(basePos[0], basePos[1] + bounce, basePos[2]);
-      infoGroupRef.current.lookAt(...look);
-
-      const scalePulse = 1 + Math.sin(time * 4) * 0.05;
-      infoGroupRef.current.scale.set(scalePulse, scalePulse, scalePulse);
-    }
-
-    // Scroll indicator logic (fades & hides after user scrolls)
+    // Scroll indicator logic (fade instantly on scroll)
     if (scrollIndicatorRef.current) {
       const progress = offset; // 0..1
-      const fadeStart = 0.05; // start fading shortly after first movement
-      const fadeEnd = 0.2; // fully gone
-      if (progress > fadeEnd && !hideIndicator) setHideIndicator(true);
-      const opacity = hideIndicator ? 0 : progress < fadeStart ? 1 : Math.max(0, 1 - (progress - fadeStart) / (fadeEnd - fadeStart));
+      const opacity = progress > 0 ? 0 : 1;
       scrollIndicatorRef.current.style.opacity = opacity;
       scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${Math.sin(state.clock.getElapsedTime() * 3) * 8}px)`;
     }
@@ -171,10 +181,10 @@ const LandingScene = ({ eventsData }) => {
   color="#ffffff"
 />
 
-      <CityNeonModel position={[0.22, 0.4, -0.01]} />
+      <CityNeonModel position={[0.22, 0.4, -0.01]} onPointerOver={() => setLoading(false)} onPointerMove={() => setLoading(false)} />
      
 
-      {/* Scroll Down Indicator (HTML overlay) */}
+      {/* Scroll Down Indicator (HTML overlay as mouse icon, lower position, instant fade) */}
       <Html
         ref={scrollIndicatorRef}
         center
@@ -182,73 +192,77 @@ const LandingScene = ({ eventsData }) => {
         style={{
           position: 'absolute',
           left: '50%',
-          bottom: isMobile ? '40px' : '60px',
+          bottom: isMobile ? '-400px' : '-300px', // much lower
           pointerEvents: 'none',
-          fontFamily: 'Dosis, sans-serif',
-          color: '#fff',
-          textAlign: 'center',
-          fontSize: isMobile ? '14px' : '16px',
-          letterSpacing: '1px',
-          transition: 'opacity 0.6s ease',
-          textShadow: '0 2px 8px rgba(0,0,0,0.6)',
-          fontWeight: 500,
-          opacity: 1,
           userSelect: 'none',
+          transition: 'opacity 0.08s linear', // very fast
+          opacity: 1,
+          zIndex: 10,
         }}
         sprite={false}
         zIndexRange={[10, 0]}
       >
-        <div>
-          <div>SCROLL DOWN</div>
-          <div style={{ fontSize: isMobile ? '22px' : '26px', lineHeight: 1, marginTop: '4px' }}>↓</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* Simple mouse SVG icon */}
+          <svg width={isMobile ? 32 : 40} height={isMobile ? 48 : 56} viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="4" width="24" height="48" rx="12" stroke="#fff" strokeWidth="3" fill="rgba(0,0,0,0.2)" />
+            <circle cx="20" cy="18" r="3" fill="#fff" />
+          </svg>
         </div>
       </Html>
 
-      {/* Robot Model positioned at the IT quiz building */}
-      {/* <RobotModel 
-        position={[80, 25, 120]} 
-        scale={[0.2, 0.2, 0.2]} 
-        rotation={[0, Math.PI, 0]} 
-      /> */}
 
-      {/* Info icon that moves & bounces */}
-      <group ref={infoGroupRef}>
-        <Billboard>
-          <RoundedBox args={[3, 3, 0.5]} radius={0.3}>
-            <meshStandardMaterial 
-              color="#00ffff" 
-              emissive="#00ffff"
-              emissiveIntensity={0.5}
-              transparent
-              opacity={0.8}
-            />
-          </RoundedBox>
-          <Text
-            position={[0, 0, 0.3]}
-            fontSize={2}
-            color="#ffffff"
-            anchorX="center"
-            anchorY="middle"
-            font="/fonts/Dosis-Bold.ttf"
+      {/* Info icons: circular halogen buttons with animated sonar pulse for each waypoint */}
+      {infoWaypoints.map((waypoint, index) => (
+        <Billboard key={index}>
+          <group
+            position={waypoint.position}
+            onPointerDown={() => setDrawerEventId(waypoint.eventId)}
+            onClick={() => setDrawerEventId(waypoint.eventId)}
+            cursor="pointer"
           >
-            i
-          </Text>
-          {/* Glow effect */}
-        <RoundedBox args={[3.5, 3.5, 0.1]} radius={0.4} position={[0, 0, -0.1]}>
-            <meshStandardMaterial 
-              color="#00ffff"
-              emissive="#00ffff"
-              emissiveIntensity={0.3}
-              transparent
-              opacity={0.3}
-            />
-          </RoundedBox> 
+            <AnimatedPulseCircle />
+            <mesh>
+              <circleGeometry args={[1.5, 64]} />
+              <meshStandardMaterial 
+                color="#00ffff"
+                emissive="#00ffff"
+                emissiveIntensity={0.7}
+                transparent
+                opacity={0.85}
+                metalness={0.6}
+              />
+            </mesh>
+            <Text
+              position={[0, 0, 0.2]}
+              fontSize={1.6}
+              color="#ffffff"
+              anchorX="center"
+              anchorY="middle"
+              font="/fonts/Dosis-Bold.ttf"
+              outlineWidth={0.08}
+              outlineColor="#00eaff"
+            >
+              i
+            </Text>
+          </group>
         </Billboard>
-      </group>
+      ))}
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
-      {/* Add bloom post-processing effect */}
+      {/* CyberpunkDrawer: event details drawer, shown when drawerEventId is set */}
+      {drawerEventId && (
+        <Html center style={{ pointerEvents: 'auto', zIndex: 10000 }}>
+          <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0 }}>
+            <CyberpunkDrawer
+              eventId={drawerEventId}
+              eventsData={eventsData}
+              onClose={() => setDrawerEventId(null)}
+            />
+          </div>
+        </Html>
+      )}
        <EffectComposer multisampling={4}>
         <Bloom 
           intensity={1.2}

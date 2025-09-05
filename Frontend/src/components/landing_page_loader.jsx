@@ -282,14 +282,14 @@ const CyberpunkLoader = ({ onLoadComplete }) => {
             </motion.div>
 
             {/* System Info */}
-            <div className="absolute bottom-8 left-8 font-mono text-xs text-gray-500">
+            <div className="absolute bottom-8 left-8 font-mono text-sm md:text-xs text-gray-500">
               <p>&gt; NEURAL_NET_STATUS: ONLINE</p>
               <p>&gt; QUANTUM_STATE: SYNCHRONIZED</p>
               <p>&gt; MEMORY_BANKS: OPTIMAL</p>
             </div>
 
             {/* Version Info */}
-            <div className="absolute bottom-8 right-8 font-mono text-xs text-gray-500">
+            <div className="absolute bottom-8 right-8 font-mono text-sm md:text-xs text-gray-500">
               <p>CYBERPUNK.OS v2025.8.12</p>
               <p>BUILD: ALPHA_7_NEXUS</p>
             </div>
