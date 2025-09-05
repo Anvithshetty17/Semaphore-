@@ -66,7 +66,7 @@ const LandingScene = ({ eventsData }) => {
   
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [75, 35, 15], lookAt: [-10, 10, 0] },
+    { position: [73, 33, 15], lookAt: [10, 20, 60] },
     // { position: [78, 22, 18], lookAt: [-10, 10, 0] },
     // { position: [82, 19, 14], lookAt: [-10, 10, 0] },
     // { position: [85, 21, 12], lookAt: [-10, 10, 0] },
@@ -134,11 +134,11 @@ const LandingScene = ({ eventsData }) => {
 
   return (
     <>
-     {/* Dark background */}
+       {/* Dark background */}
 <color attach="background" args={["#000000"]} />
 
 {/* Minimal ambient light (almost dark) */}
-<ambientLight intensity={0.02} />
+<ambientLight intensity={0.01} />
 
 {/* Neon-style lights */}
 <pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
@@ -195,7 +195,7 @@ const LandingScene = ({ eventsData }) => {
         rotation={[0, Math.PI, 0]} 
       /> */}
 
-      {/* Guided robot that moves & bounces instead of info button */}
+      {/* Guided robot that moves & bounces instead of info button
       {infoWaypoints.length > 0 && infoWaypoints.map((waypoint, index) => {
         const { position } = waypoint;
         return (
@@ -203,14 +203,14 @@ const LandingScene = ({ eventsData }) => {
             <RobotModel 
               position={[0, 0, 0]} 
               scale={[0.02, 0.02, 0.02]} 
-              rotation={[0, Math.PI / 4, 0]} 
+              rotation={[0, 0, 0]} 
             />
           </group>
-        )})}
+        )})} */}
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
       {/* Add bloom post-processing effect */}
-      <EffectComposer multisampling={8}>
+       <EffectComposer multisampling={8}>
         <Bloom 
           intensity={1.2}
           kernelSize={2}
