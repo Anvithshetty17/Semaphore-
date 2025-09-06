@@ -77,20 +77,22 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
     { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //left near view 
     { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
 
+    { position: [29, 12, 18], lookAt: [7, 66, -50] }, //far view 
     //Tech talk tfechno hive
-    { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
+    { position: [40.5, 16, 12], lookAt: [7, 20, -10] }, //far view 
+    { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
 
     //Rampage Horizon Gaming 
     { position: [27, 34, 14], lookAt: [6, 48, -50] }, //top left view 
     { position: [35, 39, 9], lookAt: [-4, 42, -50] }, //top right view 
-    
+
     //Techno hive tech talk
     { position: [42, 34, -12], lookAt: [6, 17, -11] }, //top view 
-    
+
     // Cryptix coding event
     { position: [42, 34, -12], lookAt: [43, 57, 10] }, //nearup view 
     { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
-    
+
     //Design riot
     { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
     { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
