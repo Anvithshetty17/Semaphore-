@@ -42,8 +42,8 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
   console.log("Events Data in LandingScene:", eventsData);
 
  // Camera waypoints 
-  const cameraPositions = [
-    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+  const cameraPositions = [ isMobile?{ position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
+    :{ position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
     { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
     { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  

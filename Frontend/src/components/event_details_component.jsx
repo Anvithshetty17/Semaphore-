@@ -37,7 +37,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
       {/* Backdrop */}
       {isOpen && (
         <div 
-          className="absolute inset-0 bg-black/90 backdrop-blur-sm pointer-events-auto transition-opacity duration-300"
+          className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black/95 to-black/95 backdrop-blur-sm pointer-events-auto transition-opacity duration-300"
           onClick={handleClose}
         />
       )}
@@ -52,22 +52,22 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
           className="relative mx-3 mb-2 cursor-pointer group"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <div className="bg-black/90 border-2 border-red-500/50 rounded-t-xl p-3 shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-r from-purple-900/90 via-black/90 to-purple-900/90 border-2 border-cyan-400/50 rounded-t-xl p-3 shadow-2xl relative overflow-hidden">
             {/* Glitch effect lines */}
-            <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-transparent opacity-50"></div>
-            <div className="absolute top-0 left-0 w-full h-0.5 bg-red-500 animate-pulse"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-500/10 to-pink-500/10 opacity-50"></div>
+            <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-pulse"></div>
             
             <div className="flex items-center justify-between relative z-10">
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-ping absolute"></div>
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping absolute"></div>
+                  <div className="w-2 h-2 bg-cyan-300 rounded-full"></div>
                 </div>
-                <span className="text-red-400 text-xs tracking-widest font-bold">
+                <span className="text-cyan-300 text-xs tracking-widest font-bold">
                   NEURAL_LINK://ACTIVE
                 </span>
               </div>
-              <ChevronUp className={`w-5 h-5 text-red-400 transition-transform duration-300 ${
+              <ChevronUp className={`w-5 h-5 text-cyan-300 transition-transform duration-300 ${
                 isOpen ? 'rotate-180' : ''
               }`} />
             </div>
@@ -75,24 +75,26 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
         </div>
 
         {/* Main Content */}
-        <div className="bg-black/95 border-t-2 border-red-500/50 rounded-t-2xl shadow-2xl max-h-[85vh] overflow-hidden relative">
+        <div className="bg-gradient-to-b from-purple-900/95 via-black/95 to-black/95 border-t-2 border-cyan-400/50 rounded-t-2xl shadow-2xl max-h-[85vh] overflow-hidden relative">
           
           {/* Scanlines Effect */}
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-500/5 to-transparent bg-repeat-y animate-pulse" 
-                 style={{backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(239, 68, 68, 0.03) 2px, rgba(239, 68, 68, 0.03) 4px)'}}>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/5 to-transparent bg-repeat-y animate-pulse" 
+                 style={{backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(34, 211, 238, 0.03) 2px, rgba(34, 211, 238, 0.03) 4px)'}}>
             </div>
+            {/* Purple glow overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-transparent to-pink-500/5"></div>
           </div>
           
           <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(85vh-24px)] relative z-10">
             
             {/* Header with Event Name */}
-            <div className="text-center border-b border-gray-800/80 pb-4 relative">
-              <div className="absolute top-0 left-0 right-0 h-px bg-red-500/30"></div>
-              <h2 className="text-xl font-bold text-red-400 font-mono tracking-wider mb-1 glitch-text">
+            <div className="text-center border-b border-purple-800/50 pb-4 relative">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-cyan-400/30 via-purple-500/30 to-pink-500/30"></div>
+              <h2 className="text-xl font-bold text-cyan-300 font-mono tracking-wider mb-1 glitch-text">
                 {eventData.eventName?.toUpperCase() || 'EVENT_UNKNOWN'}
               </h2>
-              <div className="flex justify-center items-center space-x-2 text-xs text-gray-500">
+              <div className="flex justify-center items-center space-x-2 text-xs text-purple-400">
                 <Terminal className="w-3 h-3" />
                 <span>ID: {eventData.eventId?.slice(-8)}</span>
               </div>
@@ -102,27 +104,27 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
               
               {/* Left Side - Character/GIF Spot */}
               <div className="md:col-span-1">
-                <div className="bg-gray-900/80 border border-red-900/50 rounded-lg p-4 h-full">
-                  <h3 className="text-red-400 text-sm mb-3 tracking-wider">NEURAL_AVATAR</h3>
+                <div className="bg-gradient-to-br from-purple-900/80 via-gray-900/80 to-black/80 border border-cyan-400/30 rounded-lg p-4 h-full">
+                  <h3 className="text-cyan-300 text-sm mb-3 tracking-wider">NEURAL_AVATAR</h3>
                   
                   {/* GIF Placeholder - Replace this div with your GIF */}
-                  <div className="bg-black/60 border border-red-800/30 rounded-lg h-32 mb-4 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 to-transparent"></div>
-                    <div className="text-red-600 text-xs text-center z-10">
-                      [GIF_PLACEHOLDER]<br/>
-                      <span className="text-gray-600">128x128</span>
+                  <div className="bg-gradient-to-br from-purple-900/60 via-black/60 to-pink-900/30 border border-cyan-400/20 rounded-lg h-32 mb-4 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10"></div>
+                    <div className="text-cyan-400 text-xs text-center z-10">
+                      [AVATAR_MATRIX]<br/>
+                      <span className="text-purple-400">128x128</span>
                     </div>
                   </div>
                   
                   {/* Character Stats */}
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between border-b border-gray-800 pb-1">
-                      <span className="text-gray-400">STATUS:</span>
-                      <span className="text-red-400">CONNECTED</span>
+                    <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                      <span className="text-purple-400">STATUS:</span>
+                      <span className="text-cyan-300">CONNECTED</span>
                     </div>
-                    <div className="flex justify-between border-b border-gray-800 pb-1">
-                      <span className="text-gray-400">SYNC:</span>
-                      <span className="text-green-400">98.7%</span>
+                    <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                      <span className="text-purple-400">SYNC:</span>
+                      <span className="text-pink-400">98.7%</span>
                     </div>
                   </div>
                 </div>
@@ -133,30 +135,30 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                 
                 {/* Main Stats Grid */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gray-900/60 border border-red-900/40 rounded-lg p-3 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-px bg-red-500/40"></div>
+                  <div className="bg-gradient-to-br from-purple-900/60 to-black/60 border border-cyan-400/40 rounded-lg p-3 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-px bg-cyan-400/40"></div>
                     <div className="flex items-center space-x-2 mb-1">
-                      <Users className="w-4 h-4 text-red-400" />
-                      <span className="text-gray-400 text-xs">MEMBERS</span>
+                      <Users className="w-4 h-4 text-cyan-300" />
+                      <span className="text-purple-300 text-xs">MEMBERS</span>
                     </div>
-                    <div className="text-lg font-bold text-red-300">{eventData.memberCount || 0}</div>
-                    <div className="text-xs text-gray-600">CONNECTED</div>
+                    <div className="text-lg font-bold text-cyan-300">{eventData.memberCount || 0}</div>
+                    <div className="text-xs text-purple-400">CONNECTED</div>
                   </div>
                   
-                  <div className="bg-gray-900/60 border border-yellow-900/40 rounded-lg p-3 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-px bg-yellow-500/40"></div>
+                  <div className="bg-gradient-to-br from-pink-900/60 to-black/60 border border-pink-400/40 rounded-lg p-3 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-px bg-pink-400/40"></div>
                     <div className="flex items-center space-x-2 mb-1">
-                      <Target className="w-4 h-4 text-yellow-400" />
-                      <span className="text-gray-400 text-xs">ROUNDS</span>
+                      <Target className="w-4 h-4 text-pink-400" />
+                      <span className="text-purple-300 text-xs">ROUNDS</span>
                     </div>
-                    <div className="text-lg font-bold text-yellow-300">{eventData.noOfRounds || 0}</div>
-                    <div className="text-xs text-gray-600">REMAINING</div>
+                    <div className="text-lg font-bold text-pink-300">{eventData.noOfRounds || 0}</div>
+                    <div className="text-xs text-purple-400">REMAINING</div>
                   </div>
                 </div>
 
                 {/* Event Details */}
-                <div className="bg-gray-900/40 border border-gray-800/60 rounded-lg p-4">
-                  <h3 className="text-red-400 text-sm mb-3 flex items-center tracking-wider">
+                <div className="bg-gradient-to-br from-purple-900/40 via-black/40 to-pink-900/20 border border-cyan-400/30 rounded-lg p-4">
+                  <h3 className="text-cyan-300 text-sm mb-3 flex items-center tracking-wider">
                     <Database className="w-4 h-4 mr-2" />
                     EVENT_DATA
                   </h3>
@@ -164,26 +166,26 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                   <div className="space-y-3 text-xs">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <div className="text-gray-500 mb-1">CATEGORY:</div>
-                        <div className="text-red-300 font-bold">HACKATHON</div>
+                        <div className="text-purple-400 mb-1">CATEGORY:</div>
+                        <div className="text-cyan-300 font-bold">HACKATHON</div>
                       </div>
                       <div>
-                        <div className="text-gray-500 mb-1">DIFFICULTY:</div>
-                        <div className="text-yellow-300 font-bold">EXTREME</div>
+                        <div className="text-purple-400 mb-1">DIFFICULTY:</div>
+                        <div className="text-pink-300 font-bold">EXTREME</div>
                       </div>
                     </div>
                     
                     <div>
-                      <div className="text-gray-500 mb-1">STATUS:</div>
+                      <div className="text-purple-400 mb-1">STATUS:</div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-green-400 font-bold">ACTIVE</span>
+                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                        <span className="text-cyan-300 font-bold">ACTIVE</span>
                       </div>
                     </div>
                     
                     <div>
-                      <div className="text-gray-500 mb-1">NEURAL_HASH:</div>
-                      <div className="text-gray-400 font-mono text-xs break-all">
+                      <div className="text-purple-400 mb-1">NEURAL_HASH:</div>
+                      <div className="text-cyan-400 font-mono text-xs break-all">
                         {eventData.eventId?.replace(/-/g, '').slice(0, 16).toUpperCase()}...
                       </div>
                     </div>
@@ -191,27 +193,27 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                 </div>
 
                 {/* System Status */}
-                <div className="bg-gray-900/40 border border-gray-800/60 rounded-lg p-4">
-                  <h3 className="text-red-400 text-sm mb-3 flex items-center tracking-wider">
+                <div className="bg-gradient-to-br from-purple-900/40 via-black/40 to-cyan-900/20 border border-purple-400/30 rounded-lg p-4">
+                  <h3 className="text-cyan-300 text-sm mb-3 flex items-center tracking-wider">
                     <Cpu className="w-4 h-4 mr-2" />
                     SYSTEM_STATUS
                   </h3>
                   
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">CPU_LOAD:</span>
-                      <span className="text-red-400">67.3%</span>
+                      <span className="text-purple-400">CPU_LOAD:</span>
+                      <span className="text-cyan-300">67.3%</span>
                     </div>
-                    <div className="bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                      <div className="bg-gradient-to-r from-red-600 to-red-400 h-full w-2/3 animate-pulse"></div>
+                    <div className="bg-purple-900/50 rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-gradient-to-r from-cyan-400 to-purple-500 h-full w-2/3 animate-pulse"></div>
                     </div>
                     
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-400">MEMORY:</span>
-                      <span className="text-yellow-400">84.1%</span>
+                      <span className="text-purple-400">MEMORY:</span>
+                      <span className="text-pink-300">84.1%</span>
                     </div>
-                    <div className="bg-gray-800 rounded-full h-1.5 overflow-hidden">
-                      <div className="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full w-5/6 animate-pulse"></div>
+                    <div className="bg-purple-900/50 rounded-full h-1.5 overflow-hidden">
+                      <div className="bg-gradient-to-r from-pink-400 to-cyan-400 h-full w-5/6 animate-pulse"></div>
                     </div>
                   </div>
                 </div>
@@ -220,21 +222,21 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <button className="bg-red-900/30 border border-red-700/50 hover:bg-red-800/40 text-red-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-red-500/70">
+              <button className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-400/50 hover:from-cyan-800/40 hover:to-purple-800/40 text-cyan-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-cyan-300/70 hover:shadow-lg hover:shadow-cyan-400/20">
                 JACK_IN
               </button>
               <button 
                 onClick={handleClose}
-                className="bg-gray-900/30 border border-gray-700/50 hover:bg-gray-800/40 text-gray-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-gray-500/70"
+                className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-400/50 hover:from-purple-800/40 hover:to-pink-800/40 text-purple-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-purple-300/70 hover:shadow-lg hover:shadow-purple-400/20"
               >
                 DISCONNECT
               </button>
             </div>
 
             {/* Footer */}
-            <div className="text-center pt-2 border-t border-gray-800/50">
-              <div className="text-xs text-gray-600 tracking-widest">
-                NEURAL_INTERFACE_v2.0.47 | SECURE_CONNECTION
+            <div className="text-center pt-2 border-t border-purple-800/50">
+              <div className="text-xs text-purple-400 tracking-widest">
+                CYBERPUNK_INTERFACE_v2K25.47 | SECURE_CONNECTION
               </div>
             </div>
           </div>
