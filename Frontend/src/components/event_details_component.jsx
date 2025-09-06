@@ -206,7 +206,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                     {eventHeads.length > 0 ? eventHeads.map(h => (
                       <li key={h.eventHeadId} className="text-xs text-purple-200 flex flex-col border-b border-purple-800/40 pb-1">
                         <span className="text-cyan-300 font-semibold">{h?.user?.fullName || h?.user?.username}</span>
-                        <span className="text-purple-400">{h?.user?.email}</span>
+                        <span className="text-purple-400">{h?.user?.phoneNumber}</span>
                       </li>
                     )) : <li className="text-xs text-purple-400">No event heads linked.</li>}
                   </ul>
