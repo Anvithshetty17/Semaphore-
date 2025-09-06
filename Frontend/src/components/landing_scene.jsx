@@ -44,19 +44,14 @@ const LandingScene = ({ eventsData }) => {
 
   // Camera waypoints 
   const cameraPositions = [
-    isMobile 
-      ? { position: [110, 65, -16], lookAt: [0, 55, 0] } //starting from semaphore mobile
-      : { position: [80, 65, -15], lookAt: [0, 52, 0] }, //starting from semaphore desktop 
-    { position: [70, 63, -10], lookAt: [0, 52, 0] },//starting from semaphore 
-    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom into logo + look down 
+    { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+    { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
+    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
     { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
 
-    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //IT quiz building bottom 
-    //IT quiz building top1 
-
-    { position: [76.5, 12, -20], lookAt: [80, 45, 120] }, //IT quiz building top1 
-    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //IT quiz building top1 
-
+    //IT quiz building
+    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //bottom 
+    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //Top
 
     //surprise event buiding 
     { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
@@ -64,53 +59,43 @@ const LandingScene = ({ eventsData }) => {
 
     //Photography Cyber scope 
     { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
-    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //far view 
+    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //near view 
 
     //Cyborg recruit IT manager 
     { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
-    { position: [61, 27, 11], lookAt: [67, 40, -60] }, //far view 
+    { position: [61, 27, 11], lookAt: [67, 40, -60] }, //near view 
 
     //Rythm Hack dance event 
     { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
-    { position: [75, 16, 4], lookAt: [27, 30, -60] }, //far view 
+    { position: [75, 16, 4], lookAt: [27, 30, -60] }, //near view 
 
     //Hyper Launch Startup 
     { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
     { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
 
-    //Rampage Horizon Gaming far view 
-    { position: [32, 22, -10], lookAt: [-25, 70, -40] }, //far view 
-    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //far view 
+    //Rampage Horizon Gaming 
+    { position: [32, 22, -10], lookAt: [-25, 70, -40] }, //right near view 
+    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //left near view 
     { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
 
-
-
+    //Tech talk tfechno hive
     { position: [30, 16, 6], lookAt: [7, 20, -10] }, //far view 
 
-
-    { position: [27, 34, 14], lookAt: [6, 48, -50] }, //far view 
+    //Rampage Horizon Gaming 
+    { position: [27, 34, 14], lookAt: [6, 48, -50] }, //top left view 
+    { position: [35, 39, 9], lookAt: [-4, 42, -50] }, //top right view 
     
+    //Techno hive tech talk
+    { position: [42, 34, -12], lookAt: [6, 17, -11] }, //top view 
     
-    { position: [35, 39, 9], lookAt: [-4, 42, -50] }, //far view 
+    // Cryptix coding event
+    { position: [42, 34, -12], lookAt: [43, 57, 10] }, //nearup view 
+    { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
     
-    { position: [42, 34, -12], lookAt: [6, 17, -11] }, //far view 
-    
-    { position: [42, 34, -12], lookAt: [43, 57, 10] }, //far view 
-    
-    { position: [42, 45, -12], lookAt: [43, 43, 10] }, //far view 
-
-    { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far view 
-    
-    
-    
-   
-   
-    { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //far view 
-    { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //far view 
+    //Design riot
+    { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
+    { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
     { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
-    
-
-
   ];
   
   // Info button guided waypoints
