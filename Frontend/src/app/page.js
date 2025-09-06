@@ -3,6 +3,7 @@
 import CyberpunkLoader, { LandingPageLoader } from "@/components/landing_page_loader";
 import { LandingScene } from "@/components/landing_scene";
 import { NavigationButtons } from "@/components/navigation_buttons";
+import CyberpunkDrawer from "@/components/event_details_component";
 import { RocketLoader } from "@/components/model_components/rocket_loader";
 import { Stars } from "@/components/stars";
 import { useQueryConfig } from "@/config/useQuery.config";
@@ -39,6 +40,7 @@ export default function Home() {
   // real asset loading progress from drei
   const { progress: gltfProgress, active } = useProgress();
   const [showLoader, setShowLoader] = useState(true);
+  const [drawerEventId, setDrawerEventId] = useState(null);
 
   useEffect(() => {
     if (gltfProgress >= 100 && !active) {
@@ -64,11 +66,23 @@ export default function Home() {
       <Canvas>
         <ScrollControls pages={10}>
           <Suspense fallback={null}>
-            <LandingScene eventsData={eventsData} />
+            <LandingScene 
+              eventsData={eventsData} 
+              onEventSelect={setDrawerEventId}
+            />
             <Stars />
           </Suspense>
         </ScrollControls>
       </Canvas>
+
+      {/* CyberpunkDrawer: event details drawer, outside Canvas */}
+      {drawerEventId && (
+        <CyberpunkDrawer
+          eventId={drawerEventId}
+          eventsData={eventsData}
+          onClose={() => setDrawerEventId(null)}
+        />
+      )}
     </>
   );
 }

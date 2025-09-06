@@ -1,8 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronUp, Users, Target, Zap, Clock, Database, Terminal, Cpu } from 'lucide-react';
 
-const CyberpunkDrawer = ({ eventId, eventsData = [] }) => {
+const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Auto-open when eventId is provided
+  useEffect(() => {
+    if (eventId) {
+      setIsOpen(true);
+    }
+  }, [eventId]);
+
+  // Handle closing
+  const handleClose = () => {
+    setIsOpen(false);
+    // Call parent's onClose after animation
+    setTimeout(() => {
+      if (onClose) onClose();
+    }, 300);
+  };
 
   // Find the event data by ID
   const eventData = eventsData.find(event => event.eventId === eventId) || {
@@ -22,7 +38,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [] }) => {
       {isOpen && (
         <div 
           className="absolute inset-0 bg-black/90 backdrop-blur-sm pointer-events-auto transition-opacity duration-300"
-          onClick={() => setIsOpen(false)}
+          onClick={handleClose}
         />
       )}
       
@@ -207,7 +223,10 @@ const CyberpunkDrawer = ({ eventId, eventsData = [] }) => {
               <button className="bg-red-900/30 border border-red-700/50 hover:bg-red-800/40 text-red-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-red-500/70">
                 JACK_IN
               </button>
-              <button className="bg-gray-900/30 border border-gray-700/50 hover:bg-gray-800/40 text-gray-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-gray-500/70">
+              <button 
+                onClick={handleClose}
+                className="bg-gray-900/30 border border-gray-700/50 hover:bg-gray-800/40 text-gray-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-gray-500/70"
+              >
                 DISCONNECT
               </button>
             </div>

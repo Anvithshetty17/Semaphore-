@@ -5,7 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import CyberpunkDrawer from "./event_details_component";
 
 // AnimatedPulseCircle: sonar/halogen pulse effect for the billboard button
 function AnimatedPulseCircle() {
@@ -35,14 +34,14 @@ function AnimatedPulseCircle() {
   );
 }
 
-const LandingScene = ({ eventsData }) => {
+const LandingScene = ({ eventsData, onEventSelect }) => {
   const cameraRef = useRef();
   const scroll = useScroll();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [loading, setLoading] = useState(true);
   console.log("Events Data in LandingScene:", eventsData);
 
-  // Camera waypoints 
+ // Camera waypoints 
   const cameraPositions = [
     { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
     { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
@@ -116,7 +115,6 @@ const LandingScene = ({ eventsData }) => {
 
   const scrollIndicatorRef = useRef();
   const [hideIndicator, setHideIndicator] = useState(false);
-  const [drawerEventId, setDrawerEventId] = useState(null);
 
   useFrame((state) => {
     const offset = scroll.offset; // 0..1
@@ -200,15 +198,26 @@ const LandingScene = ({ eventsData }) => {
 
       {/* Info icons: circular halogen buttons with animated sonar pulse for each waypoint */}
       {infoWaypoints.map((waypoint, index) => (
-        <Billboard key={index}>
-          <group
-            position={waypoint.position}
-            onPointerDown={() => setDrawerEventId(waypoint.eventId)}
-            onClick={() => setDrawerEventId(waypoint.eventId)}
-            cursor="pointer"
-          >
+        <Billboard key={index} position={waypoint.position}>
+          <group>
             <AnimatedPulseCircle />
-            <mesh>
+            <mesh
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Info button clicked for event:', waypoint.eventId);
+                if (onEventSelect) {
+                  onEventSelect(waypoint.eventId);
+                }
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                document.body.style.cursor = 'pointer';
+              }}
+              onPointerOut={(e) => {
+                e.stopPropagation();
+                document.body.style.cursor = 'default';
+              }}
+            >
               <circleGeometry args={[1.5, 64]} />
               <meshStandardMaterial 
                 color="#00ffff"
@@ -237,18 +246,6 @@ const LandingScene = ({ eventsData }) => {
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
-      {/* CyberpunkDrawer: event details drawer, shown when drawerEventId is set */}
-      {drawerEventId && (
-        <Html center style={{ pointerEvents: 'auto', zIndex: 10000 }}>
-          <div style={{ position: 'fixed', left: 0, right: 0, bottom: 0 }}>
-            <CyberpunkDrawer
-              eventId={drawerEventId}
-              eventsData={eventsData}
-              onClose={() => setDrawerEventId(null)}
-            />
-          </div>
-        </Html>
-      )}
        <EffectComposer multisampling={4}>
         <Bloom 
           intensity={1.2}
