@@ -41,64 +41,58 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
   const [loading, setLoading] = useState(true);
   console.log("Events Data in LandingScene:", eventsData);
 
- // Camera waypoints 
-  const cameraPositions = [ isMobile?{ position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
-    :{ position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
-    { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
-    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
-    { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
+  // Camera waypoints 
+  const cameraPositions = [isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
+    : { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+  { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
+  { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
+  { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
 
-    //IT quiz building
-    { position: [76, 14, -20], lookAt: [80, 35, 120] }, //bottom 
-    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //Top
+  //IT quiz building
+  { position: [76, 14, -20], lookAt: [80, 35, 120] }, //bottom 
+  { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //Top
 
-    //surprise event buiding 
-    { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
-    { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view 
+  //surprise event buiding 
+  { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
+  { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view 
 
-    //Photography Cyber scope 
-    { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
-    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //near view 
+  //Photography Cyber scope 
+  { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
+  { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //near view 
 
-    //Cyborg recruit IT manager 
-    { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
-    { position: [61, 27, 11], lookAt: [67, 40, -60] }, //near view 
+  //Cyborg recruit IT manager 
+  { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
+  { position: [61, 27, 11], lookAt: [67, 40, -60] }, //near view 
 
-    //Rythm Hack dance event 
-    { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
-    { position: [75, 16, 4], lookAt: [27, 30, -60] }, //near view 
+  //Rythm Hack dance event 
+  { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
+  { position: [75, 16, 4], lookAt: [27, 30, -60] }, //near view 
 
-    //Hyper Launch Startup 
-    { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
-    { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
+  //Hyper Launch Startup 
+  { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
+  { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
+  { position: [52, 35, -3], lookAt: [33, 25, -60] }, //top view 
 
-    //Rampage Horizon Gaming 
-    { position: [32, 22, -10], lookAt: [-25, 70, -40] }, //right near view 
-    { position: [24, 20, -6], lookAt: [-1, 76, -50] }, //left near view 
-    { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
+  // Cryptix coding event
+  { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
+  { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
+  { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
 
-    { position: [29, 12, 18], lookAt: [7, 66, -50] }, //far view 
-    //Tech talk tfechno hive
-    { position: [40.5, 16, 12], lookAt: [7, 20, -10] }, //far view 
-    { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
+  //techno hive tech talk
+  { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
+  { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
 
-    //Rampage Horizon Gaming 
-    { position: [27, 34, 14], lookAt: [6, 48, -50] }, //top left view 
-    { position: [35, 39, 9], lookAt: [-4, 42, -50] }, //top right view 
+  //Rampage Horizon Gaming 
+  { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
+  { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
+  { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
 
-    //Techno hive tech talk
-    { position: [42, 34, -12], lookAt: [6, 17, -11] }, //top view 
-
-    // Cryptix coding event
-    { position: [42, 34, -12], lookAt: [43, 57, 10] }, //nearup view 
-    { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
-
-    //Design riot
-    { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
-    { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
-    { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
+  //Design riot
+  { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
+  { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
+  { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
   ];
-  
+
   // Info button guided waypoints
   const infoWaypoints = [
     { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
@@ -146,29 +140,29 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
 
   return (
     <>
-       {/* Dark background */}
-<color attach="background" args={["#000000"]} />
+      {/* Dark background */}
+      <color attach="background" args={["#000000"]} />
 
-{/* Minimal ambient light (almost dark) */}
-<ambientLight intensity={0.01} />
+      {/* Minimal ambient light (almost dark) */}
+      <ambientLight intensity={0.01} />
 
-{/* Neon-style lights */}
-<pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
-<pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
-<pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
+      {/* Neon-style lights */}
+      <pointLight position={[0, 20, 0]} intensity={2.5} distance={100} color="#00ffff" />
+      <pointLight position={[10, 10, -10]} intensity={1.5} distance={80} color="#ff00ff" />
+      <pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
 
-<fog attach="fog" args={["#000000", 10, 80]} />
+      <fog attach="fog" args={["#000000", 10, 80]} />
 
 
-{/* Slight rim light so model edges are visible */}
-<directionalLight
-  position={[5, 15, 10]}
-  intensity={0.05}
-  color="#ffffff"
-/>
+      {/* Slight rim light so model edges are visible */}
+      <directionalLight
+        position={[5, 15, 10]}
+        intensity={0.05}
+        color="#ffffff"
+      />
 
       <CityNeonModel position={[0.22, 0.4, -0.01]} onPointerOver={() => setLoading(false)} onPointerMove={() => setLoading(false)} />
-     
+
 
       {/* Scroll Down Indicator (HTML overlay as mouse icon, lower position, instant fade) */}
       <Html
@@ -221,7 +215,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
               }}
             >
               <circleGeometry args={[1.5, 64]} />
-              <meshStandardMaterial 
+              <meshStandardMaterial
                 color="#00ffff"
                 emissive="#00ffff"
                 emissiveIntensity={0.7}
@@ -248,12 +242,12 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
-       <EffectComposer multisampling={4}>
-        <Bloom 
-          intensity={1.2}
-          kernelSize={2}
-          luminanceThreshold={0.3}
-          luminanceSmoothing={0.4}
+      <EffectComposer multisampling={4}>
+        <Bloom
+        intensity={1.2}
+        kernelSize={2}
+        luminanceThreshold={0.3}
+        luminanceSmoothing={0.4}
         />
       </EffectComposer>
     </>
