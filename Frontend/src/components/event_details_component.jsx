@@ -1,8 +1,11 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { ChevronUp, Users, Target, Zap, Clock, Database, Terminal, Cpu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ChevronUp, Users, Target, Database, Terminal, Cpu, ListOrdered, UserCircle2, FileText } from 'lucide-react';
 
 const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   // Auto-open when eventId is provided
   useEffect(() => {
@@ -21,19 +24,18 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
   };
 
   // Find the event data by ID
-  const eventData = eventsData.find(event => event.eventId === eventId) || {
-    eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892',
-    eventName: 'Cryptix',
-    eventLogoUrl: '',
-    memberCount: 2,
-    noOfRounds: 3,
-    status: 'ACTIVE',
-    category: 'HACKATHON',
-    difficulty: 'HARD'
-  };
+  const eventData = eventsData.find(event => event.eventId === eventId) || {};
+
+  // Derive image path (store only filename e.g. cyber_scope.png in eventLogoUrl)
+  const logoPath = eventData.eventLogoUrl
+    ? `/images/event_logos/${eventData.eventLogoUrl}`
+    : '/images/event_logos/placeholder.png'; // ensure you add a placeholder.png
+
+  const eventHeads = eventData.eventHeads || []; // [{eventHeadId, user:{ fullName, email, ...}}]
+  const rules = eventData.eventRules || []; // [{eventRulesId, ruleNo, eventRule}]
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 font-mono">
+  <div className="fixed inset-0 pointer-events-none z-50 font-mono" role="dialog" aria-modal="true" aria-labelledby="event-drawer-heading">
       {/* Backdrop */}
       {isOpen && (
         <div 
@@ -91,40 +93,74 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
             {/* Header with Event Name */}
             <div className="text-center border-b border-purple-800/50 pb-4 relative">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-cyan-400/30 via-purple-500/30 to-pink-500/30"></div>
-              <h2 className="text-xl font-bold text-cyan-300 font-mono tracking-wider mb-1 glitch-text">
+              <h2 id="event-drawer-heading" className="text-xl font-bold text-cyan-300 font-mono tracking-wider mb-1 glitch-text">
                 {eventData.eventName?.toUpperCase() || 'EVENT_UNKNOWN'}
               </h2>
               <div className="flex justify-center items-center space-x-2 text-xs text-purple-400">
                 <Terminal className="w-3 h-3" />
                 <span>ID: {eventData.eventId?.slice(-8)}</span>
               </div>
+              {/* Meta Tags Row */}
+              <div className="flex flex-wrap justify-center gap-2 mt-3">
+                {eventData.title && (
+                  <span className="px-2 py-0.5 rounded-full bg-cyan-400/10 border border-cyan-400/40 text-cyan-300 text-[10px] tracking-wider">
+                    {eventData.title}
+                  </span>
+                )}
+                {eventData.category && (
+                  <span className="px-2 py-0.5 rounded-full bg-purple-400/10 border border-purple-400/40 text-purple-200 text-[10px] tracking-wider">
+                    {eventData.category}
+                  </span>
+                )}
+                {eventData.difficulty && (
+                  <span className="px-2 py-0.5 rounded-full bg-pink-400/10 border border-pink-400/40 text-pink-200 text-[10px] tracking-wider">
+                    {eventData.difficulty}
+                  </span>
+                )}
+                {eventData.status && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/40 text-emerald-200 text-[10px] tracking-wider">
+                    {eventData.status}
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
-              {/* Left Side - Character/GIF Spot */}
+              {/* Left Side - Supplementary Info & Logo */}
               <div className="md:col-span-1">
                 <div className="bg-gradient-to-br from-purple-900/80 via-gray-900/80 to-black/80 border border-cyan-400/30 rounded-lg p-4 h-full">
-                  <h3 className="text-cyan-300 text-sm mb-3 tracking-wider">NEURAL_AVATAR</h3>
-                  
-                  {/* GIF Placeholder - Replace this div with your GIF */}
+                  {/* Event Logo positioned where old GIF placeholder was */}
                   <div className="bg-gradient-to-br from-purple-900/60 via-black/60 to-pink-900/30 border border-cyan-400/20 rounded-lg h-32 mb-4 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10"></div>
-                    <div className="text-cyan-400 text-xs text-center z-10">
-                      [AVATAR_MATRIX]<br/>
-                      <span className="text-purple-400">128x128</span>
-                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {logoPath ? (
+                      <img
+                        src={logoPath}
+                        alt={eventData.eventName || 'event-logo'}
+                        className="object-contain w-full h-full p-2 z-10"
+                        onError={(e) => { e.currentTarget.src = '/images/event_logos/placeholder.png'; }}
+                      />
+                    ) : (
+                      <div className="text-cyan-400 text-xs text-center z-10">
+                        [NO_LOGO]<br/>
+                        <span className="text-purple-400">UPLOAD_SOON</span>
+                      </div>
+                    )}
                   </div>
-                  
-                  {/* Character Stats */}
+{/* <h3 className="text-cyan-300 text-sm mb-3 flex items-center tracking-wider">
+                    <Database className="w-4 h-4 mr-2" />
+                    EVENT_DATA
+                  </h3> */}
+                  <h3 className="text-cyan-300 text-sm mb-3 tracking-wider flex items-center"><FileText className="w-4 h-4 mr-2"/>DESCRIPTION</h3>
+                  <p className="text-xs text-purple-200 leading-relaxed mb-4 whitespace-pre-wrap">
+                    {eventData.description || 'No description provided yet.'}
+                  </p>
+
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between border-b border-purple-800/50 pb-1">
-                      <span className="text-purple-400">STATUS:</span>
-                      <span className="text-cyan-300">CONNECTED</span>
-                    </div>
-                    <div className="flex justify-between border-b border-purple-800/50 pb-1">
-                      <span className="text-purple-400">SYNC:</span>
-                      <span className="text-pink-400">98.7%</span>
+                      <span className="text-purple-400">CURRENT_ROUND:</span>
+                      <span className="text-cyan-300">{eventData.currentRound ?? '-'}</span>
                     </div>
                   </div>
                 </div>
@@ -134,7 +170,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
               <div className="md:col-span-2 space-y-4">
                 
                 {/* Main Stats Grid */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   <div className="bg-gradient-to-br from-purple-900/60 to-black/60 border border-cyan-400/40 rounded-lg p-3 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-px bg-cyan-400/40"></div>
                     <div className="flex items-center space-x-2 mb-1">
@@ -142,7 +178,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                       <span className="text-purple-300 text-xs">MEMBERS</span>
                     </div>
                     <div className="text-lg font-bold text-cyan-300">{eventData.memberCount || 0}</div>
-                    <div className="text-xs text-purple-400">CONNECTED</div>
+                    <div className="text-[10px] text-purple-400 tracking-wider">TOTAL</div>
                   </div>
                   
                   <div className="bg-gradient-to-br from-pink-900/60 to-black/60 border border-pink-400/40 rounded-lg p-3 relative overflow-hidden">
@@ -152,48 +188,61 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                       <span className="text-purple-300 text-xs">ROUNDS</span>
                     </div>
                     <div className="text-lg font-bold text-pink-300">{eventData.noOfRounds || 0}</div>
-                    <div className="text-xs text-purple-400">REMAINING</div>
+                    <div className="text-[10px] text-purple-400 tracking-wider">TOTAL_ROUNDS</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-cyan-900/50 to-black/60 border border-cyan-400/40 rounded-lg p-3 relative overflow-hidden hidden md:block">
+                    <div className="absolute top-0 left-0 w-full h-px bg-cyan-400/40"></div>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className="text-cyan-300 text-xs font-semibold">CURR ROUND</span>
+                    </div>
+                    <div className="text-lg font-bold text-cyan-300">{eventData.currentRound ?? '-'}</div>
+                    <div className="text-[10px] text-purple-400 tracking-wider">PROGRESS</div>
                   </div>
                 </div>
 
-                {/* Event Details */}
-                <div className="bg-gradient-to-br from-purple-900/40 via-black/40 to-pink-900/20 border border-cyan-400/30 rounded-lg p-4">
+                <div className="bg-gradient-to-br from-cyan-900/20 via-black/40 to-purple-900/30 border border-cyan-400/30 rounded-lg p-4">
+                  <h3 className="text-cyan-300 text-sm mb-2 tracking-wider flex items-center"><UserCircle2 className="w-4 h-4 mr-2"/>EVENT_HEADS</h3>
+                  <ul className="space-y-2 mb-4">
+                    {eventHeads.length > 0 ? eventHeads.map(h => (
+                      <li key={h.eventHeadId} className="text-xs text-purple-200 flex flex-col border-b border-purple-800/40 pb-1">
+                        <span className="text-cyan-300 font-semibold">{h?.user?.fullName || h?.user?.username}</span>
+                        <span className="text-purple-400">{h?.user?.email}</span>
+                      </li>
+                    )) : <li className="text-xs text-purple-400">No event heads linked.</li>}
+                  </ul>
+                </div>
+
+                {/* Rules Section */}
+                <div className="bg-gradient-to-br from-cyan-900/20 via-black/40 to-purple-900/30 border border-cyan-400/30 rounded-lg p-4">
                   <h3 className="text-cyan-300 text-sm mb-3 flex items-center tracking-wider">
-                    <Database className="w-4 h-4 mr-2" />
-                    EVENT_DATA
+                    <ListOrdered className="w-4 h-4 mr-2" />
+                    EVENT_RULES
                   </h3>
-                  
-                  <div className="space-y-3 text-xs">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-purple-400 mb-1">CATEGORY:</div>
-                        <div className="text-cyan-300 font-bold">HACKATHON</div>
-                      </div>
-                      <div>
-                        <div className="text-purple-400 mb-1">DIFFICULTY:</div>
-                        <div className="text-pink-300 font-bold">EXTREME</div>
-                      </div>
+                  {rules.length > 0 ? (
+                    <div className="max-h-40 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-cyan-700/50 scrollbar-track-transparent">
+                      <ol className="list-decimal list-inside space-y-2 text-xs text-purple-200 marker:text-cyan-300">
+                        {rules
+                          .slice() // clone before sort
+                          .sort((a,b) => (a.ruleNo||0)-(b.ruleNo||0))
+                          .map(r => (
+                            <li key={r.eventRulesId || r.ruleNo} className="leading-snug">
+                              <span className="text-cyan-300 font-semibold mr-1">{r.ruleNo}.</span>
+                              {r.eventRule}
+                            </li>
+                          ))}
+                      </ol>
                     </div>
-                    
-                    <div>
-                      <div className="text-purple-400 mb-1">STATUS:</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                        <span className="text-cyan-300 font-bold">ACTIVE</span>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="text-purple-400 mb-1">NEURAL_HASH:</div>
-                      <div className="text-cyan-400 font-mono text-xs break-all">
-                        {eventData.eventId?.replace(/-/g, '').slice(0, 16).toUpperCase()}...
-                      </div>
-                    </div>
-                  </div>
+                  ) : (
+                    <p className="text-xs text-purple-400">No rules published yet.</p>
+                  )}
                 </div>
 
                 {/* System Status */}
-                <div className="bg-gradient-to-br from-purple-900/40 via-black/40 to-cyan-900/20 border border-purple-400/30 rounded-lg p-4">
+              
+              </div>
+              
+            </div>
+              <div className="bg-gradient-to-br from-purple-900/40 via-black/40 to-cyan-900/20 border border-purple-400/30 rounded-lg p-4">
                   <h3 className="text-cyan-300 text-sm mb-3 flex items-center tracking-wider">
                     <Cpu className="w-4 h-4 mr-2" />
                     SYSTEM_STATUS
@@ -217,12 +266,13 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <button className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-400/50 hover:from-cyan-800/40 hover:to-purple-800/40 text-cyan-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-cyan-300/70 hover:shadow-lg hover:shadow-cyan-400/20">
+                <button 
+                  type="button"
+                  onClick={() => router.push('/register')}
+                  className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-400/50 hover:from-cyan-800/40 hover:to-purple-800/40 text-cyan-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-cyan-300/70 hover:shadow-lg hover:shadow-cyan-400/20">
                 JACK_IN
               </button>
               <button 

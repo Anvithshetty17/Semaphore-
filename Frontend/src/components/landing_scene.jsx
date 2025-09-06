@@ -13,7 +13,7 @@ function AnimatedPulseCircle() {
     if (!meshRef.current) return;
     const t = state.clock.getElapsedTime();
     const pulse = (t % 1.5) / 1.5; // 0..1
-    meshRef.current.scale.setScalar(1.5 + pulse * 1.8);
+    meshRef.current.scale.setScalar(1.5 + pulse * 1.2);
     if (meshRef.current.material) {
       meshRef.current.material.opacity = 0.25 * (1 - pulse);
     }
