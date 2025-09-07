@@ -20,7 +20,7 @@ function AnimatedRegisterButton({ router, isMobile }) {
   });
   
   return (
-    <Billboard position={[0, -6.5, 0]}>
+    <Billboard position={isMobile?[0,-4.5,0]:[0, -6.5, 0]}>
       <group
         ref={buttonRef}
         onClick={(e) => { 
@@ -36,7 +36,7 @@ function AnimatedRegisterButton({ router, isMobile }) {
       >
         {/* Rectangular Border */}
         <mesh>
-          <boxGeometry args={[8, 2.5, 0.1]} />
+          <boxGeometry args={isMobile?[4, 1.2, 0.1]:[6, 2, 0.1]} />
           <meshStandardMaterial
             color="#00eaff"
             emissive="#00eaff"
@@ -49,7 +49,7 @@ function AnimatedRegisterButton({ router, isMobile }) {
         
         {/* Border Lines */}
         <lineSegments>
-          <edgesGeometry attach="geometry" args={[new THREE.BoxGeometry(8, 2.5, 0.1)]} />
+          <edgesGeometry attach="geometry" args={isMobile?[new THREE.BoxGeometry(4, 1.2, 0.1)]:[new THREE.BoxGeometry(6, 2, 0.1)]} />
           <lineBasicMaterial 
             attach="material" 
             color="#00eaff" 
@@ -62,7 +62,7 @@ function AnimatedRegisterButton({ router, isMobile }) {
         {/* Button Text */}
         <Text
           position={[0, 0, 0.1]}
-          fontSize={1.0}
+          fontSize={isMobile ? 0.5 : 0.8}
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
@@ -283,25 +283,25 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
         {/* Semaphore logo */}
         <Image
           url={"/images/semaphore_logo.png"}
-          position={[0, 3, 0]}
-          scale={[14, 14, 1]}
+          position={[0, 3.5, 0]}
+          scale={isMobile?[10,10,1]:[13, 13, 1]}
           transparent
         />
         
         {/* Fest Quote */}
         <Text
-          position={[0, -3.9, 1]}
-          fontSize={0.8}
+          position={isMobile?[0,-2.7,0]:[0, -3.9, 1]}
+          fontSize={isMobile? 0.5 : 0.8 }
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
           font="/fonts/Dosis-Bold.ttf"
           outlineWidth={0.08}
           outlineColor="#00eaff"
-          maxWidth={isMobile ? 40 : 80}
+          maxWidth={isMobile ? 20 : 80}
           textAlign="center"
         >
-          &quot;Where Innovation Meets Celebration - Join the Ultimate Tech Festival!&quot;
+          &quot;Where Innovation Meets Celebration {isMobile ? "\n":"-"} Join the Ultimate Tech Festival!&quot;
         </Text>
         
         {/* Animated Register Button */}
