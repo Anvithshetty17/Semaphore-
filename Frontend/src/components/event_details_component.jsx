@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronUp, Users, Target, Database, Terminal, Cpu, ListOrdered, UserCircle2, FileText } from 'lucide-react';
+import Image from 'next/image';
 
 const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -135,7 +136,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {logoPath ? (
-                      <img
+                      <Image
                         src={logoPath}
                         alt={eventData.eventName || 'event-logo'}
                         className="object-contain w-full h-full p-2 z-10"

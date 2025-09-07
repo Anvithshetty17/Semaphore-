@@ -301,7 +301,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
           maxWidth={isMobile ? 40 : 80}
           textAlign="center"
         >
-          "Where Innovation Meets Celebration - Join the Ultimate Tech Festival!"
+          &quot;Where Innovation Meets Celebration - Join the Ultimate Tech Festival!&quot;
         </Text>
         
         {/* Animated Register Button */}
