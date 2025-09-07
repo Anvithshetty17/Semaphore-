@@ -295,7 +295,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
-          font="/fonts/Funkrocker.ttf"
+          font="/fonts/Dosis-Bold.ttf"
           outlineWidth={0.08}
           outlineColor="#00eaff"
           maxWidth={isMobile ? 40 : 80}
