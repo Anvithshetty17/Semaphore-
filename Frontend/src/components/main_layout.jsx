@@ -64,7 +64,7 @@ const bgImg = isMobile ? "/images/loading_bg_mobile.png" : "/images/loading_bg_p
 
         return (
             <>
-             <div className="absolute inset-0 w-full h-full  z-0">
+             <div className="absolute inset-0 w-full h-screen overflow-hidden  z-0">
             <Image src={bgImg} alt="Loading background" fill style={{ objectFit: "cover" }} priority sizes="100vw" />
           </div>
 
