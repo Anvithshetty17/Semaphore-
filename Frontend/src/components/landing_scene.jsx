@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 // AnimatedPulseCircle: sonar/halogen pulse effect for the billboard button
-function AnimatedPulseCircle() {
+const AnimatedPulseCircle = ({ size }) => {
   const meshRef = useRef();
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -20,7 +20,7 @@ function AnimatedPulseCircle() {
   });
   return (
     <mesh ref={meshRef} position={[0, 0, -0.05]}>
-      <circleGeometry args={[1.7, 64]} />
+      <circleGeometry args={[0.5 * (size != null ? size : 1), 64]} />
       <meshStandardMaterial
         color="#00eaff"
         emissive="#00eaff"
@@ -50,60 +50,65 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
 
   //IT quiz building
   { position: [76, 14, -20], lookAt: [80, 35, 120] }, //bottom 
-  { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //Top
+  { position: [77, 12, -16], lookAt: [79, 105, 120] }, //Top
 
   //surprise event buiding 
   { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
-  { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view 
+  { position: [67, 12, -7], lookAt: [20, 45, 45] }, //near view 
 
   //Photography Cyber scope 
   { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
-  { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //near view 
+  { position: [68, 25, 4], lookAt: [91, 25, -60] }, //near view 
+
 
   //Cyborg recruit IT manager 
   { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
-  { position: [61, 27, 11], lookAt: [67, 40, -60] }, //near view 
+  { position: [63, 27, 11], lookAt: [68, 40, -60] }, //near view 
 
   //Rythm Hack dance event 
-  { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
-  { position: [75, 16, 4], lookAt: [27, 30, -60] }, //near view 
+  { position: [80, 16, 11], lookAt: [29, 25, -60] }, //far view 
+  { position: [78, 16, 4], lookAt: [27, 30, -60] }, //near view 
 
   //Hyper Launch Startup 
-  { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
-  { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
-  { position: [52, 35, -3], lookAt: [33, 25, -60] }, //top view 
-
-  // Cryptix coding event
-  { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
-  { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
-  { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
-
-  //techno hive tech talk
-  { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
-  { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
-
-  //Rampage Horizon Gaming 
-  { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
-  { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
-  { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
-
-  //Design riot
-  { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
-  { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
-  { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
+  { position: [58, 16, 5], lookAt: [30, 50, -60] }, //far view 
+  { position: [52, 22, 0], lookAt: [38, 50, -60] }, //near view 
+  { position: [52, 35, -3], lookAt: [36, 25, -60] }, //top view 
+    
+       // Cryptix coding event
+       { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
+       { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
+       { position: [41, 28, -20], lookAt: [43, 52, 10] }, //far down view 
+     
+    /*    //techno hive tech talk
+       { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
+       { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
+     
+       //Rampage Horizon Gaming 
+       { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
+       { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
+       { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
+     
+       //Design riot
+       { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
+       { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
+       { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
+     */
   ];
 
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
-    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
+    { position: [73.4, 35, 12], lookAt: [85, 25, -60], size: 1, eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
+    { position: [55, 22, 3.6], lookAt: [20, 45, 45], size: 0.6, eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
+    { position: [79.4, 29, -20], lookAt: [85.5, 25, -60], size: 0.6, eventId: '' }, //Cyber scope                                                                                                   
+    { position: [68.6, 36.6, -21], lookAt: [68, 40, -60], size: 0.7, eventId: 'ad630e52-bc20-40ce-abe0-18644eddacc2' }, // Cyborg Recruit
+    { position: [60.4, 23.4, -23.6], lookAt: [27, 30, -60], size: 0.7, eventId: '' },  //Rhythm Hack
+
+    { position: [49.5, 34, -23], lookAt: [36, 25, -60], size: 0.7, eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
+    { position: [41, 28, -20], lookAt: [43, 52, 10], size:0.7, eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
+    /*{ position: [60, 32, 15], lookAt: [67, 40, -60], eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
     { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
-    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
-    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
-    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
-    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: 'ad630e52-bc20-40ce-abe0-18644eddacc2' }, // Cyborg Recruit
-    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
-  ];
+    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
+  */];
 
   function lerpVec3(a, b, t) {
     return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
@@ -196,7 +201,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
       {infoWaypoints.map((waypoint, index) => (
         <Billboard key={index} position={waypoint.position}>
           <group>
-            <AnimatedPulseCircle />
+            <AnimatedPulseCircle size={waypoint.size} />
             <mesh
               onClick={(e) => {
                 e.stopPropagation();
@@ -214,7 +219,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
                 document.body.style.cursor = 'default';
               }}
             >
-              <circleGeometry args={[1.5, 64]} />
+              <circleGeometry args={[0.5 * waypoint.size, 64]} />
               <meshStandardMaterial
                 color="#00ffff"
                 emissive="#00ffff"
@@ -226,7 +231,7 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
             </mesh>
             <Text
               position={[0, 0, 0.2]}
-              fontSize={1.6}
+              fontSize={0.6 * waypoint.size}
               color="#ffffff"
               anchorX="center"
               anchorY="middle"
@@ -244,10 +249,10 @@ const LandingScene = ({ eventsData, onEventSelect }) => {
 
       <EffectComposer multisampling={4}>
         <Bloom
-        intensity={1.2}
-        kernelSize={2}
-        luminanceThreshold={0.3}
-        luminanceSmoothing={0.4}
+          intensity={1.2}
+          kernelSize={2}
+          luminanceThreshold={0.3}
+          luminanceSmoothing={0.4}
         />
       </EffectComposer>
     </>
