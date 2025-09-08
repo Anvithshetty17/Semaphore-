@@ -73,9 +73,8 @@ function AnimatedRegisterButton({ router, isMobile }) {
 }
 
 // AnimatedPulseCircle: sonar/halogen pulse effect for the billboard button
-function AnimatedPulseCircle() {
+const AnimatedPulseCircle = ({ size }) => {
   const meshRef = useRef();
-
   useFrame((state) => {
     if (!meshRef.current) return;
     const t = state.clock.getElapsedTime();
@@ -85,10 +84,9 @@ function AnimatedPulseCircle() {
       meshRef.current.material.opacity = 0.25 * (1 - pulse);
     }
   });
-
   return (
     <mesh ref={meshRef} position={[0, 0, -0.05]}>
-      <circleGeometry args={[1.7, 64]} />
+      <circleGeometry args={[0.5 * (size != null ? size : 1), 64]} />
       <meshStandardMaterial
         color="#00eaff"
         emissive="#00eaff"
@@ -337,7 +335,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       {infoWaypoints.map((waypoint, index) => (
         <Billboard key={index} position={waypoint.position}>
           <group>
-            <AnimatedPulseCircle />
+            <AnimatedPulseCircle size={waypoint.size} />
             <mesh
               onClick={(e) => {
                 e.stopPropagation();
@@ -351,7 +349,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
                 e.stopPropagation();
                 document.body.style.cursor = "default";
               }}>
-              <circleGeometry args={[1.5, 64]} />
+              <circleGeometry args={[0.5 * waypoint.size, 64]} />
               <meshStandardMaterial
                 color="#00ffff"
                 emissive="#00ffff"
@@ -363,7 +361,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
             </mesh>
             <Text
               position={[0, 0, 0.2]}
-              fontSize={1.6}
+              fontSize={0.6 * waypoint.size}
               color="#ffffff"
               anchorX="center"
               anchorY="middle"
