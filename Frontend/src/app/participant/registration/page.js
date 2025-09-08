@@ -246,9 +246,9 @@ const AlreadyRegisteredSection = () => {
 
     return (
         <>
-            <div className="w-full min-h-full border rounded-lg bg-white p-4 space-y-6">
-                <h3 className="font-dosisBold mb-3"> Registration Details </h3>
-                <div className="flex flex-col space-y-10">
+            <div className="w-full min-h-full border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4 space-y-6">
+                <h3 className="font-dosisBold mb-3 text-white"> Registration Details </h3>
+                <div className="flex flex-col space-y-10 text-white">
                     <div className="flex flex-col space-y-2">
                         <RegistrationDetailCard1 name="College Name" value={registrationData?.college?.collegeName} />
                         <RegistrationDetailCard1 name="Registered User Name" value={registrationData?.user.fullName} />
@@ -293,7 +293,7 @@ const AlreadyRegisteredSection = () => {
 const MemberCard = ({ name, phoneNumber }) => {
     return (
         <>
-            <div className="flex flex-col space-y-1 border rounded-lg p-3">
+            <div className="flex flex-col space-y-1 border rounded-lg p-3 text-white">
                 <RegistrationDetailCard1 name="FullName" value={name} />
                 <RegistrationDetailCard1 name="Phone Number" value={phoneNumber} />
             </div>
@@ -304,7 +304,7 @@ const MemberCard = ({ name, phoneNumber }) => {
 const RegistrationDetailCard1 = ({ name, value }) => {
     return (
         <>
-            <div className="flex flex-row space-x-2">
+            <div className="flex flex-row space-x-2 text-white">
                 <p className="font-dosisRegular">{name}</p>
                 <p className="font-dosisMedium">:</p>
                 <p className="font-dosisMedium">{value}</p>

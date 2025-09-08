@@ -38,7 +38,7 @@ const MultiLineText = ({ name, label, value, placeholder, onChange, icon, type =
                 <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden px-2">
                     {icon}
                     <textarea
-                        className="w-full px-3 py-2 outline-none font-dosisRegular bg-transparent"
+                        className="w-full px-3 py-2 outline-none font-dosisRegular bg-transparent text-black"
 
                         type={type}
                         name={name}

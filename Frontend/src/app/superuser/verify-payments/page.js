@@ -79,8 +79,8 @@ const VerifyPaymentsPage = () => {
         <>
             {showRejectPopup === true && <form onSubmit={handleReject} className="absolute top-32 right-10 bg-white p-4 border z-[999] w-[25vw] rounded-lg flex flex-col items-center space-y-3">
                 <p className="text-[20px] font-dosisBold text-red-500">Reject Payment</p>
-                <p> Are you sure you want to reject this payment  </p>
-                <MultiLineText label={''} name={'remarks'} placeholder={'Enter Remarks'} isRequired={true} />
+                <p className="text-black"> Are you sure you want to reject this payment  </p>
+                <MultiLineText label={''} name={'remarks'} placeholder={'Enter Remarks'} isRequired={true} className="text-black" />
                 <div className="flex flex-row space-x-2 w-full">
                     <div className="flex justify-center w-full font-dosisMedium">
                         <button
@@ -97,6 +97,7 @@ const VerifyPaymentsPage = () => {
                             onClick={() => {
                                 setSelectPaymentId(null)
                                 setShowRejectPopup(false)
+                                // setShowAcceptPopup(false) // <-- Fix here
                             }}
                         >
                             Cancel
@@ -106,7 +107,7 @@ const VerifyPaymentsPage = () => {
             </form>}
             {showAcceptPopup === true && <div className="absolute top-32 right-10 bg-white p-4 border z-[999] w-[25vw] rounded-lg flex flex-col items-center space-y-6">
                 <p className="text-[20px] font-dosisBold text-green-700">Accept Payment</p>
-                <p> Are you sure you want to accept this payment  </p>
+                <p className="text-black"> Are you sure you want to accept this payment  </p>
                 <div className="flex flex-row space-x-2 w-full">
                     <div className="flex justify-center w-full font-dosisMedium">
                         <button
@@ -123,7 +124,8 @@ const VerifyPaymentsPage = () => {
                             type="button"
                             onClick={() => {
                                 setSelectPaymentId(null)
-                                setShowRejectPopup(false)
+                                // setShowRejectPopup(false)
+                                setShowAcceptPopup(false)
                             }}
                         >
                             Cancel
