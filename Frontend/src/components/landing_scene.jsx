@@ -166,8 +166,8 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
 
   // Close to clouds, looking at cloud center
-//  { position: [0, 130, 0], lookAt: [0, 0, 0] },
-//  { position: [0, 200, 0], lookAt: [0, 0, 0] }, // Close to pixel background, looking at it
+  { position: [0, 130, 0], lookAt: [0, 0, 0] },
+  { position: [0, 200, 0], lookAt: [0, 0, 0] }, // Close to pixel background, looking at it
   ];
 
   // Info button guided waypoints
@@ -182,7 +182,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
     { position: [39.5, 48.3, -1], lookAt: [43, 52, 10], size: 0.5, eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
     { position: [10.5, 23.7, -12], lookAt: [-7, 25, -20], size: 0.6, eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
     { position: [21.5, 41.8, -20.3], lookAt: [14, 45, -50], size: 1, eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
-    { position: [6, 37, -36], lookAt: [-55, 35, 0], size:1, eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
+    { position: [6, 37, -36], lookAt: [-55, 35, 0], size: 1, eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
   ];
 
   // Calculate which camera position we're at
