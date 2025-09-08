@@ -4,12 +4,9 @@
     justify-content: space-between;
     flex: 1;
     padding: 10px;
-    -webkit-box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
-    -moz-box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
-    box-shadow: -21px 27px 27px 0px rgba(231, 240, 245, 1);
     border-radius: 10px;
     height: 100px;
-    background-color: white;
+    background-color: bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900;
 
     font-family: 'Geist Mono', monospace;  /* Apply the Dosis font here */
 
@@ -22,7 +19,7 @@
     .title {
         font-weight: bold;
         font-size: 14px;
-        color: rgb(163, 81, 81);
+        color: white;
     }
     .counter {
         font-size: 50px;
