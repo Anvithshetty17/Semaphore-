@@ -174,10 +174,9 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const infoWaypoints = [
     { position: [73.4, 35, 12], lookAt: [85, 25, -60], size: 1, eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
     { position: [55, 22, 3.6], lookAt: [20, 45, 45], size: 0.6, eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
-    { position: [79.4, 29, -20], lookAt: [85.5, 25, -60], size: 0.6, eventId: '' }, //Cyber scope                                                                                                   
+    { position: [79.4, 29, -20], lookAt: [85.5, 25, -60], size: 0.6, eventId: 'a72d288b-f9b2-4d5c-b21a-2709170c5228' }, //Cyber scope                                                                                                   
     { position: [68.6, 36.6, -21], lookAt: [68, 40, -60], size: 0.7, eventId: 'ad630e52-bc20-40ce-abe0-18644eddacc2' }, // Cyborg Recruit
-    { position: [60.4, 23.4, -23.6], lookAt: [27, 30, -60], size: 0.7, eventId: '' },  //Rhythm Hack
-
+    { position: [60.4, 23.4, -23.6], lookAt: [27, 30, -60], size: 0.7, eventId: 'e08fb9c9-b70f-4c15-a971-36d9c83c0baf' },  //Rhythm Hack
     { position: [49.5, 34, -23], lookAt: [36, 25, -60], size: 0.7, eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
     { position: [39.5, 48.3, -1], lookAt: [43, 52, 10], size: 0.5, eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
     { position: [10.5, 23.7, -12], lookAt: [-7, 25, -20], size: 0.6, eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
