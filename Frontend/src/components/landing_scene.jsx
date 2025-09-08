@@ -115,74 +115,68 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   // console.debug("Events Data in LandingScene:", eventsData);
   const firstFrameRef = useRef(false);
 
-  // Camera waypoints with proper structure
-  const cameraPositions = [
-    isMobile
-      ? { position: [110, 65, -16], lookAt: [0, 52, 0] } // starting from semaphore
-      : { position: [80, 65, -10], lookAt: [0, 52, 0] }, // starting from semaphore
-    { position: [70, 63, -10], lookAt: [0, 52, 0] }, // semaphore zooming
-    { position: [68, 63, -10], lookAt: [-5, 30, 0] }, // zoom + look down
-    { position: [63, 63, -10], lookAt: [-20, -40, 0] }, // look down
+ // Camera waypoints 
+  const cameraPositions = [isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
+    : { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+  { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
+  { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
+  { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
 
-    // IT quiz building
-    { position: [76, 14, -20], lookAt: [80, 35, 120] }, // bottom
-    { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, // Top
+  //IT quiz building
+  { position: [76, 14, -20], lookAt: [80, 35, 120] }, //bottom 
+  { position: [75.5, 12, -16], lookAt: [80, 105, 120] }, //Top
 
-    // surprise event building
-    { position: [75, 12, -12], lookAt: [20, 30, 38] }, // far view
-    { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, // near view
+  //surprise event buiding 
+  { position: [75, 12, -12], lookAt: [20, 30, 38] }, //far view 
+  { position: [65, 12, -4.4], lookAt: [20, 45, 45] }, //near view 
 
-    // Photography Cyber scope
-    { position: [70, 12, 19], lookAt: [83, 30, -60] }, // far view
-    { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, // near view
+  //Photography Cyber scope 
+  { position: [70, 12, 19], lookAt: [83, 30, -60] }, //far view 
+  { position: [69.5, 25, 4], lookAt: [85.5, 25, -60] }, //near view 
 
-    // Cyborg recruit IT manager
-    { position: [58, 27, 20], lookAt: [70, 40, -60] }, // far view
-    { position: [61, 27, 11], lookAt: [67, 40, -60] }, // near view
+  //Cyborg recruit IT manager 
+  { position: [58, 27, 20], lookAt: [70, 40, -60] }, //far view 
+  { position: [61, 27, 11], lookAt: [67, 40, -60] }, //near view 
 
-    // Rhythm Hack dance event
-    { position: [77, 16, 7], lookAt: [27, 25, -60] }, // far view
-    { position: [75, 16, 4], lookAt: [27, 30, -60] }, // near view
+  //Rythm Hack dance event 
+  { position: [77, 16, 7], lookAt: [27, 25, -60] }, //far view 
+  { position: [75, 16, 4], lookAt: [27, 30, -60] }, //near view 
 
-    // Hyper Launch Startup
-    { position: [58, 16, 5], lookAt: [27, 50, -60] }, // far view
-    { position: [52, 22, -3], lookAt: [33, 50, -60] }, // near view
-    { position: [52, 35, -3], lookAt: [33, 25, -60] }, // top view
+  //Hyper Launch Startup 
+  { position: [58, 16, 5], lookAt: [27, 50, -60] }, //far view 
+  { position: [52, 22, -3], lookAt: [33, 50, -60] }, //near view 
+  { position: [52, 35, -3], lookAt: [33, 25, -60] }, //top view 
 
-    // Cryptix coding event
-    { position: [62, 44, -12], lookAt: [33, 37, 0] }, // near left view
-    { position: [42, 38, -10], lookAt: [43, 52, 10] }, // near down view
-    { position: [42, 28, -20], lookAt: [43, 52, 10] }, // far down view
+  // Cryptix coding event
+  { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
+  { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
+  { position: [42, 28, -20], lookAt: [43, 52, 10] }, //far down view 
 
-    // techno hive tech talk
-    { position: [52, 22, -13], lookAt: [3, 20, -10] }, // near view
-    { position: [30, 17, 6], lookAt: [-7, 25, -20] }, // near view
+  //techno hive tech talk
+  { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
+  { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
 
-    // Rampage Horizon Gaming
-    { position: [26, 12, 13], lookAt: [7, 66, -50] }, // far view
-    { position: [19, 30, 1], lookAt: [14, 45, -50] }, // left near view
-    { position: [45, 30, -10], lookAt: [-25, 45, -30] }, // right near view
+  //Rampage Horizon Gaming 
+  { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
+  { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
+  { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
 
-    // Design riot
-    { position: [40, 30, -24], lookAt: [-55, 35, -42] }, // near left view
-    { position: [40, 34, -44], lookAt: [-55, 35, 0] }, // near front view
-    { position: [60, 34, -48], lookAt: [-55, 25, -7] }, // far view
-
-    // Close to clouds, looking at cloud center
-    { position: [0, 130, 0], lookAt: [0, 0, 0] },
-    { position: [0, 200, 0], lookAt: [0, 0, 0] }, // Close to pixel background, looking at it
+  //Design riot
+  { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
+  { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
+  { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
   ];
 
   // Info button guided waypoints
   const infoWaypoints = [
-    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: "2eabcb89-9cd4-4e2d-8ee0-d2242512c892" }, // Cryptix
-    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: "12b54267-ad2f-428d-9e65-07ba4a3a6215" }, // Design Riot
-    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: "d69012b5-e528-44c6-b897-d13b24d1acb2" }, // Rampage Horizon
-    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: "09512d66-191b-4402-b655-6052a0ca9285" }, // Neon Nexus
-    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: "2b2841b8-df3b-4719-837a-497653a1af92" }, // Techno Hive
-    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: "b17091f5-5643-47f8-90b2-94e80b007576" }, // Spectra Flux
-    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: "ad630e52-bc20-40ce-abe0-18644eddacc2" }, // Cyborg Recruit
-    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: "4f20822b-157f-4794-9f49-3878f5b64050" }, // Hyper Launch
+    { position: [73, 33, 15], lookAt: [10, 20, 60], eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
+    { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
+    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
+    { position: [69, 28, 12], lookAt: [85, 25, -60], eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
+    { position: [60, 32, 15], lookAt: [67, 40, -60], eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
+    { position: [75, 22, 6], lookAt: [27, 30, -60], eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
+    { position: [54, 26, 0], lookAt: [33, 50, -60], eventId: 'ad630e52-bc20-40ce-abe0-18644eddacc2' }, // Cyborg Recruit
+    { position: [26, 26, 8], lookAt: [7, 66, -50], eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
   ];
 
   // Calculate which camera position we're at
