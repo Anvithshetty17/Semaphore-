@@ -113,7 +113,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   // console.debug("Events Data in LandingScene:", eventsData);
   const firstFrameRef = useRef(false);
 
- // Camera waypoints 
+  // Camera waypoints 
   const cameraPositions = [isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
     : { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
   { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
@@ -145,32 +145,32 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   { position: [58, 16, 5], lookAt: [30, 50, -60] }, //far view 
   { position: [52, 22, 0], lookAt: [38, 50, -60] }, //near view 
   { position: [52, 35, -3], lookAt: [36, 25, -60] }, //top view 
-    
-       // Cryptix coding event
-       { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
-       { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
-       { position: [41, 28, -20], lookAt: [43, 52, 10] }, //far down view 
-     
-        //techno hive tech talk
-       { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
-       { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
-     
-       //Rampage Horizon Gaming 
-       { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
-       { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
-       { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
-     
-       //Design riot
-       { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
-       { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
-       { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
 
-    // Close to clouds, looking at cloud center
-    { position: [0, 130, 0], lookAt: [0, 0, 0] },
-    { position: [0, 200, 0], lookAt: [0, 0, 0] }, // Close to pixel background, looking at it
-  ];
+  // Cryptix coding event
+  { position: [62, 44, -12], lookAt: [33, 37, 0] }, //near left view 
+  { position: [42, 38, -10], lookAt: [43, 52, 10] }, //near down view 
+  { position: [41, 28, -20], lookAt: [43, 52, 10] }, //far down view 
 
-   // Info button guided waypoints
+  //techno hive tech talk
+  { position: [52, 22, -13], lookAt: [3, 20, -10] }, //near view 
+  { position: [30, 17, 6], lookAt: [-7, 25, -20] }, //near view
+
+ /* //Rampage Horizon Gaming 
+  { position: [26, 12, 13], lookAt: [7, 66, -50] }, //far view 
+  { position: [19, 30, 1], lookAt: [14, 45, -50] }, //left near view 
+  { position: [45, 30, -10], lookAt: [-25, 45, -30] }, //right near view 
+
+  //Design riot
+  { position: [40, 30, -24], lookAt: [-55, 35, -42] }, //near left view 
+  { position: [40, 34, -44], lookAt: [-55, 35, 0] }, //near front view 
+  { position: [60, 34, -48], lookAt: [-55, 25, -7] }, //far view 
+
+  // Close to clouds, looking at cloud center
+  { position: [0, 130, 0], lookAt: [0, 0, 0] },
+  { position: [0, 200, 0], lookAt: [0, 0, 0] }, // Close to pixel background, looking at it
+  */];
+
+  // Info button guided waypoints
   const infoWaypoints = [
     { position: [73.4, 35, 12], lookAt: [85, 25, -60], size: 1, eventId: '09512d66-191b-4402-b655-6052a0ca9285' }, // Neon Nexus
     { position: [55, 22, 3.6], lookAt: [20, 45, 45], size: 0.6, eventId: 'b17091f5-5643-47f8-90b2-94e80b007576' }, // Spectra Flux
@@ -179,9 +179,9 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
     { position: [60.4, 23.4, -23.6], lookAt: [27, 30, -60], size: 0.7, eventId: '' },  //Rhythm Hack
 
     { position: [49.5, 34, -23], lookAt: [36, 25, -60], size: 0.7, eventId: '4f20822b-157f-4794-9f49-3878f5b64050' }, // Hyper Launch
-    { position: [41, 28, -20], lookAt: [43, 52, 10], size:0.7, eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
-    /*{ position: [60, 32, 15], lookAt: [67, 40, -60], eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
-    { position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
+   { position: [39.5, 48.3, -1], lookAt: [43, 52, 10], size:0.7, eventId: '2eabcb89-9cd4-4e2d-8ee0-d2242512c892' }, // Cryptix
+  { position: [11, 23.5, -12], lookAt: [-7, 25, -20], size:1, eventId: '2b2841b8-df3b-4719-837a-497653a1af92' }, // Techno Hive
+      /*{ position: [65, 18, -2], lookAt: [20, 45, 45], eventId: 'd69012b5-e528-44c6-b897-d13b24d1acb2' }, // Rampage Horizon
     { position: [76, 20, -15], lookAt: [80, 35, 120], eventId: '12b54267-ad2f-428d-9e65-07ba4a3a6215' }, // Design Riot
   */];
 
@@ -230,9 +230,8 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       const progress = offset; // 0..1
       const opacity = progress > 0 ? 0 : 1;
       scrollIndicatorRef.current.style.opacity = opacity;
-      scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${
-        Math.sin(state.clock.getElapsedTime() * 3) * 8
-      }px)`;
+      scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${Math.sin(state.clock.getElapsedTime() * 3) * 8
+        }px)`;
     }
 
     // Logo rotation
