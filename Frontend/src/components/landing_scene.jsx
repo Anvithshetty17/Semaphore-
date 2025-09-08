@@ -198,12 +198,13 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       onFirstFrame && onFirstFrame();
     }
     const offset = scroll.offset; // 0..1
-    const currentPosition = offset * (totalPositions - 1);
+    const scrollSpeed = isMobile ? 0.5 : 1; // Reduce scroll speed on mobile
+    const currentPosition = offset * (totalPositions - 1) * scrollSpeed;
 
     // Camera interpolation
     if (cameraRef.current && cameraPositions.length > 1) {
       const total = cameraPositions.length - 1;
-      const t = offset * total;
+      const t = offset * total * scrollSpeed;
       const currentIndex = Math.floor(t);
       const lerpFactor = t - currentIndex;
       const fromPos = cameraPositions[currentIndex];
