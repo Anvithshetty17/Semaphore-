@@ -14,6 +14,10 @@ import dynamic from "next/dynamic";
 import { Suspense, useState, useEffect } from "react";
 import { useProgress } from "@react-three/drei";
 import { useMediaQuery } from "react-responsive";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { useAuthStore } from "@/store";
+import { config as headerConfig } from "@/config/header.config";
 
 // const LandingScene = dynamic(() => import('@/components/landing_scene'), {
 //   ssr: false,
@@ -32,23 +36,65 @@ import { useMediaQuery } from "react-responsive";
 export default function Home() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  const { data: eventsData, isLoading: isEventsLoading } = useGetData(
+  // Base list (without rules)
+  const { data: eventsList, isLoading: isEventsLoading } = useGetData(
     "eventsList",
     `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/FindAll`,
     useQueryConfig
   );
+
+  const { token } = useAuthStore();
+
+  // Enriched list with rules (fetched in parallel per event)
+  const { data: enrichedEvents, isLoading: isRulesLoading } = useQuery(
+    ["eventsList", "withRules"],
+    async () => {
+      if (!Array.isArray(eventsList) || eventsList.length === 0) return eventsList || [];
+      const results = await Promise.all(
+        eventsList.map(async (ev) => {
+          try {
+            const res = await axios.get(
+              `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/FindEventRules?eventId=${ev.eventId}`,
+              headerConfig(token)
+            );
+            const evWithRules = res.data;
+            return {
+              ...ev,
+              eventRules: evWithRules.eventRules || [],
+              eventHeads: evWithRules.eventHeads || ev.eventHeads,
+            };
+          } catch (e) {
+            // Fallback: return original event if rules fetch fails
+            return { ...ev, eventRules: ev.eventRules || [] };
+          }
+        })
+      );
+      return results;
+    },
+    {
+      enabled: Array.isArray(eventsList) && eventsList.length > 0,
+      staleTime: 1000 * 60, // 1 min
+    }
+  );
+
+  // Unified events data (once rules fetched each event will have eventRules[])
+  const eventsData = enrichedEvents || eventsList;
+  // Combined loading flag (base list or rules enrichment pending)
+  const isLoadingCombined = isEventsLoading || (Array.isArray(eventsList) && !enrichedEvents && isRulesLoading);
+
   // real asset loading progress from drei
   const { progress: gltfProgress, active } = useProgress();
   const [showLoader, setShowLoader] = useState(true);
+  const [sceneReady, setSceneReady] = useState(false);
   const [drawerEventId, setDrawerEventId] = useState(null);
 
   useEffect(() => {
-    if (gltfProgress >= 100 && !active) {
-      // small delay for smooth exit
-      const t = setTimeout(() => setShowLoader(false), 400);
+    // Only hide when assets downloaded AND first frame signaled
+    if (sceneReady && gltfProgress >= 100 && !active) {
+      const t = setTimeout(() => setShowLoader(false), 200); // shorter delay
       return () => clearTimeout(t);
     }
-  }, [gltfProgress, active]);
+  }, [gltfProgress, active, sceneReady]);
 
   return (
     <>
@@ -65,10 +111,19 @@ export default function Home() {
 
       <Canvas>
         <ScrollControls pages={10}>
-          <Suspense fallback={null}>
-            <LandingScene 
-              eventsData={eventsData} 
+          <Suspense
+            fallback={
+              <Html center>
+                <div className="text-cyan-300 text-xs tracking-widest animate-pulse bg-black/60 px-4 py-2 rounded border border-cyan-500/40">
+                  INITIALIZING_SCENE//...
+                </div>
+              </Html>
+            }>
+            <LandingScene
+              eventsData={eventsData}
               onEventSelect={setDrawerEventId}
+              isLoadingEvents={isLoadingCombined}
+              onFirstFrame={() => setSceneReady(true)}
             />
             <Stars />
           </Suspense>
@@ -77,11 +132,7 @@ export default function Home() {
 
       {/* CyberpunkDrawer: event details drawer, outside Canvas */}
       {drawerEventId && (
-        <CyberpunkDrawer
-          eventId={drawerEventId}
-          eventsData={eventsData}
-          onClose={() => setDrawerEventId(null)}
-        />
+        <CyberpunkDrawer eventId={drawerEventId} eventsData={eventsData} onClose={() => setDrawerEventId(null)} />
       )}
     </>
   );

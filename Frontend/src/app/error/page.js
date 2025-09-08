@@ -7,7 +7,7 @@ export default function ErrorPage() {
     const router = useRouter();
     const gifSrc = '/images/error.gif';
     return (
-        <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center bg-[#0b0012]">
+        <div className="relative w-full h-full min-h-screen overflow-hidden flex items-center justify-center bg-[#0b0012]">
             {/* Left GIF */}
             <div className="absolute inset-y-0 left-0 w-1/2 pointer-events-none select-none hidden md:block">
                 <div className="w-full h-full opacity-40 animate-pan-slow" style={{backgroundImage:`url(${gifSrc})`, backgroundRepeat:'no-repeat', backgroundPosition:'center', backgroundSize:'contain'}}></div>
@@ -32,7 +32,7 @@ export default function ErrorPage() {
                             Go To Login
                         </button>
                         <button
-                            onClick={() => router.back()}
+                            onClick={() => window.history.go(-1)}
                             className="flex-1 bg-fuchsia-500/20 border border-fuchsia-400/40 text-fuchsia-200 font-dosisMedium py-3 rounded-lg text-sm font-semibold hover:bg-fuchsia-500/30 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/50 focus:ring-offset-2 focus:ring-offset-[#0b0012]"
                         >
                             Go Back

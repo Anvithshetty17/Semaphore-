@@ -54,9 +54,9 @@ const VerifyEmailComponent = () => {
                             {isVerifying === true ? 'Verifying ... please wait' : 'Verify Email'}
                         </button>
                     </div> </> :
-                    <><h3 className="font-dosisBold text-[25px]"> Email Verified </h3>
-                        <p className="font-dosisMedium text-md text-center mt-4">Your email has been successfully verified. You’re all set! Now you can access all event details and updates. We’re excited to have you on board!</p>
-                        <div className="flex justify-center w-full mt-10">
+                    <div className="text-black text-center"><h3 className="font-dosisBold text-[25px]"> Email Verified </h3>
+                        <p className="font-dosisMedium text-md text-center mt-4">Your email has been successfully verified.<br/> You’re all set! Now you can access all event details and updates. <br/>We’re excited to have you on board!</p>
+                        <div className="flex justify-center w-full mt-5">
                             <button
                                 className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300 font-dosisMedium"
                                 type="submit"
@@ -65,7 +65,7 @@ const VerifyEmailComponent = () => {
                                 Login
                             </button>
                         </div>
-                    </>}
+                    </div>}
             </div>
         </>
     )
