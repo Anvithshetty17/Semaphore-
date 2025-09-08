@@ -115,7 +115,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
 
   // Camera waypoints 
   const cameraPositions = [isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
-    : { position: [80, 65, -10], lookAt: [0, 52, 0] }, //starting from semaphore 
+    : { position: [80, 65, -12], lookAt: [0, 52, 0] }, //starting from semaphore 
   { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
   { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
   { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
@@ -261,6 +261,93 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
 
       <fog attach="fog" args={["#000000", 10, 80]} />
 
+      {/* Info Instructions - Always visible at top of screen */}
+      <Html
+        center
+        transform={false}
+        style={{
+          position: "absolute",
+          top: isMobile ? "20px" : "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          pointerEvents: "none",
+          userSelect: "none",
+          zIndex: 20,
+          textAlign: "center",
+          whiteSpace: "nowrap",
+        }}
+        sprite={false}
+        zIndexRange={[20, 0]}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            color: "#ffffff",
+            fontSize: isMobile ? "12px" : "18px",
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bold",
+            backgroundColor: "rgba(0,0,0,0.3)",
+            padding: isMobile ? "6px 10px" : "10px 20px",
+            borderRadius: "20px",
+            border: "1px solid rgba(0,234,255,0.3)",
+            width: isMobile ? "50%" : "auto",
+            maxWidth: isMobile ? "300px" : "none",
+          }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: isMobile ? "16px" : "24px",
+              height: isMobile ? "16px" : "24px",
+              borderRadius: "50%",
+              backgroundColor: "#00ffff",
+              color: "#000",
+              fontSize: isMobile ? "10px" : "14px",
+              fontWeight: "bold",
+              boxShadow: "0 0 8px #00ffff",
+              flexShrink: 0,
+            }}>
+            i
+          </div>
+          <span>Click on the info icons to know more about the events!</span>
+        </div>
+      </Html>
+
+      {/* Scroll Down Indicator */}
+        <Html
+          ref={scrollIndicatorRef}
+          center
+          transform={false}
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: isMobile ? "-400px" : "-300px",
+            pointerEvents: "none",
+            userSelect: "none",
+            transition: "opacity 0.08s linear",
+            opacity: 1,
+            zIndex: 10,
+          }}
+          sprite={false}
+          zIndexRange={[10, 0]}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <svg
+              width={isMobile ? 32 : 40}
+              height={isMobile ? 48 : 56}
+              viewBox="0 0 40 56"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="4" width="24" height="48" rx="12" stroke="#fff" strokeWidth="3" fill="rgba(0,0,0,0.2)" />
+              <circle cx="20" cy="18" r="3" fill="#fff" />
+            </svg>
+            <h1 className="flex">
+            Scroll_Down_To_Explore
+            </h1>
+          </div>
+        </Html>
       {/* Slight rim light so model edges are visible */}
       <directionalLight position={[5, 15, 10]} intensity={0.05} color="#ffffff" />
 
@@ -289,7 +376,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
           anchorY="middle"
           font="/fonts/Dosis-Bold.ttf"
           outlineWidth={0.08}
-          outlineColor="#00eaff"
+          outlineColor="#000000"
           maxWidth={isMobile ? 20 : 80}
           textAlign="center">
           &quot;Where Innovation Meets Celebration {isMobile ? "\n" : "-"} Join the Ultimate Tech Festival!&quot;
@@ -298,35 +385,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
         {/* Animated Register Button */}
         <AnimatedRegisterButton router={router} isMobile={isMobile} />
 
-        {/* Scroll Down Indicator */}
-        <Html
-          ref={scrollIndicatorRef}
-          center
-          transform={false}
-          style={{
-            position: "absolute",
-            left: "50%",
-            bottom: isMobile ? "-400px" : "-300px",
-            pointerEvents: "none",
-            userSelect: "none",
-            transition: "opacity 0.08s linear",
-            opacity: 1,
-            zIndex: 10,
-          }}
-          sprite={false}
-          zIndexRange={[10, 0]}>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <svg
-              width={isMobile ? 32 : 40}
-              height={isMobile ? 48 : 56}
-              viewBox="0 0 40 56"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <rect x="8" y="4" width="24" height="48" rx="12" stroke="#fff" strokeWidth="3" fill="rgba(0,0,0,0.2)" />
-              <circle cx="20" cy="18" r="3" fill="#fff" />
-            </svg>
-          </div>
-        </Html>
+      
       </group>
 
       {/* Info icons: circular halogen buttons with animated sonar pulse for each waypoint */}
