@@ -1,7 +1,7 @@
 "use client";
 
 import { useSubmit } from "@/hooks/useSubmit";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Mail01Icon, LockPasswordIcon } from "hugeicons-react";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/store";
@@ -10,6 +10,7 @@ import { useQueryConfig } from "@/config/useQuery.config";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function Login_Page() {
   const router = useRouter();
@@ -25,6 +26,55 @@ export default function Login_Page() {
     email: "",
     password: "",
   });
+
+  // DVD Logo bouncing state
+  const [logoPosition, setLogoPosition] = useState({ x: 50, y: 50 });
+  const [logoVelocity, setLogoVelocity] = useState({ dx: 2, dy: 1.5 });
+  const animationRef = useRef();
+  const containerRef = useRef();
+
+  // DVD bouncing animation
+  useEffect(() => {
+    const animate = () => {
+      setLogoPosition(prev => {
+        const container = containerRef.current;
+        if (!container) return prev;
+        
+        const containerRect = container.getBoundingClientRect();
+        const logoSize = 100; // Logo width/height
+        
+        let newX = prev.x + logoVelocity.dx;
+        let newY = prev.y + logoVelocity.dy;
+        let newDx = logoVelocity.dx;
+        let newDy = logoVelocity.dy;
+        
+        // Bounce off edges
+        if (newX <= 0 || newX >= containerRect.width - logoSize) {
+          newDx = -newDx;
+          newX = newX <= 0 ? 0 : containerRect.width - logoSize;
+        }
+        
+        if (newY <= 0 || newY >= containerRect.height - logoSize) {
+          newDy = -newDy;
+          newY = newY <= 0 ? 0 : containerRect.height - logoSize;
+        }
+        
+        setLogoVelocity({ dx: newDx, dy: newDy });
+        
+        return { x: newX, y: newY };
+      });
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    
+    animationRef.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [logoVelocity.dx, logoVelocity.dy]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,16 +114,36 @@ export default function Login_Page() {
   };
 
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center font-orbitron 
-                 bg-cover bg-center bg-no-repeat px-2 overflow-hidden"
-     style={{ backgroundImage: "url('/images/login.gif')" }}
-    >
+    <>
+      <Head>
+        <link rel="canonical" href="https://semaphore2k25.in/" />
+      </Head>
+      <div
+        ref={containerRef}
+        className="fixed inset-0 flex items-center justify-center font-orbitron 
+                   bg-cover bg-center bg-no-repeat px-2 overflow-hidden"
+       style={{ backgroundImage: "url('/images/login.gif')" }}
+      >
+        {/* DVD Bouncing Logo */}
+        <Image 
+          src={"/images/semaphore_logo.png"} 
+          alt="bouncing logo" 
+          width={150} 
+          height={150} 
+          className="absolute pointer-events-none z-0 transition-all duration-75 ease-linear
+                     drop-shadow-[0_0_20px_rgba(236,72,153,0.8)] 
+                     hover:drop-shadow-[0_0_30px_rgba(236,72,153,1)]"
+          style={{ 
+            left: `${logoPosition.x}px`, 
+            top: `${logoPosition.y}px`,
+            filter: 'brightness(1.2) saturate(1.3)'
+          }}
+        />
       <form
         onSubmit={handleSubmit}
         className="relative w-full max-w-sm mx-auto p-5 sm:p-7 rounded-2xl
                    backdrop-blur-xl bg-black/80 border border-pink-500/40 
-                   shadow-[0_0_30px_rgba(255,0,255,0.25)] max-h-[95vh] overflow-y-auto"
+                   shadow-[0_0_30px_rgba(255,0,255,0.25)] max-h-[95vh] z-10"
       >
         {/* Neon border animated glow */}
         <div className="absolute inset-0 rounded-2xl border-2 border-pink-500/80 
@@ -144,5 +214,6 @@ export default function Login_Page() {
 
       </form>
     </div>
+    </>
   );
 }
