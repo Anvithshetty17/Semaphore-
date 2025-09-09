@@ -38,6 +38,7 @@ const NewPasswordForm = () => {
         { userId, newPassword: input.newPassword }
       );
       if (data) toast.success(data);
+      router.push("/login");
     } catch (e) {
       toast.error(e?.response?.data?.message ?? e?.message ?? "Reset failed");
     }
