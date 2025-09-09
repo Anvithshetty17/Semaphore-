@@ -110,8 +110,6 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const scrollIndicatorRef = useRef();
   const logoRef = useRef();
   const infoIconRef = useRef(); // Ref for <div> info icon
-  // Smoothed scroll offset for slower camera movement on mobile
-  const smoothedOffsetRef = useRef(0);
   // Ref to animate the scroll indicator dot inside the SVG
   const scrollDotRef = useRef(null);
 
@@ -261,21 +259,18 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       onFirstFrame && onFirstFrame();
     }
   const rawOffset = scroll.offset; // 0..1
-  // Mobile-only damping to slow perceived scroll speed without capping range
-  const smoothing = isMobile ? 0.06 : 0.18; // tweakable: lower = slower
-  smoothedOffsetRef.current = THREE.MathUtils.lerp(
-    smoothedOffsetRef.current,
-    rawOffset,
-    smoothing
-  );
-  const effectiveOffset = isMobile ? smoothedOffsetRef.current : rawOffset;
+  
+  // Apply smooth curve to reduce scroll sensitivity without capping
+  // This makes small movements less sensitive while keeping full range
+  const sensitivityPower = isMobile ? 1.8 : 1.4; // Higher = less sensitive to small movements
+  const effectiveOffset = Math.pow(rawOffset, sensitivityPower);
   // Use effective offset for camera progress
   const currentPosition = effectiveOffset * (totalPositions - 1);
 
     // Camera interpolation
     if (cameraRef.current && cameraPositions.length > 1) {
   const total = cameraPositions.length - 1;
-  // Use effective offset (damped on mobile) for interpolation
+  // Use effective offset (reduced sensitivity) for interpolation
   const t = effectiveOffset * total;
       const currentIndex = Math.floor(t);
       const lerpFactor = t - currentIndex;

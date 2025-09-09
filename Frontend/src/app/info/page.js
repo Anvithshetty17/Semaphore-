@@ -1,9 +1,11 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { Phone, Mail, MapPin, Shield, Zap, Users, ExternalLink } from "lucide-react";
+import { Phone, Mail, MapPin, Shield, Zap, Users, ExternalLink, ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
 
 const TeamPage = () => {
+  const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   // Map coordinates (NMAMIT Nitte)
   const mapLat = 13.2088;
@@ -23,7 +25,6 @@ const TeamPage = () => {
       position: "SEMAPHORE CONVENOR",
       photo: "/images/core/ananth_sir.png", // Replace with your image
       phone: "+91 97437 02262",
-      email: " ",
       status: "ONLINE"
     }
   ]
@@ -163,6 +164,20 @@ const TeamPage = () => {
       </div>
 
       <div className="relative z-10">
+        {/* Back Button */}
+        <div className="absolute top-3 left-3 z-20">
+          <button
+            onClick={() => router.back()}
+            className={`group flex items-center gap-2 bg-gradient-to-r from-gray-900/90 to-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-xl px-4 py-2 hover:border-cyan-400/60 hover:from-cyan-900/20 hover:to-purple-900/20 transition-all duration-300 ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+            style={{ transitionDelay: '200ms' }}
+          >
+            <ArrowLeft className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300" />
+            <span className="text-cyan-300 font-mono text-sm group-hover:text-white transition-colors duration-300">
+              BACK
+            </span>
+          </button>
+        </div>
+
         {/* Compact Header */}
         <header className="pt-12 pb-8">
           <div className="container mx-auto px-6 text-center">
@@ -202,14 +217,15 @@ const TeamPage = () => {
         {/* Staff Coordinators */}
         <main className="pb-12">
           <div className="container mx-auto px-6">
+            {/* Staff Coordinators */}
             <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               STAFF COORDINATORS
             </h2>
-            <section className="flex justify-center md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            <section className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto mb-12">
               {staffMembers.map((member, index) => (
                 <article
                   key={member.id}
-                  className={`group relative transform transition-all duration-700 hover:scale-105 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
+                  className={`group w-full md:w-1/3 relative transform transition-all duration-700 hover:scale-105 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
                   style={{ transitionDelay: `${index * 200}ms` }}
                 >
                   <div className="relative bg-gradient-to-br from-gray-900/90 to-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl overflow-hidden group-hover:border-cyan-400/60 transition-all duration-500">
@@ -236,7 +252,7 @@ const TeamPage = () => {
                             width={150}
                             height={150}
                             alt={`${member.name} - ${member.position}`}
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                            className="w-full h-full object-cover md:grayscale group-hover:grayscale-0 transition-all duration-500"
                           />
                         </GlitchBurst>
                       </div>
@@ -262,12 +278,14 @@ const TeamPage = () => {
                           >
                             <Phone className="w-5 h-5 text-cyan-400" />
                           </a>
-                          {/* <a
-                            href={`mailto:${member.email}`}
-                            className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border border-purple-500/50 rounded-xl p-3 hover:from-purple-500/30 hover:to-purple-400/30 hover:border-purple-400 hover:scale-110 transition-all duration-300"
-                          >
-                            <Mail className="w-5 h-5 text-purple-400" />
-                          </a> */}
+                          {member.email && member.email.trim() && (
+                            <a
+                              href={`mailto:${member.email}`}
+                              className="bg-gradient-to-r from-purple-600/20 to-purple-500/20 border border-purple-500/50 rounded-xl p-3 hover:from-purple-500/30 hover:to-purple-400/30 hover:border-purple-400 hover:scale-110 transition-all duration-300"
+                            >
+                              <Mail className="w-5 h-5 text-purple-400" />
+                            </a>
+                          )}
                         </div>
 
                         {/* Contact Info */}
@@ -320,7 +338,7 @@ const TeamPage = () => {
                             width={150}
                             height={150}
                             alt={`${member.name} - ${member.position}`}
-                            className=" object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                            className="w-full h-full object-cover  md:grayscale group-hover:grayscale-0 transition-all duration-500"
                           />
                         </GlitchBurst>
                       </div>
