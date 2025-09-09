@@ -69,7 +69,7 @@ const TeamPage = () => {
     "The registration fee is ₹2025 per team.",
     "All participants must be present before 9:00 AM.",
     "A team must participate in all events to be eligible for the Overall Championship.",
-    "Participants in the roles of IT Manager and Photography should not participate in any other events.",
+    "IT Manager and Photography participants cannot join other events, while Dance participants may join any events except IT Manager and Photography.",
     "Participants are required to produce their college ID on the fest day.",
     "All participants must be available on campus for both days of the event.",
     "The department/convenor reserves the right to take action in case of any misconduct.",
