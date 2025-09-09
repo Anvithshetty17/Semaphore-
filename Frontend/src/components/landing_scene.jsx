@@ -455,10 +455,10 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       {infoWaypoints.map((waypoint, index) => (
         <Billboard key={index} position={waypoint.position}>
           <group
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              handleEventClick(waypoint.eventId);
-            }}
+            // onPointerDown={(e) => {
+            //   e.stopPropagation();
+            //   handleEventClick(waypoint.eventId);
+            // }}
           >
             <AnimatedPulseCircle size={waypoint.size} />
             <mesh
@@ -466,10 +466,10 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
                 e.stopPropagation();
                 handleEventClick(waypoint.eventId);
               }}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                handleEventClick(waypoint.eventId);
-              }}
+              // onPointerDown={(e) => {
+              //   e.stopPropagation();
+              //   handleEventClick(waypoint.eventId);
+              // }}
               onPointerOver={(e) => {
                 e.stopPropagation();
                 document.body.style.cursor = "pointer";
@@ -499,10 +499,10 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
                 e.stopPropagation();
                 handleEventClick(waypoint.eventId);
               }}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                handleEventClick(waypoint.eventId);
-              }}
+              // onPointerDown={(e) => {
+              //   e.stopPropagation();
+              //   handleEventClick(waypoint.eventId);
+              // }}
             >
               i
             </Text>
