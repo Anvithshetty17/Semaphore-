@@ -141,6 +141,20 @@ export class UsersService {
     return 'Please check your mail';
   }
 
+  async sendPasswordResetLinkByEmail(email: string): Promise<string> {
+    const user = await this.findUserByEmail(email);
+    // Do not reveal if user exists; send generic response
+    if (!user) {
+      return 'Please check your mail';
+    }
+    await this.emailService.sendPasswordResetLinkEmail(
+      user.email,
+      user.fullName,
+      user.userId,
+    );
+    return 'Please check your mail';
+  }
+
   async updateUserPassword(
     userId: string,
     oldPassword: string,
