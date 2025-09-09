@@ -415,7 +415,7 @@ const TeamPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 pointer-events-none" />
                   
                   {/* Simple HUD */}
-                  <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md border border-cyan-500/40 rounded-lg p-4 pointer-events-none">
+                  <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-md border border-cyan-500/40 rounded-lg p-4 pointer-events-none">
                     <div className="text-xs font-mono text-cyan-300 space-y-1">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />

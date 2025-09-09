@@ -136,8 +136,16 @@ export default function Register_Page() {
         className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
         style={{ backgroundImage: "url('/images/login.gif')" }}
       >
-        
-       <div className="absolute top-16 sm:top-8 left-1/2 -translate-x-1/2 z-20">
+
+     
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-sm mx-auto p-4 rounded-2xl text-white
+                   backdrop-blur-xl bg-black/80 border border-pink-500/30 
+                   shadow-[0_0_20px_rgba(255,0,255,0.18)] z-10"
+        style={{ minHeight: "auto" }}
+      >
+          <div className="flex justify-center mb-3 ">
                <div className="flex items-center gap-3 sm:gap-4 bg-black/60 rounded-xl px-3 py-2 border border-pink-500/30">
                  
                  <Image
@@ -154,13 +162,6 @@ export default function Register_Page() {
                  </div>
                </div>
              </div>
-      <form
-        onSubmit={handleSubmit}
-        className="relative w-full max-w-sm mx-auto p-4 rounded-2xl text-white
-                   backdrop-blur-xl bg-black/80 border border-pink-500/30 
-                   shadow-[0_0_20px_rgba(255,0,255,0.18)] max-h-[95vh] overflow-y-auto z-10"
-        style={{ minHeight: "auto" }}
-      >
         {/* Neon border animated glow */}
         <div className="absolute inset-0 rounded-2xl border border-pink-500/60 
                         shadow-[0_0_20px_4px_rgba(255,0,255,0.22)] pointer-events-none 
