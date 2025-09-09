@@ -29,6 +29,11 @@ export const participantMenu = [
     link: `/participant/payment-details`,
     icon: <CreditCardPosIcon color="#000" />,
   },
+    {
+    name: "Edit Team Details",
+    link: `/participant/edit-team-details`,
+    icon: <Edit01Icon color="#000" />,
+  },
   {
     name: "Change Password",
     link: `/request-password-change`,

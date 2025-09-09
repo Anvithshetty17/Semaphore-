@@ -166,4 +166,31 @@ export class UsersService {
     await this.userRepository.save(user);
     return 'Successfully updated the password';
   }
+
+  async resetUserPassword(
+    userId: string,
+    newPassword: string,
+  ): Promise<string> {
+    const user = await this.userRepository.findOne({ where: { userId } });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    const hashedPassword = await this.bcrypt.hashPassword(newPassword);
+    user.password = hashedPassword;
+    await this.userRepository.save(user);
+    return 'Password has been reset successfully';
+  }
+
+  async sendPasswordResetLinkByEmail(email: string): Promise<string> {
+    const user = await this.findUserByEmail(email);
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    await this.emailService.sendForgotPasswordEmail(
+      user.email,
+      user.fullName,
+      user.userId,
+    );
+    return 'Please check your mail';
+  }
 }

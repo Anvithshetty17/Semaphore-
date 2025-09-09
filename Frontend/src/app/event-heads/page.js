@@ -15,6 +15,7 @@ function EventHeadsPage() {
     `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/GetEventHeadDashbord?userId=${cached?.userId}`,
     useQueryConfig
   );
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -30,7 +31,7 @@ function EventHeadsPage() {
   return (
     <div className="p-4 font-mono bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-lg">
       {/* Container for widgets */}
-      <div className="flex space-x-4 mb-8">
+      <div className="flex space-x-4 mb-8 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900">
         {cardList.map((card, index) => (
           <Widgetsv key={index} type={card.cardName} value={card.cardValue} />
         ))}

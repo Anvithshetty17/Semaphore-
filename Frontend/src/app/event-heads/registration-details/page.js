@@ -22,31 +22,31 @@ export default function Page() {
       {registrationDetails?.map((registration) => (
         <div
           key={registration.eventTeamId}
-          className="border border-gray-300 mb-6 p-6 bg-white shadow-md rounded-lg"
+          className="border border-gray-300 mb-6 p-6 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-lg"
         >
           {/* Event Details */}
           <div className="flex justify-between border-b pb-4 mb-4">
             <div>
-              <span className="font-dosisMedium text-gray-600">Team Name</span><br />
-              <span className="font-dosisMedium">{registration.registration.teamName}</span>
+              <span className="font-dosisMedium text-white">Team Name</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.teamName}</span>
             </div>
             <div>
-              <span className="font-dosisMedium text-gray-600">College Name</span><br />
-              <span className="font-dosisMedium">{registration.registration.college.collegeName || "Not Available"}</span> {/* Add actual college data if available */}
+              <span className="font-dosisMedium text-white">College Name</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.college.collegeName || "Not Available"}</span> {/* Add actual college data if available */}
             </div>
             <div>
-              <span className="font-dosisMedium text-gray-600">Is Reported</span><br />
-              <span className="font-dosisMedium">{registration.registration.isTeamReported ? "Yes" : "No"}</span>
+              <span className="font-dosisMedium text-white">Is Reported</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.isTeamReported ? "Yes" : "No"}</span>
             </div>
           </div>
 
           <div>
-            <span className="font-dosisMedium text-gray-600">Participants</span>
+            <span className="font-dosisMedium text-white">Participants</span>
             <div className="grid grid-cols-2 gap-2 mt-2">
               {registration.eventMembers.map((participant) => (
-                <div key={participant.eventMemberId} className="flex flex-col">
-                  <div className="font-dosisMedium">Name: <span className="ml-1">{participant.memberName}</span></div>
-                  <div className="font-dosisMedium">Phone No: <span className="ml-1">{participant.memberPhoneNumber}</span></div>
+                <div key={participant.eventMemberId} className="flex flex-col ">
+                  <div className="font-dosisMedium text-white">Name: <span className="ml-1">{participant.memberName}</span></div>
+                  <div className="font-dosisMedium text-white">Phone No: <span className="ml-1">{participant.memberPhoneNumber}</span></div>
                 </div>
               ))}
             </div>

@@ -17,7 +17,7 @@ const RegistrationListPage = () => {
     return (
         <>
             <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4">
-                <h3 className="font-dosisBold mb-3"> Registration List </h3>
+                <h3 className="font-dosisBold mb-3 text-white"> Registration List </h3>
                 <CustomTable
                     rows={['S.I No', 'Team Name', 'College Name', 'Name', 'Email', 'Status', 'Is Reported']}
                 >

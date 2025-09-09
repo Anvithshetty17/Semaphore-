@@ -38,7 +38,7 @@ const AdminPage = () => {
                                     <td className="px-2 py-3 font-bold  text-gray-900">{ele?.user?.fullName}</td>
                                     <td className="px-2 py-3 font-bold  text-gray-900">{ele?.user?.email}</td>
                                     <td className="px-2 py-3 font-bold  text-gray-900">{ele?.user?.phoneNumber}</td>
-                                    <td className="px-2 py-3 font-bold  text-gray-900">{ele?.status?.status}</td>
+                                    <td className="px-2 py-3 font-bold  text-gray-900">{ele?.user?.status}</td>
 
                                     <td className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap flex flex-row space-x-3 justify-center">
                                         <Link href={`/admin/registration-details?userId=${ele?.user?.userId}`}><EyeIcon color="#000" /></Link>

@@ -44,6 +44,13 @@ export class UsersController {
     return await this.usersService.sendPasswordResetLink(data.userId);
   }
 
+  @Post('/v1/SendPasswordResetLinkByEmail')
+  async sendPasswordResetLinkByEmail(
+    @Body() data: { email: string },
+  ): Promise<string> {
+    return await this.usersService.sendPasswordResetLinkByEmail(data.email);
+  }
+
   @Post('/v1/ChangePassword')
   async changePassword(
     @Body() data: { oldPassword: string; newPassword: string; userId: string },
@@ -53,5 +60,12 @@ export class UsersController {
       data.oldPassword,
       data.newPassword,
     );
+  }
+
+  @Post('/v1/ResetPassword')
+  async resetPassword(
+    @Body() data: { userId: string; newPassword: string },
+  ): Promise<string> {
+    return this.usersService.resetUserPassword(data.userId, data.newPassword);
   }
 }

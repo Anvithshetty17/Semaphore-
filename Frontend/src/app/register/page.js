@@ -12,8 +12,10 @@ import {
   UserAccountIcon,
 } from "hugeicons-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
+import Head from "next/head";
+import Image from "next/image";
 
 export default function Register_Page() {
   const [colleges, setColleges] = useState([]);
@@ -33,6 +35,55 @@ export default function Register_Page() {
     phoneNumber: "",
     fullName: "",
   });
+
+  // DVD Logo bouncing state
+  const [logoPosition, setLogoPosition] = useState({ x: 100, y: 80 });
+  const [logoVelocity, setLogoVelocity] = useState({ dx: 1.8, dy: 2.2 });
+  const animationRef = useRef();
+  const containerRef = useRef();
+
+  // DVD bouncing animation
+  useEffect(() => {
+    const animate = () => {
+      setLogoPosition(prev => {
+        const container = containerRef.current;
+        if (!container) return prev;
+        
+        const containerRect = container.getBoundingClientRect();
+        const logoSize = 100; // Logo width/height
+        
+        let newX = prev.x + logoVelocity.dx;
+        let newY = prev.y + logoVelocity.dy;
+        let newDx = logoVelocity.dx;
+        let newDy = logoVelocity.dy;
+        
+        // Bounce off edges
+        if (newX <= 0 || newX >= containerRect.width - logoSize) {
+          newDx = -newDx;
+          newX = newX <= 0 ? 0 : containerRect.width - logoSize;
+        }
+        
+        if (newY <= 0 || newY >= containerRect.height - logoSize) {
+          newDy = -newDy;
+          newY = newY <= 0 ? 0 : containerRect.height - logoSize;
+        }
+        
+        setLogoVelocity({ dx: newDx, dy: newDy });
+        
+        return { x: newX, y: newY };
+      });
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    
+    animationRef.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [logoVelocity.dx, logoVelocity.dy]);
 
   // Handle Input
   const handleInputChange = (e) => {
@@ -76,15 +127,38 @@ export default function Register_Page() {
   };
 
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
-      style={{ backgroundImage: "url('/images/login.gif')" }}
-    >
+    <>
+      <Head>
+        <link rel="canonical" href="https://semaphore2k25.in/" />
+      </Head>
+      <div
+        ref={containerRef}
+        className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
+        style={{ backgroundImage: "url('/images/login.gif')" }}
+      >
+        
+       <div className="absolute top-16 sm:top-8 left-1/2 -translate-x-1/2 z-20">
+               <div className="flex items-center gap-3 sm:gap-4 bg-black/60 rounded-xl px-3 py-2 border border-pink-500/30">
+                 
+                 <Image
+                   src="/images/semaphore_logo.png"
+                   alt="Semaphore logo"
+                   width={65}
+                   height={65}
+                   className="drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]"
+                   priority
+                 />
+                 <div className="leading-tight">
+                   <p className="text-white text-xs sm:text-sm font-semibold">Department of MCA</p>
+                   <p className="text-white text-xs sm:text-sm">NMAMIT,Nitte</p>
+                 </div>
+               </div>
+             </div>
       <form
         onSubmit={handleSubmit}
         className="relative w-full max-w-sm mx-auto p-4 rounded-2xl text-white
                    backdrop-blur-xl bg-black/80 border border-pink-500/30 
-                   shadow-[0_0_20px_rgba(255,0,255,0.18)] max-h-[95vh] overflow-y-auto"
+                   shadow-[0_0_20px_rgba(255,0,255,0.18)] max-h-[95vh] overflow-y-auto z-10"
         style={{ minHeight: "auto" }}
       >
         {/* Neon border animated glow */}
@@ -195,5 +269,6 @@ export default function Register_Page() {
         </p>
       </form>
     </div>
+    </>
   );
 }
