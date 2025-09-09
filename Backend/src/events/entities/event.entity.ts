@@ -31,4 +31,5 @@ export class Events {
   modelName: string;
   @OneToMany(() => EventTeams, (eventTeam) => eventTeam.event)
   eventTeams: EventTeams[];
+  rules: any;
 }

@@ -94,38 +94,49 @@ export class EventsService {
     return await this.eventRepository.save(event);
   }
 
-  async addEventRules(eventRulesData: CreateEventRulesDto): Promise<Events> {
-    const event = await this.eventRepository.findOne({
-      where: { eventId: eventRulesData.eventId },
+ async addEventRules(eventRulesData: CreateEventRulesDto): Promise<Events> {
+  const event = await this.eventRepository.findOne({
+    where: { eventId: eventRulesData.eventId },
+    relations: ['eventRules'],
+  });
+
+  if (!event) {
+    throw new BadRequestException('Event does not exist');
+  }
+
+  for (const ele of eventRulesData.eventRules) {
+    // Check for duplicate rule number
+    const existingRuleNo = await this.eventRulesRepository.findOne({
+      where: { event, ruleNo: ele.ruleNo },
     });
-    if (event === undefined || event === null) {
-      throw new BadRequestException('Event doesnot exists');
+    if (existingRuleNo) {
+      throw new BadRequestException(
+        `Rule number ${ele.ruleNo} already exists for this event`,
+      );
     }
 
-    eventRulesData.eventRules.map(async (ele) => {
-      let eventRule = await this.eventRulesRepository.findOne({
-        where: { event, ruleNo: ele.ruleNo },
-      });
-      if (eventRule != null) {
-        throw new BadRequestException('Event Rule No already exists');
-      }
+    // Check for duplicate rule text
+    const existingRuleText = await this.eventRulesRepository.findOne({
+      where: { event, eventRule: ele.eventRule },
+    });
+    if (existingRuleText) {
+      throw new BadRequestException(
+        `Rule "${ele.eventRule}" already exists for this event`,
+      );
+    }
 
-      eventRule = await this.eventRulesRepository.findOne({
-        where: { event, eventRule: ele.eventRule },
-      });
-      if (eventRule != null) {
-        throw new BadRequestException('Event Rule already exists');
-      }
-
-      eventRule = this.eventRulesRepository.create({
-        ...ele,
-        eventRule: uuid4(),
-      });
-      await this.eventRulesRepository.save(eventRule);
+    // Create and save new rule (UUID auto-generated)
+    const newEventRule = this.eventRulesRepository.create({
+      ...ele,
+      event,
     });
 
-    return event;
+    await this.eventRulesRepository.save(newEventRule);
   }
+
+  return event;
+}
+
 
   async getEventRules(eventId: string): Promise<Events> {
     const event = await this.eventRepository.findOne({
