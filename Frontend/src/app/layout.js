@@ -115,8 +115,20 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
+        {/* Force Dark Mode Script - Applied immediately before any content loads */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                document.documentElement.classList.add('dark');
+                document.documentElement.style.colorScheme = 'dark';
+                document.body && (document.body.style.backgroundColor = '#000');
+              })();
+            `,
+          }}
+        />
         {/* Primary Meta Tags (fallback for non Next.js aware crawlers) */}
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords.join(", ")} />
@@ -189,7 +201,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark bg-black text-white`}>
         <Providers>{children}</Providers>
       </body>
     </html>

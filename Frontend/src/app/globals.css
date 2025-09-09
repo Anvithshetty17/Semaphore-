@@ -37,18 +37,27 @@
   font-style: normal;
 }
 
-/* Base Styles */
+/* Base Styles - Force Dark Mode */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
   font-family: 'Arial', 'Helvetica', sans-serif;
-  background-color: #000;
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Override any light mode */
+html:not(.dark) {
+  background-color: #000 !important;
+  color: #fff !important;
 }
 
 body {
   @apply bg-background text-foreground;
+  background-color: #000 !important;
+  color: #fff !important;
 }
 
 /* Autofill transparent fix */
@@ -74,22 +83,43 @@ input[type=number] {
   -moz-appearance: textfield; /* Firefox */
 }
 
-/* Custom Utilities */
+/* Custom Utilities - Force Dark Mode */
 @layer utilities {
   .bg-background {
-    background-color: var(--background, #000);
+    background-color: var(--background, #000) !important;
   }
 
   .text-foreground {
-    color: var(--foreground, #fff);
+    color: var(--foreground, #fff) !important;
+  }
+  
+  /* Ensure all elements respect dark mode */
+  * {
+    color-scheme: dark;
   }
 }
 
-/* Dark Mode Support */
+/* Dark Mode Support - Force Dark Always */
+:root {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  color-scheme: dark;
+}
+
+/* Override system preference detection - always use dark */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    color-scheme: dark;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    color-scheme: dark;
   }
 }
 
@@ -136,33 +166,37 @@ input[type=number] {
     --radius: 0.5rem;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 300 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 180 100% 50%;
-    --secondary-foreground: 0 0% 0%;
-    --tertiary: 0 0% 0%;
-    --tertiary-foreground: 0 0% 100%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+  /* Force dark mode variables - override light mode */
+  :root,
+  .dark,
+  html,
+  html.dark {
+    --background: 222.2 84% 4.9% !important;
+    --foreground: 210 40% 98% !important;
+    --card: 222.2 84% 4.9% !important;
+    --card-foreground: 210 40% 98% !important;
+    --popover: 222.2 84% 4.9% !important;
+    --popover-foreground: 210 40% 98% !important;
+    --primary: 300 100% 50% !important;
+    --primary-foreground: 0 0% 100% !important;
+    --secondary: 180 100% 50% !important;
+    --secondary-foreground: 0 0% 0% !important;
+    --tertiary: 0 0% 0% !important;
+    --tertiary-foreground: 0 0% 100% !important;
+    --muted: 217.2 32.6% 17.5% !important;
+    --muted-foreground: 215 20.2% 65.1% !important;
+    --accent: 217.2 32.6% 17.5% !important;
+    --accent-foreground: 210 40% 98% !important;
+    --destructive: 0 62.8% 30.6% !important;
+    --destructive-foreground: 210 40% 98% !important;
+    --border: 217.2 32.6% 17.5% !important;
+    --input: 217.2 32.6% 17.5% !important;
+    --ring: 212.7 26.8% 83.9% !important;
+    --chart-1: 220 70% 50% !important;
+    --chart-2: 160 60% 45% !important;
+    --chart-3: 30 80% 55% !important;
+    --chart-4: 280 65% 60% !important;
+    --chart-5: 340 75% 55% !important;
   }
 }
 

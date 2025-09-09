@@ -9,8 +9,8 @@ const TeamPage = () => {
   const mapLat = 13.2088;
   const mapLng = 74.9320;
   const mapZoom = 16; // 1-21
-  const mapEmbedSrc = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.947851010841!2d74.93440267490502!3d13.17408581290662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbca3db8b9e5b9d%3A0x1bb51f75a1c0dc5c!2sNitte%20Mahalinga%20Adyanthaya%20Memorial%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1694253712768!5m2!1sen!2sin`;
-  const mapExternalLink = `https://www.google.com/maps?q=${mapLat},${mapLng}`;
+  const mapEmbedSrc = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4395.547802221305!2d74.93141407554465!3d13.183007810207187!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbb56415ad85e5b%3A0x10b77ac6f6afc7fa!2sNitte%20Mahalinga%20Adyantaya%20Memorial%20Institute%20of%20Technology!5e1!3m2!1sen!2sin!4v1757421069777!5m2!1sen!2sin`;
+  const mapExternalLink = `https://www.google.com/maps/place/Nitte+Mahalinga+Adyantaya+Memorial+Institute+of+Technology/@13.1830026,74.933989,17z/data=!3m1!4b1!4m6!3m5!1s0x3bbb56415ad85e5b:0x10b77ac6f6afc7fa!8m2!3d13.1830026!4d74.933989!16zL20vMDQxa25k?entry=ttu&g_ep=EgoyMDI1MDkwMy4wIKXMDSoASAFQAw%3D%3D`;
 
   useEffect(() => {
     setIsLoaded(true);
