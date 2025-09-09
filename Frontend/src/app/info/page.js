@@ -19,7 +19,7 @@ const TeamPage = () => {
   const staffMembers=[
     {
        id: 1,
-      name: "DR. ANANTH MURTHY",
+      name: "DR. ANANTHA MURTHY",
       position: "SEMAPHORE CONVENOR",
       photo: "/images/core/ananth_sir.png", // Replace with your image
       phone: "+91 97437 02262",
@@ -45,7 +45,7 @@ const TeamPage = () => {
       photo: "/images/core/rakshitha.png", // Replace with your image
       phone: "+91 7975967009",
       email: "nnm24mc119@nmamit.in",
-      status: "ACTIVE"
+      status: "ONLINE"
     },
     {
       id: 3,
@@ -184,7 +184,7 @@ const TeamPage = () => {
               <div className="flex justify-center gap-6 text-xs font-mono">
                 <div className="flex items-center gap-1">
                   <Users className="w-4 h-4 text-cyan-400" />
-                  <span className="text-cyan-300">3 ACTIVE</span>
+                  <span className="text-cyan-300">4 ACTIVE</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Shield className="w-4 h-4 text-green-400" />
