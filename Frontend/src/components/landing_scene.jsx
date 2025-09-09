@@ -109,6 +109,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const [showPixelBg, setShowPixelBg] = useState(false);
   const scrollIndicatorRef = useRef();
   const logoRef = useRef();
+  const infoIconRef = useRef(); // Ref for <div> info icon
 
   // console.debug("Events Data in LandingScene:", eventsData);
   const firstFrameRef = useRef(false);
@@ -238,6 +239,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
     if (logoRef.current) {
       logoRef.current.rotation.set(-Math.PI / 2, 0, 0); // Always face upwards
     }
+  // Info icon remains fixed; no scroll-based movement
   });
 
   const handleEventClick = (eventId) => {
@@ -263,60 +265,46 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       <fog attach="fog" args={["#000000", 10, 80]} />
 
       {/* Info Instructions - Always visible at top of screen */}
-      <Html
-        center
-        transform={false}
-        style={{
-          position: "absolute",
-          top: isMobile ? "20px" : "20px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          pointerEvents: "none",
-          userSelect: "none",
-          zIndex: 20,
-          textAlign: "center",
-          whiteSpace: "nowrap",
-        }}
-        sprite={false}
-        zIndexRange={[20, 0]}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            color: "#ffffff",
-            fontSize: isMobile ? "12px" : "18px",
-            fontFamily: "Arial, sans-serif",
-            fontWeight: "bold",
-            backgroundColor: "rgba(0,0,0,0.3)",
-            padding: isMobile ? "6px 10px" : "10px 20px",
-            borderRadius: "20px",
-            border: "1px solid rgba(0,234,255,0.3)",
-            width: isMobile ? "50%" : "auto",
-            maxWidth: isMobile ? "300px" : "none",
-          }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: isMobile ? "16px" : "24px",
-              height: isMobile ? "16px" : "24px",
-              borderRadius: "50%",
-              backgroundColor: "#00ffff",
-              color: "#000",
-              fontSize: isMobile ? "10px" : "14px",
-              fontWeight: "bold",
-              boxShadow: "0 0 8px #00ffff",
-              flexShrink: 0,
-            }}>
-            i
-          </div>
-          <span>Click on the info icons to know more about the events!</span>
-        </div>
-      </Html>
-
+      <group position={[45, 56, 1]} rotation={[0, 1.7, 0]} ref={logoRef}>
+        <Text
+          position={[0, 0, 0]}
+          fontSize={isMobile ? 0.7 : 0.7}
+          color="#ffffff"
+          anchorX="left"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.08}
+          maxWidth={isMobile ? 40 : 120}
+          textAlign="left"
+        >
+          Click on the
+        </Text>
+        <Text
+          position={[ 3.9, 0, 0]}
+          fontSize={isMobile ? 0.7 : 0.7}
+          color="#fff"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.42}
+          outlineColor="#00ffff"
+        >
+          i
+        </Text>
+        <Text
+          position={[ 4.5, 0, 0]}
+          fontSize={isMobile ? 0.7 : 0.7}
+          color="#ffffff"
+          anchorX="left"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.08}
+          maxWidth={isMobile ? 40 : 120}
+          textAlign="left"
+        >
+          icon to know more about the events!
+        </Text>
+      </group>
       {/* Scroll Down Indicator */}
         <Html
           ref={scrollIndicatorRef}
