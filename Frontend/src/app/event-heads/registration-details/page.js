@@ -27,26 +27,26 @@ export default function Page() {
           {/* Event Details */}
           <div className="flex justify-between border-b pb-4 mb-4">
             <div>
-              <span className="font-dosisMedium text-black">Team Name</span><br />
-              <span className="font-dosisMedium text-black">{registration.registration.teamName}</span>
+              <span className="font-dosisMedium text-white">Team Name</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.teamName}</span>
             </div>
             <div>
-              <span className="font-dosisMedium text-black">College Name</span><br />
-              <span className="font-dosisMedium text-black">{registration.registration.college.collegeName || "Not Available"}</span> {/* Add actual college data if available */}
+              <span className="font-dosisMedium text-white">College Name</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.college.collegeName || "Not Available"}</span> {/* Add actual college data if available */}
             </div>
             <div>
-              <span className="font-dosisMedium text-black">Is Reported</span><br />
-              <span className="font-dosisMedium text-black">{registration.registration.isTeamReported ? "Yes" : "No"}</span>
+              <span className="font-dosisMedium text-white">Is Reported</span><br />
+              <span className="font-dosisMedium text-white">{registration.registration.isTeamReported ? "Yes" : "No"}</span>
             </div>
           </div>
 
           <div>
-            <span className="font-dosisMedium text-black">Participants</span>
+            <span className="font-dosisMedium text-white">Participants</span>
             <div className="grid grid-cols-2 gap-2 mt-2">
               {registration.eventMembers.map((participant) => (
                 <div key={participant.eventMemberId} className="flex flex-col ">
-                  <div className="font-dosisMedium text-black">Name: <span className="ml-1">{participant.memberName}</span></div>
-                  <div className="font-dosisMedium text-black">Phone No: <span className="ml-1">{participant.memberPhoneNumber}</span></div>
+                  <div className="font-dosisMedium text-white">Name: <span className="ml-1">{participant.memberName}</span></div>
+                  <div className="font-dosisMedium text-white">Phone No: <span className="ml-1">{participant.memberPhoneNumber}</span></div>
                 </div>
               ))}
             </div>
