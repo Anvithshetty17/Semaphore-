@@ -28,8 +28,18 @@ const EditTeamDetails = () => {
         if (registrationData) {
             let eventListData = [];
             registrationData?.eventTeams?.map((ele, index) => {
-                let eventTeamList = []
-                ele?.eventMembers?.map((el, ind) => eventTeamList.push(el))
+                let eventTeamList = [];
+                ele?.eventMembers?.map((el, ind) => {
+                    let phone = '';
+                    // Only allow valid 10-digit numbers, else set to empty string
+                    if (el?.memberPhoneNumber && typeof el.memberPhoneNumber === 'number' && el.memberPhoneNumber > 0 && el.memberPhoneNumber.toString().length === 10) {
+                        phone = String(el.memberPhoneNumber);
+                    }
+                    eventTeamList.push({
+                        ...el,
+                        memberPhoneNumber: phone
+                    });
+                });
                 if (ele?.event?.eventName?.toLowerCase() === 'dance') {
                     const newLength = 12 - eventTeamList.length;
                     for (let i = 0; i < newLength; i++) {
@@ -37,17 +47,17 @@ const EditTeamDetails = () => {
                             eventMemberId: null,
                             memberName: '',
                             memberPhoneNumber: ''
-                        })
+                        });
                     }
                 }
                 let data = {
                     eventId: ele?.event.eventId,
                     eventName: ele?.event.eventName,
                     memberList: eventTeamList
-                }
-                eventListData.push(data)
+                };
+                eventListData.push(data);
             });
-            setInputData(eventListData)
+            setInputData(eventListData);
         }
     }, [registrationData])
 
@@ -86,6 +96,19 @@ const EditTeamDetails = () => {
         })
 
         try {
+            //at least one event validation
+            const hasAtLeastOneEvent = inputData.some((event) =>
+            event.memberList.some(
+            (member) =>
+            member.memberName.trim() !== "" || member.memberPhoneNumber.trim() !== ""
+            )
+            );
+
+            if (!hasAtLeastOneEvent) {
+            toast.error("Please fill at least one event before proceeding.");
+            return;
+            }
+
             let phoneNumberList = []
             let isError = false;
             inputData?.map((ele, index) => {
@@ -130,7 +153,7 @@ const EditTeamDetails = () => {
             if (data) {
                 toast.success('Event registration successful')
                 // queryClient.invalidateQueries('registrationDetails')
-                // router.back()
+                 //router.back()
             }
         } catch (error) {
             toast.error(error?.response?.data?.message ?? error?.message ?? 'Registration failed')

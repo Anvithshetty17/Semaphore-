@@ -40,9 +40,9 @@ const ParticipantRegistrationPage = () => {
     return (
         <>
             {isPaymentPending === true && isAlreadyRegistered === true && <>
-                <div className="flex flex-col space-y-3 border p-4 bg-white rounded-lg mb-3">
+                <div className="flex flex-col space-y-3 border p-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-lg mb-3">
                     <h3 className="text-red-600 font-dosisBold">Payment Pending !</h3>
-                    <p> Please complete your payment procedure for successful registration </p>
+                    <p className="text-white"> Please complete your payment procedure for successful registration </p>
                     <div className="flex justify-start font-dosisMedium px-2">
                         <button
                             className="bg-blue-950 text-white py-2 rounded-md text-md font-semibold hover:bg-blue-700 transition duration-300 cursor-pointer px-6"
@@ -108,6 +108,18 @@ const RegisterSection = ({ eventList }) => {
         e.preventDefault()
         if (isSubmitting === true) return
         try {
+                const hasAtLeastOneEvent = inputData.some((event) =>
+                event.memberList.some(
+                (member) =>
+                member.memberName.trim() !== "" || member.memberPhoneNumber.trim() !== ""
+                )
+                );
+
+                if (!hasAtLeastOneEvent) {
+                    toast.error("Please fill at least one event before proceeding.");
+                return;
+                }
+
             let itManagerPhoneNumber = '';
             inputData?.map((ele) => {
                 if (ele?.eventName?.toLowerCase() === 'it manager') {
@@ -276,7 +288,7 @@ const AlreadyRegisteredSection = () => {
                         )
                     })}
                 </div>
-                {/* <div className="flex justify-center w-full font-dosisMedium">
+                { <div className="flex justify-center w-full font-dosisMedium">
                     <button
                         className="w-1/2 bg-blue-950 text-white py-2 rounded-md text-lg font-dosisBold hover:bg-blue-700 transition duration-300 cursor-pointer"
                         type="button"
@@ -284,7 +296,7 @@ const AlreadyRegisteredSection = () => {
                     >
                         Update Details
                     </button>
-                </div> */}
+                </div> }
             </div>
         </>
     )
