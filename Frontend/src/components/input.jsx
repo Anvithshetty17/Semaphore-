@@ -7,7 +7,7 @@ const TextInput = ({ name, label, value, placeholder, onChange, icon, type = 'te
                 <label className="block text-white text-sm mb-2 font-dosisMedium" htmlFor={name}>
                     {label}
                 </label>
-                <div className="flex items-center border border-pink-400/40 rounded-lg overflow-hidden px-2">
+                <div className="flex items-center border border-pink-400/40 rounded-lg overflow-hidden px-2 text-white">
                     {icon}
                     <input
                         className="w-full px-3 py-2 outline-none font-dosisRegular bg-transparent"
@@ -84,7 +84,7 @@ const PasswordTextInput = ({ name, label, value, placeholder, onChange, icon, is
                         required={isRequired}
                         id={name}
                     />
-                    {isPassword === true ? <ViewOffSlashIcon color="#000" onClick={handleChange} /> : <EyeIcon color="#000" onClick={handleChange} />}
+                    {isPassword === true ? <ViewOffSlashIcon color="#fff" onClick={handleChange} /> : <EyeIcon color="#fff" onClick={handleChange} />}
                 </div>
             </div>
         </>
