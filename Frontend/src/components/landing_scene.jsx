@@ -110,8 +110,6 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const scrollIndicatorRef = useRef();
   const logoRef = useRef();
   const infoIconRef = useRef(); // Ref for <div> info icon
-  // Smoothed scroll offset for slower camera movement on mobile
-  const smoothedOffsetRef = useRef(0);
   // Ref to animate the scroll indicator dot inside the SVG
   const scrollDotRef = useRef(null);
 
@@ -260,23 +258,21 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       firstFrameRef.current = true;
       onFirstFrame && onFirstFrame();
     }
-  const rawOffset = scroll.offset; // 0..1
-  // Mobile-only damping to slow perceived scroll speed without capping range
-  const smoothing = isMobile ? 0.06 : 0.18; // tweakable: lower = slower
-  smoothedOffsetRef.current = THREE.MathUtils.lerp(
-    smoothedOffsetRef.current,
-    rawOffset,
-    smoothing
-  );
-  const effectiveOffset = isMobile ? smoothedOffsetRef.current : rawOffset;
-  // Use effective offset for camera progress
-  const currentPosition = effectiveOffset * (totalPositions - 1);
+
+    const rawOffset = scroll.offset; // 0..1
+    
+    // Mobile: reduce scroll sensitivity instead of adding lag
+    // This maintains responsiveness while reducing visual intensity
+    const effectiveOffset = isMobile ? rawOffset * 0.7 : rawOffset;
+    
+    // Use effective offset for camera progress
+    const currentPosition = effectiveOffset * (totalPositions - 1);
 
     // Camera interpolation
     if (cameraRef.current && cameraPositions.length > 1) {
-  const total = cameraPositions.length - 1;
-  // Use effective offset (damped on mobile) for interpolation
-  const t = effectiveOffset * total;
+      const total = cameraPositions.length - 1;
+      // Use effective offset for smooth interpolation
+      const t = effectiveOffset * total;
       const currentIndex = Math.floor(t);
       const lerpFactor = t - currentIndex;
       const fromPos = cameraPositions[currentIndex];
@@ -299,11 +295,9 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
 
     // Scroll indicator logic (fade instantly on scroll)
     if (scrollIndicatorRef.current) {
-  const progress = rawOffset; // instant fade on any scroll
+      const progress = rawOffset; // instant fade on any scroll
       const opacity = progress > 0 ? 0 : 1;
       scrollIndicatorRef.current.style.opacity = opacity;
-     // scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${Math.sin(state.clock.getElapsedTime() * 3) * 8
-       // }px)`;
     }
 
     // Logo rotation
@@ -320,7 +314,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       const cy = cyMin + (cyMax - cyMin) * p;
       scrollDotRef.current.setAttribute("cy", cy.toFixed(2));
     }
-  // Info icon remains fixed; no scroll-based movement
+    // Info icon remains fixed; no scroll-based movement
   });
 
   const handleEventClick = (eventId) => {
