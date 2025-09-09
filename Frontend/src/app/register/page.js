@@ -136,21 +136,24 @@ export default function Register_Page() {
         className="fixed inset-0 flex items-center justify-center font-orbitron bg-cover bg-center bg-no-repeat px-1 overflow-hidden"
         style={{ backgroundImage: "url('/images/login.gif')" }}
       >
-        {/* DVD Bouncing Logo */}
-        <Image 
-          src={"/images/semaphore_logo.png"} 
-          alt="bouncing logo" 
-          width={150} 
-          height={150} 
-          className="absolute pointer-events-none z-0 transition-all duration-75 ease-linear
-                     drop-shadow-[0_0_20px_rgba(236,72,153,0.8)] 
-                     hover:drop-shadow-[0_0_30px_rgba(236,72,153,1)]"
-          style={{ 
-            left: `${logoPosition.x}px`, 
-            top: `${logoPosition.y}px`,
-            filter: 'brightness(1.2) saturate(1.3)'
-          }}
-        />
+        
+       <div className="absolute top-16 sm:top-8 left-1/2 -translate-x-1/2 z-20">
+               <div className="flex items-center gap-3 sm:gap-4 bg-black/60 rounded-xl px-3 py-2 border border-pink-500/30">
+                 
+                 <Image
+                   src="/images/semaphore_logo.png"
+                   alt="Semaphore logo"
+                   width={65}
+                   height={65}
+                   className="drop-shadow-[0_0_12px_rgba(236,72,153,0.8)]"
+                   priority
+                 />
+                 <div className="leading-tight">
+                   <p className="text-white text-xs sm:text-sm font-semibold">Department of MCA</p>
+                   <p className="text-white text-xs sm:text-sm">NMAMIT,Nitte</p>
+                 </div>
+               </div>
+             </div>
       <form
         onSubmit={handleSubmit}
         className="relative w-full max-w-sm mx-auto p-4 rounded-2xl text-white

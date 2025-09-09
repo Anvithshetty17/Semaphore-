@@ -142,7 +142,7 @@ export class EmailService {
     name: string,
     userId: string,
   ): Promise<void> {
-    const resetLink = `${this.configService.get<string>('EMAIL_VERIFY_HOST')}/change-password?userId=${userId}`;
+    const resetLink = `${this.configService.get<string>('EMAIL_VERIFY_HOST')}/new-password?userId=${userId}`;
     const body = `<h1>Hello ${name},</h1><p>We received a request to reset your password for your account at <strong>Semaphore @k@5</strong>. If you did not request this change, you can safely ignore this email.</p><p>To reset your password, click the link below:</p><p><a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p><p>If the button above does not work, copy and paste the following URL into your web browser:</p<p>${resetLink}</p><p><strong>Note:</strong> This password reset link is valid for 24 hours. After that, you will need to request a new link.</p><p>If you have any questions or need further assistance, feel free to contact us.</p><p>With warm regards,<br>The Semaphore 2k25 Team</p>`;
 
     const mailOptions = {
