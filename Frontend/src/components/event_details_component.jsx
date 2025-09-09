@@ -28,6 +28,20 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
   const memoryUsage = memoryPercent ?? fallbackMem;
   const router = useRouter();
 
+  // Logo glitch effect (same approach as loading screen)
+  const [isLogoGlitching, setIsLogoGlitching] = useState(false);
+  useEffect(() => {
+    const glitchInterval = setInterval(() => {
+      if (Math.random() < 0.05) {
+        setIsLogoGlitching(true);
+        const glitchDuration = Math.random() * 150 + 50;
+        const id = setTimeout(() => setIsLogoGlitching(false), glitchDuration);
+        return () => clearTimeout(id);
+      }
+    }, 200);
+    return () => clearInterval(glitchInterval);
+  }, []);
+
   // Auto-open when eventId is provided
   useEffect(() => {
     if (eventId) {
@@ -75,7 +89,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
           isOpen ? "translate-y-0" : "translate-y-[calc(100%-70px)]"
         }`}>
         {/* Trigger Handle */}
-        <div className="relative mx-3 mb-2 cursor-pointer group" onClick={() => setIsOpen(!isOpen)}>
+        <div className="relative mx-3 mb-2 cursor-pointer group" onClick={() => handleClose()}>
           <div className="bg-gradient-to-r from-purple-900/90 via-black/90 to-purple-900/90 border-2 border-cyan-400/50 rounded-t-xl p-3 shadow-2xl relative overflow-hidden">
             {/* Glitch effect lines */}
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-500/10 to-pink-500/10 opacity-50"></div>
@@ -153,24 +167,59 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
               <div className="md:col-span-1">
                 <div className="bg-gradient-to-br from-purple-900/80 via-gray-900/80 to-black/80 border border-cyan-400/30 rounded-lg p-4 h-full">
                   {/* Event Logo positioned where old GIF placeholder was */}
-                  <div className="bg-gradient-to-br from-purple-900/60 via-black/60 to-pink-900/30 border border-cyan-400/20 rounded-lg h-32 mb-4 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-purple-500/10" />
+                  <div className="bg-gradient-to-br from-purple-900/60 via-black/60 to-pink-900/30 border border-cyan-400/20 rounded-lg h-72 mb-4 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-black" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {logoPath ? (
-                      <Image
-                        src={logoPath}
-                        alt={eventData.eventName || "event-logo"}
-                        width={128}
-                        height={128}
-                        // Note: layout controlled by Tailwind utility classes below
-                        className="object-contain w-full h-full p-2 z-10"
-                        onError={(e) => {
-                          // Fallback to placeholder if the provided logo fails to load
-                          if (e?.currentTarget) {
-                            e.currentTarget.src = "/images/event_logos/placeholder.png";
-                          }
+                      <div
+                        className="relative w-full h-full z-10 overflow-hidden"
+                        style={{
+                          filter: isLogoGlitching
+                            ? `hue-rotate(${Math.random() * 360}deg) saturate(${1 + Math.random() * 2}) contrast(${1 + Math.random()})`
+                            : "none",
+                          transform: isLogoGlitching
+                            ? `translate(${(Math.random() - 0.5) * 10}px, ${(Math.random() - 0.5) * 10}px) scale(${1.2 + Math.random() * 0.04})`
+                            : "scale(1.2)",
+                          transition: isLogoGlitching ? "none" : "transform 0.2s ease, filter 0.1s ease",
                         }}
-                      />
+                      >
+                        <Image
+                          src={logoPath}
+                          alt={eventData.eventName || "event-logo"}
+                          width={200}
+                          height={200}
+                          className="object-cover w-full h-full"
+                          onError={(e) => {
+                            if (e?.currentTarget) {
+                              e.currentTarget.src = "/images/event_logos/placeholder.png";
+                            }
+                          }}
+                        />
+                        {isLogoGlitching && (
+                          <>
+                            <div
+                              className="absolute inset-0 bg-cyan-400 opacity-10 mix-blend-screen pointer-events-none"
+                              style={{
+                                clipPath: `polygon(0 ${Math.random() * 100}%, 100% ${Math.random() * 100}%, 100% ${
+                                  Math.random() * 100
+                                }%, 0 ${Math.random() * 100}%)`,
+                              }}
+                            />
+                            <div
+                              className="absolute inset-0 bg-red-500 opacity-5 mix-blend-multiply pointer-events-none"
+                              style={{
+                                clipPath: `polygon(${Math.random() * 100}% 0, ${Math.random() * 100}% 0, ${
+                                  Math.random() * 100
+                                }% 100%, ${Math.random() * 100}% 100%)`,
+                              }}
+                            />
+                            <div
+                              className="absolute inset-0 bg-green-400 opacity-8 mix-blend-color-dodge pointer-events-none"
+                              style={{ transform: `translateX(${(Math.random() - 0.5) * 20}px)` }}
+                            />
+                          </>
+                        )}
+                      </div>
                     ) : (
                       <div className="text-cyan-400 text-xs text-center z-10">
                         [NO_LOGO]
@@ -192,7 +241,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                   </p>
 
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between border-b border-purple-800/50 pb-1">
+                    <div className="flex justify-between border-t border-purple-800/50 py-1">
                       <span className="text-purple-400">CURRENT_ROUND:</span>
                       <span className="text-cyan-300">{eventData.currentRound ?? "-"}</span>
                     </div>
@@ -328,7 +377,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            {/* <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => router.push("/register")}
@@ -340,7 +389,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                 className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-400/50 hover:from-purple-800/40 hover:to-pink-800/40 text-purple-300 font-bold py-3 rounded-lg transition-all duration-300 text-sm tracking-wider hover:border-purple-300/70 hover:shadow-lg hover:shadow-purple-400/20">
                 DISCONNECT
               </button>
-            </div>
+            </div> */}
 
             {/* Footer */}
             <div className="text-center pt-2 border-t border-purple-800/50">
@@ -376,6 +425,8 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
             transform: translate(1px, -1px);
           }
         }
+
+  /* Loader-style glitch effect is rendered inline during glitch bursts */
       `}</style>
     </div>
   );

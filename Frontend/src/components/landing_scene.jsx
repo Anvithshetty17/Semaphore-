@@ -110,13 +110,18 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const scrollIndicatorRef = useRef();
   const logoRef = useRef();
   const infoIconRef = useRef(); // Ref for <div> info icon
+  // Smoothed scroll offset for slower camera movement on mobile
+  const smoothedOffsetRef = useRef(0);
+  // Ref to animate the scroll indicator dot inside the SVG
+  const scrollDotRef = useRef(null);
 
   // console.debug("Events Data in LandingScene:", eventsData);
   const firstFrameRef = useRef(false);
 
   // Camera waypoints 
-  const cameraPositions = [isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
-    : { position: [80, 65, -12], lookAt: [0, 52, 0] }, //starting from semaphore 
+  const cameraPositions = [
+    isMobile ? { position: [110, 65, -16], lookAt: [0, 52, 0] } //starting from semaphore 
+     : { position: [80, 65, -12], lookAt: [0, 52, 0] }, //starting from semaphore 
   { position: [70, 63, -10], lookAt: [0, 52, 0] },//semaphore zooming
   { position: [68, 63, -10], lookAt: [-5, 30, 0] }, //zoom + look down 
   { position: [63, 63, -10], lookAt: [-20, -40, 0], duration: 0.2 }, //look down  
@@ -198,14 +203,23 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       firstFrameRef.current = true;
       onFirstFrame && onFirstFrame();
     }
-    const offset = scroll.offset; // 0..1
-    const scrollSpeed = isMobile ? 0.5 : 1; // Reduce scroll speed on mobile
-    const currentPosition = offset * (totalPositions - 1) * scrollSpeed;
+  const rawOffset = scroll.offset; // 0..1
+  // Mobile-only damping to slow perceived scroll speed without capping range
+  const smoothing = isMobile ? 0.06 : 0.18; // tweakable: lower = slower
+  smoothedOffsetRef.current = THREE.MathUtils.lerp(
+    smoothedOffsetRef.current,
+    rawOffset,
+    smoothing
+  );
+  const effectiveOffset = isMobile ? smoothedOffsetRef.current : rawOffset;
+  // Use effective offset for camera progress
+  const currentPosition = effectiveOffset * (totalPositions - 1);
 
     // Camera interpolation
     if (cameraRef.current && cameraPositions.length > 1) {
-      const total = cameraPositions.length - 1;
-      const t = offset * total * scrollSpeed;
+  const total = cameraPositions.length - 1;
+  // Use effective offset (damped on mobile) for interpolation
+  const t = effectiveOffset * total;
       const currentIndex = Math.floor(t);
       const lerpFactor = t - currentIndex;
       const fromPos = cameraPositions[currentIndex];
@@ -228,16 +242,26 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
 
     // Scroll indicator logic (fade instantly on scroll)
     if (scrollIndicatorRef.current) {
-      const progress = offset; // 0..1
+  const progress = rawOffset; // instant fade on any scroll
       const opacity = progress > 0 ? 0 : 1;
       scrollIndicatorRef.current.style.opacity = opacity;
-      scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${Math.sin(state.clock.getElapsedTime() * 3) * 8
-        }px)`;
+     // scrollIndicatorRef.current.style.transform = `translate(-50%, 0) translateY(${Math.sin(state.clock.getElapsedTime() * 3) * 8
+       // }px)`;
     }
 
     // Logo rotation
     if (logoRef.current) {
       logoRef.current.rotation.set(-Math.PI / 2, 0, 0); // Always face upwards
+    }
+    // Animate the middle dot inside the scroll indicator (SVG circle cy)
+    if (scrollDotRef.current) {
+      const t = state.clock.getElapsedTime();
+      // Smooth up/down motion in SVG coords within the phone/mouse outline
+      const p = (Math.sin(t * 2.2) + 1) / 2; // 0..1
+      const cyMin = 14; // near top inside the rounded rect
+      const cyMax = 36; // near bottom inside the rounded rect
+      const cy = cyMin + (cyMax - cyMin) * p;
+      scrollDotRef.current.setAttribute("cy", cy.toFixed(2));
     }
   // Info icon remains fixed; no scroll-based movement
   });
@@ -263,12 +287,36 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       <pointLight position={[-10, 5, 10]} intensity={1.2} distance={60} color="#00ff88" />
 
       <fog attach="fog" args={["#000000", 10, 80]} />
+      <group  position={[50, 63.5,isMobile?-3.6:-4.5]} rotation={[0, 1.7, 0]} ref={logoRef}>
+        <Text
+        position={[0,0,0]}
+        fontSize={isMobile?0.9: 0.7}
+         color="#ffffff"
+          anchorX="left"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.08}
+          maxWidth={isMobile ? 40 : 120}
+          textAlign="left"
+        >Department Of MCA</Text>
+         <Text
+        position={[isMobile?2.3:1.9,-2,isMobile?-3.2:-3.5]}
+        fontSize={isMobile?0.5:0.4}
+         color="#00ffff"
+          anchorX="left"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.08}
+          maxWidth={isMobile ? 40 : 120}
+          textAlign="left"
+        >PRESENTS</Text>
+        </group>
 
       {/* Info Instructions - Always visible at top of screen */}
-      <group position={[45, 56, 1]} rotation={[0, 1.7, 0]} ref={logoRef}>
+      <group position={[49, 57.5,isMobile ? -1.9 :-2.7]} rotation={[0, 1.7, 0]} ref={logoRef}>
         <Text
           position={[0, 0, 0]}
-          fontSize={isMobile ? 0.7 : 0.7}
+          fontSize={isMobile ? 0.5 : 0.4}
           color="#ffffff"
           anchorX="left"
           anchorY="middle"
@@ -280,20 +328,20 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
           Click on the
         </Text>
         <Text
-          position={[ 3.9, 0, 0]}
-          fontSize={isMobile ? 0.7 : 0.7}
+          position={[isMobile ? 3 : 2.5, 0, 0]}
+          fontSize={isMobile ? 0.5 : 0.4}
           color="#fff"
           anchorX="center"
           anchorY="middle"
           font="/fonts/Dosis-Bold.ttf"
-          outlineWidth={0.42}
+          outlineWidth={0.35}
           outlineColor="#00ffff"
         >
           i
         </Text>
         <Text
-          position={[ 4.5, 0, 0]}
-          fontSize={isMobile ? 0.7 : 0.7}
+          position={[ isMobile? 3.5 : 3.1, 0, 0]}
+          fontSize={isMobile ? 0.5 : 0.4}
           color="#ffffff"
           anchorX="left"
           anchorY="middle"
@@ -307,13 +355,13 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
       </group>
       {/* Scroll Down Indicator */}
         <Html
-          ref={scrollIndicatorRef}
+           ref={scrollIndicatorRef}
           center
           transform={false}
           style={{
             position: "absolute",
             left: "50%",
-            bottom: isMobile ? "-400px" : "-300px",
+            bottom: "-300px",
             pointerEvents: "none",
             userSelect: "none",
             transition: "opacity 0.08s linear",
@@ -330,7 +378,7 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <rect x="8" y="4" width="24" height="48" rx="12" stroke="#fff" strokeWidth="3" fill="rgba(0,0,0,0.2)" />
-              <circle cx="20" cy="18" r="3" fill="#fff" />
+              <circle ref={scrollDotRef} cx="20" cy="18" r="3" fill="#fff" />
             </svg>
             <h1 className="flex">
             Scroll_Down_To_Explore
@@ -346,44 +394,22 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
         onPointerMove={() => setLoading(false)}
       />
 
-      {/* Logo, Quote, and Register Button Group - faces upwards */}
-      <group position={[0, 160, 0]} rotation={[-Math.PI / 2, 0, 0]} ref={logoRef}>
-        {/* Semaphore logo */}
-        <Image
-          url={"/images/semaphore_logo.png"}
-          position={[0, 3.5, 0]}
-          scale={isMobile ? [10, 10, 1] : [13, 13, 1]}
-          transparent
-        />
-
-        {/* Fest Quote */}
-        <Text
-          position={isMobile ? [0, -2.7, 0] : [0, -3.9, 1]}
-          fontSize={isMobile ? 0.5 : 0.8}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="middle"
-          font="/fonts/Dosis-Bold.ttf"
-          outlineWidth={0.08}
-          outlineColor="#000000"
-          maxWidth={isMobile ? 20 : 80}
-          textAlign="center">
-          &quot;Where Innovation Meets Celebration {isMobile ? "\n" : "-"} Join the Ultimate Tech Festival!&quot;
-        </Text>
-
-        {/* Animated Register Button */}
-        <AnimatedRegisterButton router={router} isMobile={isMobile} />
-
-      
-      </group>
-
-      {/* Info icons: circular halogen buttons with animated sonar pulse for each waypoint */}
+       {/* Info icons: circular halogen buttons with animated sonar pulse for each waypoint */}
       {infoWaypoints.map((waypoint, index) => (
         <Billboard key={index} position={waypoint.position}>
-          <group>
+          <group
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              handleEventClick(waypoint.eventId);
+            }}
+          >
             <AnimatedPulseCircle size={waypoint.size} />
             <mesh
               onClick={(e) => {
+                e.stopPropagation();
+                handleEventClick(waypoint.eventId);
+              }}
+              onPointerDown={(e) => {
                 e.stopPropagation();
                 handleEventClick(waypoint.eventId);
               }}
@@ -412,13 +438,51 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
               anchorX="center"
               anchorY="middle"
               font="/fonts/Dosis-Bold.ttf"
-              outlineWidth={0.08}
-              outlineColor="#00eaff">
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEventClick(waypoint.eventId);
+              }}
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                handleEventClick(waypoint.eventId);
+              }}
+            >
               i
             </Text>
           </group>
         </Billboard>
       ))}
+
+      {/* Logo, Quote, and Register Button Group - faces upwards */}
+      <group position={[0, 157, 1]} rotation={[-Math.PI / 2, 0, 0]} ref={logoRef}>
+        {/* Semaphore logo */}
+        <Image
+          url={"/images/semaphore_logo.png"}
+          position={[0, 3.5, 0]}
+          scale={isMobile ? [10, 10, 1] : [13, 13, 1]}
+          transparent
+        />
+
+        {/* Fest Quote */}
+        <Text
+          position={isMobile ? [0, -2.7, 0] : [0, -3.9, 1]}
+          fontSize={isMobile ? 0.5 : 0.8}
+          color="#ffffff"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/Dosis-Bold.ttf"
+          outlineWidth={0.08}
+          outlineColor="#000000"
+          maxWidth={isMobile ? 20 : 80}
+          textAlign="center">
+          &quot;Where Innovation Meets Celebration {isMobile ? "\n" : "-"} Join the Ultimate Tech Festival!&quot;
+        </Text>
+
+        {/* Animated Register Button */}
+        <AnimatedRegisterButton router={router} isMobile={isMobile} />
+
+      
+      </group>
 
       <PerspectiveCamera ref={cameraRef} fov={30} makeDefault />
 
