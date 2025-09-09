@@ -186,7 +186,7 @@ export class UsersService {
     if (!user) {
       throw new BadRequestException('User does not exist');
     }
-    await this.emailService.sendPasswordResetLinkEmail(
+    await this.emailService.sendForgotPasswordEmail(
       user.email,
       user.fullName,
       user.userId,
