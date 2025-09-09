@@ -153,7 +153,9 @@ const EditTeamDetails = () => {
             if (data) {
                 toast.success('Event registration successful')
                 // queryClient.invalidateQueries('registrationDetails')
-                 //router.back()
+                setTimeout(() => {
+                router.push("/participant/registration"); // 👈 change to your register page route
+                }, 1500); 
             }
         } catch (error) {
             toast.error(error?.response?.data?.message ?? error?.message ?? 'Registration failed')
@@ -186,16 +188,19 @@ const EditTeamDetails = () => {
                                                         value={el?.memberName}
                                                         onChange={(e) => handleInputChange(index, ind, 'memberName', e.target.value)}
                                                     />
-                                                    <TextInput
-                                                        name={`${ele?.eventId}_${ind}_memberPhoneNumber`}
-                                                        label={`Member ${ind + 1} Phone Number`}
-                                                        placeholder="Enter Phone Number"
-                                                        type="number"
-                                                        // isRequired={ind < 4 ? true : false}
-                                                        isRequired={false}
-                                                        value={el?.memberPhoneNumber}
-                                                        onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value)}
+                                                  <TextInput
+                                                    name={`${ele?.eventId}_${ind}_memberPhoneNumber`}
+                                                    label={`Member ${ind + 1} Phone Number`}
+                                                    placeholder="Enter Phone Number"
+                                                    type="tel"
+                                                    inputMode="numeric"   // mobile shows number keypad
+                                                    pattern="[0-9]*"      // only digits allowed
+                                                    maxLength={10}            // prevents typing more than 10
+                                                    isRequired={false}
+                                                    value={el?.memberPhoneNumber}
+                                                    onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value.replace(/\D/g, ''))} // remove non-digits
                                                     />
+
                                                 </>
                                             )
                                         })}

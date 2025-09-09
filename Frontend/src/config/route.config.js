@@ -30,7 +30,7 @@ export const participantMenu = [
     icon: <CreditCardPosIcon color="#000" />,
   },
     {
-    name: "Edit Details",
+    name: "Edit Team Details",
     link: `/participant/edit-team-details`,
     icon: <Edit01Icon color="#000" />,
   },
