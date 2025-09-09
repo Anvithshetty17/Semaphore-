@@ -2,7 +2,7 @@
 import { CityNeonModel } from "./cityneon2";
 import { PerspectiveCamera, useScroll, Image, Billboard, Text, Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useRouter } from "next/navigation";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -114,6 +114,63 @@ const LandingScene = ({ eventsData, onEventSelect, onFirstFrame }) => {
   const smoothedOffsetRef = useRef(0);
   // Ref to animate the scroll indicator dot inside the SVG
   const scrollDotRef = useRef(null);
+
+  // Disable browser zoom gestures on mobile (pinch, double-tap, ctrl+wheel)
+  useEffect(() => {
+    if (!isMobile) return; // Desktop unaffected
+
+    const el = document;
+    const prevent = (e) => {
+      e.preventDefault();
+      // do not bubble to avoid ScrollControls/scene handling
+      e.stopPropagation();
+      return false;
+    };
+
+    const onWheel = (e) => {
+      // Chrome/Android pinch zoom triggers wheel with ctrlKey
+      if (e.ctrlKey) prevent(e);
+    };
+    const onTouchMove = (e) => {
+      // Block pinch (2+ touches)
+      if (e.touches && e.touches.length > 1) prevent(e);
+    };
+    const onGesture = (e) => prevent(e); // iOS Safari gesture events
+
+    // Prevent double-tap to zoom
+    let lastTouchEnd = 0;
+    const onTouchEnd = (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) prevent(e);
+      lastTouchEnd = now;
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("gesturestart", onGesture, { passive: false });
+    el.addEventListener("gesturechange", onGesture, { passive: false });
+    el.addEventListener("gestureend", onGesture, { passive: false });
+    el.addEventListener("touchend", onTouchEnd, { passive: false });
+
+    // Help browsers honor touch interactions without pinch-zoom
+    const root = document.documentElement;
+    const body = document.body;
+    const prevRootTouchAction = root.style.touchAction;
+    const prevBodyTouchAction = body.style.touchAction;
+    root.style.touchAction = "manipulation";
+    body.style.touchAction = "manipulation";
+
+    return () => {
+      el.removeEventListener("wheel", onWheel, { passive: false });
+      el.removeEventListener("touchmove", onTouchMove, { passive: false });
+      el.removeEventListener("gesturestart", onGesture, { passive: false });
+      el.removeEventListener("gesturechange", onGesture, { passive: false });
+      el.removeEventListener("gestureend", onGesture, { passive: false });
+      el.removeEventListener("touchend", onTouchEnd, { passive: false });
+      root.style.touchAction = prevRootTouchAction;
+      body.style.touchAction = prevBodyTouchAction;
+    };
+  }, [isMobile]);
 
   // console.debug("Events Data in LandingScene:", eventsData);
   const firstFrameRef = useRef(false);
