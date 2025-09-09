@@ -47,7 +47,7 @@ const Widgetsv = ({ type = "user", value = 0 }) => {
         <div className="widget ">
             <div className="left">
                 <span className="title">{data.title}</span>
-                <span className="counter">{value}</span>
+                <span className="counter">{data.value}</span>
             </div>
             <div className="right">
                 {data.icon}

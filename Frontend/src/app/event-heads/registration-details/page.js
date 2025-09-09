@@ -22,7 +22,7 @@ export default function Page() {
       {registrationDetails?.map((registration) => (
         <div
           key={registration.eventTeamId}
-          className="border border-gray-300 mb-6 p-6 bg-white shadow-md rounded-lg"
+          className="border border-gray-300 mb-6 p-6 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-lg"
         >
           {/* Event Details */}
           <div className="flex justify-between border-b pb-4 mb-4">

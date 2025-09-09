@@ -214,15 +214,17 @@ const RegisterSection = ({ eventList }) => {
                                                         value={ele?.memberName}
                                                         onChange={(e) => handleInputChange(index, ind, 'memberName', e.target.value)}
                                                     />
-                                                    <TextInput
-                                                        name={`${ele?.eventId}_${ind}_memberPhoneNumber`}
-                                                        label={`Member ${ind + 1} Phone Number`}
-                                                        placeholder="Enter Phone Number"
-                                                        type="number"
-                                                        // isRequired={ind < 4 ? true : false}
-                                                        isRequired={false}
-                                                        value={ele?.memberPhoneNumber}
-                                                        onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value)}
+                                                  <TextInput
+                                                    name={`${ele?.eventId}_${ind}_memberPhoneNumber`}
+                                                    label={`Member ${ind + 1} Phone Number`}
+                                                    placeholder="Enter Phone Number"
+                                                    type="tel"
+                                                    inputMode="numeric"   // mobile shows number keypad
+                                                    pattern="[0-9]*"      // only digits allowed
+                                                    maxLength={10}            // prevents typing more than 10
+                                                    isRequired={false}
+                                                    value={ele?.memberPhoneNumber}
+                                                    onChange={(e) => handleInputChange(index, ind, 'memberPhoneNumber', e.target.value.replace(/\D/g, ''))} // remove non-digits
                                                     />
                                                 </>
                                             )
