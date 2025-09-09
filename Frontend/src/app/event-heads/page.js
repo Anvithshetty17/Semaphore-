@@ -15,6 +15,7 @@ function EventHeadsPage() {
     `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/GetEventHeadDashbord?userId=${cached?.userId}`,
     useQueryConfig
   );
+  
 
   if (isLoading) {
     return <div>Loading...</div>;

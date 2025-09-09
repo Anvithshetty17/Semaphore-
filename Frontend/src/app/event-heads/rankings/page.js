@@ -33,16 +33,16 @@ function EventHeadsPage() {
                   className={`bg-white ${index != data?.length - 1 && 'border-b'
                     } text-[13px]`}
                 >
-                  <td className="px-2 py-3">{index + 1}</td>
-                  <td className="px-2 py-3">{ele?.teamName}</td>
+                  <td className="px-2 py-3 font-bold text-black">{index + 1}</td>
+                  <td className="px-2 py-3 font-bold text-black">{ele?.teamName}</td>
                   <th
                     scope="row"
-                    className="p-2 font-medium text-gray-900 whitespace-nowrap"
+                    className="p-2  text-black whitespace-nowrap font-bold"
                   >
                     {ele?.collegeName}
                   </th>
-                  <td className="px-2 py-3">{ele?.maxRound}</td>
-                  <td className="px-2 py-3">{ele?.totalScore}</td>
+                  <td className="px-2 py-3 font-bold text-black">{ele?.maxRound}</td>
+                  <td className="px-2 py-3 font-bold text-black">{ele?.totalScore}</td>
                 </tr>
               </>
             )
