@@ -50,7 +50,7 @@ const MeetTheTeam = () => {
       name: "HARSHITH P",
       position: "Full Stack Developer",
 
-      photo: "NA",
+      photo: "/images/dev/Harshith_P.png",
       status: "ONLINE",
      
       github: "https://github.com/harshithpancheru",
