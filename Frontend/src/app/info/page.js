@@ -182,17 +182,26 @@ const TeamPage = () => {
         <header className="pt-12 pb-8">
           <div className="container mx-auto px-6 text-center">
             <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  NEURAL TEAM
-                </span>
-              </h1>
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent to-cyan-400" />
-                <p className="text-cyan-300 font-mono text-sm tracking-wider">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 md:-translate-x-12 ">
+                <Image 
+                  src="/images/semaphore_logo.png" 
+                  alt="Semaphore Logo" 
+                  className="object-contain" 
+                  height={34} 
+                  width={90} 
+                />
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center">
+                  <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    NEURAL TEAM
+                  </span>
+                </h1>
+              </div>
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mb-6 mt-4">
+                <div className="h-px w-8 sm:w-12 md:w-16 bg-gradient-to-r from-transparent to-cyan-400" />
+                <p className="text-cyan-300 font-mono text-xs sm:text-sm tracking-wider text-center">
                   NMAMIT_DIVISION
                 </p>
-                <div className="h-px w-16 bg-gradient-to-l from-transparent to-cyan-400" />
+                <div className="h-px w-8 sm:w-12 md:w-16 bg-gradient-to-l from-transparent to-cyan-400" />
               </div>
 
               {/* Compact Stats */}
