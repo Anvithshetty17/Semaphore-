@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { Phone, Mail, MapPin, Shield, Zap, Users, ExternalLink, ArrowLeft } from "lucide-react";
+import { Phone, Mail, MapPin, Shield, Zap, Users, ExternalLink, ArrowLeft, Code, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 
@@ -482,6 +482,147 @@ const TeamPage = () => {
             </div>
           </div>
         </section>
+
+        {/* Meet The Developers Section */}
+        <section className="pb-16">
+          <div className="container mx-auto px-6">
+            <div className="max-w-2xl mx-auto text-center">
+              <GlitchBurst>
+                <div 
+                  onClick={() => {router.push("/meet-the-team")}}
+                  className="group relative cursor-pointer transform transition-all duration-500 hover:scale-105"
+                >
+                  {/* Main Container */}
+                  <div className="relative bg-gradient-to-br from-gray-900/90 to-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl overflow-hidden group-hover:border-cyan-400/60 transition-all duration-500 p-8">
+                    
+                    {/* Animated Background Effects */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 via-purple-400/10 to-pink-400/10"></div>
+                    </div>
+
+                    {/* Scanlines Effect */}
+                    <div className="absolute inset-0 pointer-events-none opacity-30">
+                      <div
+                        className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400/5 to-transparent bg-repeat-y"
+                        style={{
+                          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px)"
+                        }}
+                      />
+                    </div>
+
+                    {/* Status Bar */}
+                    <div className="relative mb-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-xs font-mono tracking-wider">DEV_TEAM://ACCESSIBLE</span>
+                        </div>
+                        <div className="flex gap-1">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                      </div>
+                      <div className="h-px bg-gradient-to-r from-cyan-400/30 via-purple-500/30 to-pink-500/30"></div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="relative z-10 space-y-6">
+                      {/* Title */}
+                      <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-mono tracking-wider group-hover:scale-110 transition-transform duration-500">
+                        MEET_THE_DEVS
+                      </h1>
+
+                      {/* Subtitle */}
+                      <p className="text-cyan-300 font-mono text-sm tracking-wider opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                        &gt; ACCESS_DEVELOPER_PROFILES &lt;
+                      </p>
+
+                      {/* Description */}
+                      
+
+                      {/* Call to Action */}
+                      <div className="pt-4">
+                        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600/20 to-purple-600/20 border border-cyan-400/50 rounded-lg font-mono text-cyan-300 group-hover:from-cyan-500/30 group-hover:to-purple-500/30 group-hover:border-cyan-300 group-hover:text-white transition-all duration-300">
+                          <Code className="w-5 h-5" />
+                          <span className="tracking-wider">INITIALIZE_CONNECTION</span>
+                          <ExternalLink className="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Corner Accent */}
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-cyan-400/20 to-transparent rounded-bl-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr from-purple-400/20 to-transparent rounded-tr-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    {/* Hover Glow Effect */}
+                    <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                      <div className="absolute inset-0 rounded-2xl border border-cyan-400/50 shadow-lg shadow-cyan-400/20"></div>
+                    </div>
+                  </div>
+
+                  {/* External Glow */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-400/0 via-cyan-400/5 to-purple-400/0 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
+                </div>
+              </GlitchBurst>
+            </div>
+          </div>
+        </section>
+         <footer className="relative z-10 border-t border-cyan-500/30 bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl">
+        <div className="container mx-auto px-6 py-8">
+          <div className="text-center space-y-6">
+            {/* Social Media Links */}
+            <div className="flex justify-center items-center gap-6">
+              {/* SAMCA Instagram */}
+              <a 
+                href="https://www.instagram.com/samca_nitte_mca?igsh=MXVmYzcwOTloNm9nZw%3D%3D&utm_source=qr" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/40 rounded-lg hover:from-pink-500/30 hover:to-purple-500/30 hover:border-pink-400/60 transition-all duration-300 hover:scale-105"
+              >
+                <Instagram className="w-5 h-5 text-pink-400 group-hover:text-pink-300" />
+                <span className="text-pink-300 font-mono text-sm group-hover:text-white">SAMCA</span>
+              </a>
+
+              {/* MCA.Fest Instagram */}
+              <a 
+                href="https://www.instagram.com/semaphore.25?igsh=MW5mbmhtMXF5bGNhcg%3D%3D&utm_source=qr" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/40 rounded-lg hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/60 transition-all duration-300 hover:scale-105"
+              >
+                <Instagram className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+                <span className="text-purple-300 font-mono text-sm group-hover:text-white">SEMAPHORE.25</span>
+              </a>
+
+              {/* SAMCA YouTube */}
+              <a 
+                href="https://www.youtube.com/@SAMCANMAMIT" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-lg hover:from-red-500/30 hover:to-orange-500/30 hover:border-red-400/60 transition-all duration-300 hover:scale-105"
+              >
+                <Youtube className="w-5 h-5 text-red-400 group-hover:text-red-300" />
+                <span className="text-red-300 font-mono text-sm group-hover:text-white">SAMCA</span>
+              </a>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
+
+            {/* Original Footer Content */}
+            <div>
+              <div className="text-xs text-purple-400 tracking-widest font-mono">
+                CYBERPUNK_DEVELOPMENT_INTERFACE_v2K25.47 | NEURAL_LINK_ESTABLISHED
+              </div>
+              <div className="text-xs text-gray-500 mt-2">
+                Built with dedication by the Semaphore 2K25 Development Team
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       </div>
 
       {/* Styles */}

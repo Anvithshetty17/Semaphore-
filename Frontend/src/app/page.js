@@ -37,7 +37,7 @@ export default function Home() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
   // Base list (without rules)
-  const { data: eventsList, isLoading: isEventsLoading } = useGetData(
+  const { data: eventsList, isLoading: isEventsLoading, error: eventsError } = useGetData(
     "eventsList",
     `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/FindAll`,
     useQueryConfig
@@ -46,7 +46,7 @@ export default function Home() {
   const { token } = useAuthStore();
 
   // Enriched list with rules (fetched in parallel per event)
-  const { data: enrichedEvents, isLoading: isRulesLoading } = useQuery(
+  const { data: enrichedEvents, isLoading: isRulesLoading, error: rulesError } = useQuery(
     ["eventsList", "withRules"],
     async () => {
       if (!Array.isArray(eventsList) || eventsList.length === 0) return eventsList || [];
@@ -64,6 +64,7 @@ export default function Home() {
               eventHeads: evWithRules.eventHeads || ev.eventHeads,
             };
           } catch (e) {
+            console.warn(`Failed to fetch rules for event ${ev.eventId}:`, e);
             // Fallback: return original event if rules fetch fails
             return { ...ev, eventRules: ev.eventRules || [] };
           }
@@ -74,27 +75,61 @@ export default function Home() {
     {
       enabled: Array.isArray(eventsList) && eventsList.length > 0,
       staleTime: 1000 * 60, // 1 min
+      retry: 3, // Retry failed requests
     }
   );
 
   // Unified events data (once rules fetched each event will have eventRules[])
   const eventsData = enrichedEvents || eventsList;
+  
   // Combined loading flag (base list or rules enrichment pending)
   const isLoadingCombined = isEventsLoading || (Array.isArray(eventsList) && !enrichedEvents && isRulesLoading);
 
-  // real asset loading progress from drei
+  // Real asset loading progress from drei
   const { progress: gltfProgress, active } = useProgress();
+  
+  // Loading states
   const [showLoader, setShowLoader] = useState(true);
   const [sceneReady, setSceneReady] = useState(false);
   const [drawerEventId, setDrawerEventId] = useState(null);
+  const [dataLoadingComplete, setDataLoadingComplete] = useState(false);
+  const [assetsLoadingComplete, setAssetsLoadingComplete] = useState(false);
 
+  // Monitor data loading completion
   useEffect(() => {
-    // Only hide when assets downloaded AND first frame signaled
-    if (sceneReady && gltfProgress >= 100 && !active) {
-      const t = setTimeout(() => setShowLoader(false), 200); // shorter delay
-      return () => clearTimeout(t);
+    if (!isLoadingCombined && eventsData && eventsData.length > 0) {
+      console.log("✅ Data loading completed - Events:", eventsData.length);
+      setDataLoadingComplete(true);
+    } else if (eventsError || rulesError) {
+      console.warn("⚠️ Data loading error, proceeding with fallback");
+      setDataLoadingComplete(true); // Allow proceeding even with errors
+    }
+  }, [isLoadingCombined, eventsData, eventsError, rulesError]);
+
+  // Monitor asset loading completion
+  useEffect(() => {
+    if (gltfProgress >= 100 && !active && sceneReady) {
+      console.log("✅ Assets loading completed - Progress:", gltfProgress);
+      setAssetsLoadingComplete(true);
     }
   }, [gltfProgress, active, sceneReady]);
+
+  // Hide loader only when both data and assets are ready
+  useEffect(() => {
+    if (dataLoadingComplete && assetsLoadingComplete) {
+      console.log("🚀 All loading completed - Showing landing page");
+      const timer = setTimeout(() => {
+        setShowLoader(false);
+      }, 500); // Small delay for smooth transition
+      return () => clearTimeout(timer);
+    }
+  }, [dataLoadingComplete, assetsLoadingComplete]);
+
+  // Error handling
+  const hasErrors = eventsError || rulesError;
+  if (hasErrors && !showLoader) {
+    console.error("❌ Critical errors detected:", { eventsError, rulesError });
+  }
 
   return (
     <>
@@ -103,6 +138,13 @@ export default function Home() {
           externalProgress={gltfProgress}
           onLoadComplete={() => setShowLoader(false)}
           active={showLoader}
+          dataLoading={!dataLoadingComplete}
+          assetsLoading={!assetsLoadingComplete}
+          loadingStages={{
+            data: dataLoadingComplete,
+            assets: assetsLoadingComplete,
+            scene: sceneReady
+          }}
         />
       )}
 
@@ -115,7 +157,7 @@ export default function Home() {
             fallback={
               <Html center>
                 <div className="text-cyan-300 text-xs tracking-widest animate-pulse bg-black/60 px-4 py-2 rounded border border-cyan-500/40">
-                  INITIALIZING_SCENE//...
+                  INITIALIZING_NEURAL_MATRIX...
                 </div>
               </Html>
             }>
@@ -134,6 +176,8 @@ export default function Home() {
       {drawerEventId && (
         <CyberpunkDrawer eventId={drawerEventId} eventsData={eventsData} onClose={() => setDrawerEventId(null)} />
       )}
-    </>
+
+      {/* Debug Info (only in development) */}
+     </>
   );
 }
