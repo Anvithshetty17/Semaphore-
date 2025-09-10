@@ -63,7 +63,7 @@ const MeetTheTeam = () => {
       name: "SUJAN",
       position: "3D Model Designer",
 
-      photo: "/images/core/sujan.png",
+      photo: "NA",
       status: "ONLINE",
       
       github: "",
@@ -76,7 +76,7 @@ const MeetTheTeam = () => {
       name: "MANESH KUMAR",
       position: "Frontend Developer",
 
-      photo: "/images/core/manesh.png",
+      photo: "NA",
       status: "ONLINE",
      
       
@@ -91,7 +91,7 @@ const MeetTheTeam = () => {
       name: "ANVITH SHETTY",
       position: "Frontend Developer & SEO",
 
-      photo: "/images/core/anvith.png",
+      photo: "NA",
       status: "ONLINE",
      
       
@@ -106,7 +106,7 @@ const MeetTheTeam = () => {
       name: "SHREYAS S",
       position: "Frontend Developer",
 
-      photo: "/images/core/shreyas.png",
+      photo: "NA",
       status: "ONLINE",
      
       
