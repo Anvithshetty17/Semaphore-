@@ -91,7 +91,7 @@ const MeetTheTeam = () => {
       name: "ANVITH SHETTY",
       position: "Frontend Developer & SEO",
 
-      photo: "NA",
+      photo: "/images/dev/anvith.png",
       status: "ONLINE",
      
       
