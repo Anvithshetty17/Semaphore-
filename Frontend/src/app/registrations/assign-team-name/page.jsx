@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 const AssignTeamName = () => {
     const { submitData, isLoading: isSubmitting } = useSubmit()
     const [teamNames, setTeamNames] = useState([])
+    const [editingStates, setEditingStates] = useState({});
     const { data: regCollegeNames, isLoading: isEventLoading } = useGetData(
         'regCollegeNames',
         `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetRegisteredCollegeList`,
@@ -40,6 +41,8 @@ const AssignTeamName = () => {
             )
             if (data) {
                 toast.success('Successfully assigned team names')
+                setEditingStates((prev) => ({ ...prev, [index]: false }));
+
             }
         } catch (e) {
             toast.error(e?.response?.data?.message ?? e?.message ?? 'Registration failed')
@@ -79,20 +82,28 @@ const AssignTeamName = () => {
                                     <p className="font-dosisMedium"> {ele?.user?.phoneNumber}</p>
                                 </div>
                                 <div className="flex flex-col space-y-1 text-[16px] font-dosisRegular">
-                                    <TextInput
-                                        name="teamName"
-                                        label={"Team Name"}
-                                        placeholder={'Enter Team Name'}
-                                        value={teamNames[index]}
-                                        onChange={(e) => handleChangeName(e.target.value, index)}
+                                {editingStates[index] !== false ? (
+                                        <TextInput
+                                            name="teamName"
+                                            label={"Team Name"}
+                                            placeholder="Enter Team Name"
+                                            value={teamNames[index]}
+                                            onChange={(e) => handleChangeName(e.target.value, index)}
+                                        />
+                                    ) : (
+                                        <span className="py-2 px-3 border border-gray-300 rounded-md">
+                                            {teamNames[index]}
+                                        </span>
+                                    )}
 
-                                    />
-                                    <button
-                                        onClick={() => handleClick(index, ele?.registrationId)}
-                                        className="bg-blue-950 text-white py-1 px-10 rounded-md text-lg font-dosisMedium hover:bg-blue-700 transition duration-300 cursor-pointer"
-                                    >
-                                        Update Team Name
-                                    </button>
+                                    {editingStates[index] !== false && (
+                                        <button
+                                            onClick={() => handleClick(index, ele?.registrationId)}
+                                            className="bg-blue-950 text-white py-1 px-10 rounded-md text-lg font-dosisMedium hover:bg-blue-700 transition duration-300 cursor-pointer"
+                                        >
+                                            Update Team Name
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </>
