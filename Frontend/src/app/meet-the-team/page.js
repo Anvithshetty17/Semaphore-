@@ -50,7 +50,7 @@ const MeetTheTeam = () => {
       name: "HARSHITH P",
       position: "Full Stack Developer",
 
-      photo: "/images/core/harshith.png",
+      photo: "NA",
       status: "ONLINE",
      
       github: "https://github.com/harshithpancheru",
@@ -313,7 +313,7 @@ const MeetTheTeam = () => {
                           <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/50 to-purple-500/50 rounded-full blur-lg group-hover:blur-xl transition-all duration-500"></div>
                           <div className="relative w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 rounded-full border-2 border-cyan-400/60 flex items-center justify-center overflow-hidden">
                             {/* Placeholder for actual image */}
-                            <Code className="w-16 h-16 text-cyan-400" />
+                            {dev.photo!=="NA" ? <Image src={dev.photo} alt={dev.name} layout="fill" objectFit="cover" className="rounded-full" /> : <Code className="w-16 h-16 text-cyan-400" />}
                           </div>
                         </div>
 
