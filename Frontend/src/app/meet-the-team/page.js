@@ -230,7 +230,7 @@ const MeetTheTeam = () => {
           {/* System Status Bar */}
           <div className="bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 border border-cyan-500/40 rounded-lg p-4 mb-8 backdrop-blur-xl">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="flex items-center gap-4">
+              <div className="md:flex space-y-2 items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                   <span className="font-mono text-green-400 text-sm">DEVELOPMENT_TEAM://ACTIVE</span>
@@ -264,7 +264,7 @@ const MeetTheTeam = () => {
                 MEET_THE_DEVELOPMENT_TEAM
               </h1>
             </GlitchBurst>
-            <p className="text-xl text-gray-300 font-mono tracking-wider">
+            <p className="text-xs md:text-xl text-gray-300 font-mono tracking-wider ">
               &gt; ARCHITECTS_OF_THE_CYBERPUNK_REALITY &lt;
             </p>
             <div className="mt-4 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60"></div>

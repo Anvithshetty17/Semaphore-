@@ -554,7 +554,7 @@ const TeamPage = () => {
                       <div className="pt-4">
                         <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600/20 to-purple-600/20 border border-cyan-400/50 rounded-lg font-mono text-cyan-300 group-hover:from-cyan-500/30 group-hover:to-purple-500/30 group-hover:border-cyan-300 group-hover:text-white transition-all duration-300">
                           <Code className="w-5 h-5" />
-                          <span className="tracking-wider">INITIALIZE_CONNECTION</span>
+                          <span className="">INITIALIZE_CONNECTION</span>
                           <ExternalLink className="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
                       </div>
@@ -577,20 +577,21 @@ const TeamPage = () => {
             </div>
           </div>
         </section>
-         <footer className="relative z-10 border-t border-cyan-500/30 bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl">
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center space-y-6">
+
+      <footer className="relative z-10 border-t border-cyan-500/30 bg-gradient-to-r from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl">
+        <div className="container mx-auto px-4 sm:px-6 py-8">
+          <div className="flex flex-col gap-8 md:gap-10 lg:gap-12 text-center items-center">
             {/* Social Media Links */}
-            <div className="flex justify-center items-center gap-6">
+            <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 flex-wrap">
               {/* SAMCA Instagram */}
               <a 
                 href="https://www.instagram.com/samca_nitte_mca?igsh=MXVmYzcwOTloNm9nZw%3D%3D&utm_source=qr" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/40 rounded-lg hover:from-pink-500/30 hover:to-purple-500/30 hover:border-pink-400/60 transition-all duration-300 hover:scale-105"
+                className="group flex items-center gap-2 px-4 py-2 mb-2 sm:mb-0 bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/40 rounded-lg hover:from-pink-500/30 hover:to-purple-500/30 hover:border-pink-400/60 transition-all duration-300 hover:scale-105 text-sm sm:text-base"
               >
                 <Instagram className="w-5 h-5 text-pink-400 group-hover:text-pink-300" />
-                <span className="text-pink-300 font-mono text-sm group-hover:text-white">SAMCA</span>
+                <span className="text-pink-300 font-mono group-hover:text-white">SAMCA</span>
               </a>
 
               {/* MCA.Fest Instagram */}
@@ -598,10 +599,10 @@ const TeamPage = () => {
                 href="https://www.instagram.com/semaphore.25?igsh=MW5mbmhtMXF5bGNhcg%3D%3D&utm_source=qr" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/40 rounded-lg hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/60 transition-all duration-300 hover:scale-105"
+                className="group flex items-center gap-2 px-4 py-2 mb-2 sm:mb-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/40 rounded-lg hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/60 transition-all duration-300 hover:scale-105 text-sm sm:text-base"
               >
                 <Instagram className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
-                <span className="text-purple-300 font-mono text-sm group-hover:text-white">SEMAPHORE.25</span>
+                <span className="text-purple-300 font-mono group-hover:text-white">SEMAPHORE.25</span>
               </a>
 
               {/* SAMCA YouTube */}
@@ -609,22 +610,22 @@ const TeamPage = () => {
                 href="https://www.youtube.com/@SAMCANMAMIT" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-lg hover:from-red-500/30 hover:to-orange-500/30 hover:border-red-400/60 transition-all duration-300 hover:scale-105"
+                className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-lg hover:from-red-500/30 hover:to-orange-500/30 hover:border-red-400/60 transition-all duration-300 hover:scale-105 text-sm sm:text-base"
               >
                 <Youtube className="w-5 h-5 text-red-400 group-hover:text-red-300" />
-                <span className="text-red-300 font-mono text-sm group-hover:text-white">SAMCA</span>
+                <span className="text-red-300 font-mono group-hover:text-white">SAMCA</span>
               </a>
             </div>
 
             {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
 
             {/* Original Footer Content */}
-            <div>
-              <div className="text-xs text-purple-400 tracking-widest font-mono">
+            <div className="w-full flex flex-col items-center gap-2">
+              <div className="text-xs sm:text-sm text-purple-400 tracking-widest font-mono text-center">
                 CYBERPUNK_DEVELOPMENT_INTERFACE_v2K25.47 | NEURAL_LINK_ESTABLISHED
               </div>
-              <div className="text-xs text-gray-500 mt-2">
+              <div className="text-xs sm:text-sm text-gray-500 mt-2 text-center">
                 Built with dedication by the Semaphore 2K25 Development Team
               </div>
             </div>
