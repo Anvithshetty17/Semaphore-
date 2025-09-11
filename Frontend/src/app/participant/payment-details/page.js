@@ -53,7 +53,7 @@ const PaymentDetails = () => {
                                     {ele?.phoneNumber}
                                 </td>
                                 <td className="px-3 py-3 font-medium text-green-400 whitespace-nowrap">
-                                    Rs. 1500.00 /-
+                                    Rs. 2025.00 /-
                                 </td>
                                 <td className="px-3 py-3 font-medium text-cyan-200 whitespace-nowrap">
                                     {ele?.upiId}

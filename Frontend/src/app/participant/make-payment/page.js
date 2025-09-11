@@ -45,7 +45,7 @@ const MakePayment = () => {
                 <h3 className="font-dosisBold mb-3"> Payment Details Page</h3>
                 <div className="flex flex-col w-full h-full justify-around items-center">
                     <Image
-                        src="/images/kiran_qr_code.jpg"
+                        src="/images/payment_qr_code.png"
                         alt="Payment QR Code"
                         width={300}
                         height={300}
