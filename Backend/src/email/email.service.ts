@@ -78,7 +78,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmailId,
       subject,
-      text: `Thank you for registering! Please verify your email by clicking the link below:`,
+      text: `Congratulations! We have successfully received your payment for Semaphore 2k25  at NMAMIT, Nitte  and your application is now confirmed. We’re thrilled to welcome you to this exciting event.`,
       html: htmlContent,
     };
 
@@ -101,7 +101,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmailId,
       subject,
-      text: `Thank you for registering! Please verify your email by clicking the link below:`,
+      text: `We regret to inform you that there was an issue with the payment for Semaphore 2k25  at NMAMIT, Nitte, and your registration could not be confirmed at this time. Please review the payment details and make a new payment to complete your registration. We would love to see you at Semaphore 2k25 and don’t want you to miss out on the exciting sessions, activities, and networking opportunities!`,
       html: htmlContent,
     };
 
@@ -125,7 +125,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmailId,
       subject,
-      text: ``,
+      text: `Hello ${fullName},Congratulations! Your team has been promoted to the next round of ${eventName} at Semaphore 2k25! We're thrilled to see your team's progress and wish you the best for the upcoming challenges. Good luck! With warm regards, The Semaphore Team Semaphore 2k25`,
       html: body,
     };
 
@@ -143,13 +143,13 @@ export class EmailService {
     userId: string,
   ): Promise<void> {
   const resetLink = `${this.configService.get<string>('EMAIL_VERIFY_HOST')}/change-password?userId=${userId}`;
-    const body = `<h1>Hello ${name},</h1><p>We received a request to reset your password for your account at <strong>Semaphore @k@5</strong>. If you did not request this change, you can safely ignore this email.</p><p>To reset your password, click the link below:</p><p><a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p><p>If the button above does not work, copy and paste the following URL into your web browser:</p<p>${resetLink}</p><p><strong>Note:</strong> This password reset link is valid for 24 hours. After that, you will need to request a new link.</p><p>If you have any questions or need further assistance, feel free to contact us.</p><p>With warm regards,<br>The Semaphore 2k25 Team</p>`;
+    const body = `<h1>Hello ${name},</h1><p>We received a request to reset your password for your account at <strong>Semaphore 2k25</strong>. If you did not request this change, you can safely ignore this email.</p><p>To reset your password, click the link below:</p><p><a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p><p>If the button above does not work, copy and paste the following URL into your web browser:</p<p>${resetLink}</p><p><strong>Note:</strong> This password reset link is valid for 24 hours. After that, you will need to request a new link.</p><p>If you have any questions or need further assistance, feel free to contact us.</p><p>With warm regards,<br>The Semaphore 2k25 Team</p>`;
 
     const mailOptions = {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmail,
       subject: 'Link To Reset Password for Semaphore 2k25',
-      text: `Reset Password`,
+      text: `Reset Password: ${resetLink}`,
       html: body,
     };
 
@@ -188,7 +188,7 @@ export class EmailService {
       from: this.configService.get<string>('GMAIL_USER'),
       to: toEmail,
       subject,
-      text: 'Use the link to set a new password',
+      text: `Use the link to set a new password: ${resetLink}`,
       html,
     };
 
