@@ -76,7 +76,7 @@ const MeetTheTeam = () => {
       name: "MANEESH KUMAR",
       position: "Frontend Developer",
 
-      photo: "NA",
+      photo: "/images/dev/maneesh.png",
       status: "ONLINE",
      
       
