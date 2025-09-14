@@ -67,7 +67,7 @@ const MeetTheTeam = () => {
       status: "ONLINE",
       
       github: "https://github.com/Shujan2003",
-      linkedin: "https://www.linkedin.com/me?trk=p_mwlite_feed-secondary_nav",
+      linkedin: "https://in.linkedin.com/in/shujan-036322324",
       email: "nnm24mc@nmamit.in",
       
     },
