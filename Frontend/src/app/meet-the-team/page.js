@@ -66,8 +66,8 @@ const MeetTheTeam = () => {
       photo: "/images/dev/sujan.png",
       status: "ONLINE",
       
-      github: "",
-      linkedin: "",
+      github: "https://www.linkedin.com/me?trk=p_mwlite_feed-secondary_nav",
+      linkedin: "https://github.com/Shujan2003",
       email: "nnm24mc@nmamit.in",
       
     },
