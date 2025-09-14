@@ -63,7 +63,7 @@ const MeetTheTeam = () => {
       name: "SHUJAN",
       position: "3D Model Designer",
 
-      photo: "NA",
+      photo: "/images/dev/sujan.png",
       status: "ONLINE",
       
       github: "",
