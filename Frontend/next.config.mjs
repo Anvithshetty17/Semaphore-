@@ -14,6 +14,14 @@ const nextConfig = {
     }
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://daff51f04522.ngrok-free.app/api/:path*',
+      },
+    ];
+  },
   // Disable strict mode in development to prevent double renders
   reactStrictMode: false,
 };
