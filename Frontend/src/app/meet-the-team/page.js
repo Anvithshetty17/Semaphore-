@@ -63,11 +63,11 @@ const MeetTheTeam = () => {
       name: "SHUJAN",
       position: "3D Model Designer",
 
-      photo: "NA",
+      photo: "/images/dev/sujan.png",
       status: "ONLINE",
       
-      github: "",
-      linkedin: "",
+      github: "https://github.com/Shujan2003",
+      linkedin: "https://in.linkedin.com/in/shujan-036322324",
       email: "nnm24mc@nmamit.in",
       
     },
@@ -76,7 +76,7 @@ const MeetTheTeam = () => {
       name: "MANEESH KUMAR",
       position: "Frontend Developer",
 
-      photo: "NA",
+      photo: "/images/dev/maneesh.png",
       status: "ONLINE",
      
       
