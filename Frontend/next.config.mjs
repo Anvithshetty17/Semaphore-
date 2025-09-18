@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_URL;
+
 const nextConfig = {
   // Optimize development experience
   experimental: {
@@ -14,11 +17,13 @@ const nextConfig = {
     }
     return config;
   },
+
+
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://daff51f04522.ngrok-free.app/api/:path*',
+      destination: `${API_BASE_URL}/api/:path*`,
       },
     ];
   },
