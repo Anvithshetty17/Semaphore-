@@ -19,14 +19,14 @@ const nextConfig = {
   },
 
 
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-      destination: `${API_BASE_URL}/api/:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //     destination: `${API_BASE_URL}/api/:path*`,
+  //     },
+  //   ];
+  // },
   // Disable strict mode in development to prevent double renders
   reactStrictMode: false,
 };
