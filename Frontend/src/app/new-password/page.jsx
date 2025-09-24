@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { useSubmit } from "@/hooks/useSubmit";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const NewPasswordPage = () => (
@@ -14,6 +15,7 @@ const NewPasswordPage = () => (
 
 const NewPasswordForm = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const userId = searchParams.get("userId");
   const { submitData: resetPassword, isLoading } = useSubmit();
   const [input, setInput] = useState({ newPassword: "", confirmPassword: "" });
