@@ -1,14 +1,27 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UnauthorizedException,
+  Req,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SuperUserAuthGuard } from '../auth/guards/auth.guard';
 import { EmailService } from 'src/email/email.service';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 @Controller('/web/api/users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   @UseGuards(SuperUserAuthGuard)
@@ -53,10 +66,30 @@ export class UsersController {
 
   @Post('/v1/ChangePassword')
   async changePassword(
-    @Body() data: { oldPassword: string; newPassword: string; userId: string },
+    @Req() req: Request,
+    @Body() data: { oldPassword: string; newPassword: string },
   ): Promise<string> {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      throw new UnauthorizedException('Missing Authorization header');
+    }
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2 || parts[0] !== 'Bearer') {
+      throw new UnauthorizedException('Invalid Authorization header');
+    }
+    const token = parts[1];
+    // Verify token and extract user id (sub)
+    await this.jwtService.verifyAsync(token, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+    });
+    const payload: any = this.jwtService.decode(token);
+    const userId = payload?.sub as string | undefined;
+    if (!userId) {
+      throw new UnauthorizedException('Invalid token payload');
+    }
+
     return this.usersService.updateUserPassword(
-      data.userId,
+      userId,
       data.oldPassword,
       data.newPassword,
     );

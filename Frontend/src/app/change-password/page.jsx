@@ -3,10 +3,12 @@
 import { PasswordTextInput } from "@/components/input"
 import { Loading } from "@/components/loading"
 import { useSubmit } from "@/hooks/useSubmit"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams,useRouter } from "next/navigation"
 import { Suspense, useState } from "react"
 import { toast } from "react-toastify"
 import Image from "next/image";
+import { useAuthStore } from "@/store";
+
 
 const ChangePasswordPage = () => {
     return (
@@ -19,7 +21,9 @@ const ChangePasswordPage = () => {
 }
 
 const ChangePasswordComponent = () => {
-    const searchParams = useSearchParams()
+    const router = useRouter();
+    // const {token } = useAuthStore();
+    // const searchParams = token ? new URLSearchParams() : useSearchParams();
     const { submitData: changePassword, isLoading: isPasswordChanging } = useSubmit()
 
     const [inputData, setInputData] = useState({
@@ -40,12 +44,13 @@ const ChangePasswordComponent = () => {
             const { data } = await changePassword(
                 `${process.env.NEXT_PUBLIC_URL}/web/api/users/v1/ChangePassword`,
                 {
-                    ...body,
-                    userId: searchParams.get('userId'),
+                    ...body
+                    //,userId: searchParams.get('userId'),
                 }
             )
             if (data) {
                 toast.success(data)
+                router.back();
             }
         } catch (e) {
             toast.error(e?.response?.data?.message ?? e?.message ?? 'Password change failed')

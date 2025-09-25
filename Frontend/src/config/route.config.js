@@ -36,7 +36,7 @@ export const participantMenu = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ];
@@ -78,7 +78,7 @@ export const eventHeadMenu = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ];
@@ -126,7 +126,7 @@ export const superUserMenu = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ];
@@ -139,7 +139,7 @@ export const adminMenuItems = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ];
@@ -152,7 +152,7 @@ export const accoMenuItems = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ]
@@ -171,7 +171,7 @@ export const registrationMenu = [
   },
   {
     name: "Change Password",
-    link: `/request-password-change`,
+    link: `/change-password`,
     icon: <LockPasswordIcon color="#000" />,
   },
 ]
