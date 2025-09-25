@@ -1,44 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
   private transporter: nodemailer.Transporter;
+  private readonly logger = new Logger(EmailService.name);
 
   constructor(private configService: ConfigService) {
+    // Gmail app passwords are often displayed with spaces for readability. Remove them.
+    const rawPass = this.configService.get<string>('GMAIL_PASS');
+    const cleanedPass = rawPass?.replace(/\s+/g, '').replace(/^"|"$/g, '');
+
+    // Use explicit SMTP configuration + pooling for faster subsequent sends
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      pool: true,
+      host: this.configService.get<string>('GMAIL_HOST') || 'smtp.gmail.com',
+      port: Number(this.configService.get<string>('GMAIL_PORT')) || 465,
+      secure: true, // 465 uses implicit TLS
       auth: {
         user: this.configService.get<string>('GMAIL_USER'),
-        pass: this.configService.get<string>('GMAIL_PASS'),
+        pass: cleanedPass,
       },
+      // Basic rate limiting to avoid Gmail throttling under bursts
+      maxConnections: Number(this.configService.get('EMAIL_MAX_CONNECTIONS')) || 3,
+      maxMessages: Number(this.configService.get('EMAIL_MAX_MESSAGES')) || 100,
+      // TLS options (leave verification on for security; can be toggled via env if needed)
       tls: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: (this.configService.get<string>('EMAIL_STRICT_TLS') ?? 'true') === 'true',
       },
+    });
+
+    // Proactive verification (non-blocking) so first real email isn't delayed by handshake
+    this.transporter.verify().then(() => {
+      this.logger.log('Email transporter verified successfully.');
+    }).catch(err => {
+      this.logger.warn(`Email transporter verification failed: ${err?.message}`);
     });
   }
 
-  async sendEmail(
-    to: string,
-    subject: string,
-    text: string,
-    html?: string,
-  ): Promise<void> {
-    const mailOptions = {
-      from: this.configService.get<string>('GMAIL_USER'),
-      to,
-      subject,
-      text,
-      html,
-    };
-
+  private async sendWithTiming(options: nodemailer.SendMailOptions): Promise<void> {
+    const start = Date.now();
     try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
+      const info = await this.transporter.sendMail({
+        priority: 'high',
+        ...options,
+        from: options.from || `Semaphore 2k25 <${this.configService.get<string>('GMAIL_USER')}>`,
+      });
+      const duration = Date.now() - start;
+      this.logger.debug(`Email to ${options.to} accepted by SMTP in ${duration}ms (messageId=${info.messageId}).`);
+      if (duration > 5000) {
+        this.logger.warn(`Slow email send detected (${duration}ms). Consider switching to a transactional provider (SES/Mailgun/Resend).`);
+      }
+    } catch (error: any) {
+      const duration = Date.now() - start;
+      this.logger.error(`Failed to send email to ${options.to} after ${duration}ms: ${error?.message}`);
       throw error;
     }
+  }
+
+  async sendEmail(to: string, subject: string, text: string, html?: string): Promise<void> {
+    await this.sendWithTiming({ to, subject, text, html });
   }
 
   async sendEmailVerificationMail(
@@ -60,12 +82,7 @@ export class EmailService {
       html: htmlContent,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 
   async sendPaymentAcceptedEmail(
@@ -82,12 +99,7 @@ export class EmailService {
       html: htmlContent,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 
   async sendPaymentRejectedEmail(
@@ -105,12 +117,7 @@ export class EmailService {
       html: htmlContent,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 
   async sendNextRoundSelectedEmail(
@@ -129,12 +136,7 @@ export class EmailService {
       html: body,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 
   async sendPasswordResetLinkEmail(
@@ -153,12 +155,7 @@ export class EmailService {
       html: body,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 
   // New, dedicated template for Forgot Password flow (do not modify existing one above)
@@ -192,11 +189,6 @@ export class EmailService {
       html,
     };
 
-    try {
-      await this.transporter.sendMail(mailOptions);
-    } catch (error) {
-      console.error('Error sending email :', error);
-      throw error;
-    }
+    await this.sendWithTiming(mailOptions);
   }
 }
