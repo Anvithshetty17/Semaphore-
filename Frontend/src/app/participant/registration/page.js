@@ -161,8 +161,8 @@ const RegisterSection = ({ eventList }) => {
                     }
                 })
             })
-            if (phoneNumberList?.length > 15) {
-                toast.error('Maximum 15 participants allowed')
+            if (phoneNumberList?.length > 16) {
+                toast.error('Maximum 16 participants allowed')
                 isError = true
                 return
             }
