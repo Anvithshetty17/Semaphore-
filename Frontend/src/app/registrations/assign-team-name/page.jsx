@@ -13,6 +13,7 @@ const AssignTeamName = () => {
     const { submitData, isLoading: isSubmitting } = useSubmit()
     const [teamNames, setTeamNames] = useState([])
     const [editingStates, setEditingStates] = useState({});
+    const [filter, setFilter] = useState("all");
     const { data: regCollegeNames, isLoading: isEventLoading } = useGetData(
         'regCollegeNames',
         `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetRegisteredCollegeList`,
@@ -28,6 +29,13 @@ const AssignTeamName = () => {
             setTeamNames(nameList)
         }
     }, [regCollegeNames])
+
+    // Filtered teams based on dropdown selection
+    const filteredTeams = regCollegeNames?.filter((ele) => {
+        if (filter === "all") return true;
+        if (filter === "sa") return ele?.teamName === "sa";
+        return true;
+    });
 
     const handleClick = async (index, registrationId) => {
         toast.info('Assigning team names .. please wait')
@@ -49,10 +57,16 @@ const AssignTeamName = () => {
         }
     }
 
-    const handleChangeName = (name, index) => {
-        let nameList = [...teamNames];
-        nameList[index] = name
-        setTeamNames((prev) => nameList)
+    const handleChangeName = (name, registrationId) => {
+        // Update teamNames for the correct registrationId
+        setTeamNames((prev) => {
+            // Find the index in regCollegeNames
+            const idx = regCollegeNames?.findIndex(ele => ele?.registrationId === registrationId);
+            if (idx === -1) return prev;
+            const nameList = [...prev];
+            nameList[idx] = name;
+            return nameList;
+        });
     }
 
     if (isEventLoading) return <Loading />
@@ -60,11 +74,21 @@ const AssignTeamName = () => {
     return (
         <>
             <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-4">
-                <h3 className="font-dosisBold mb-3"> Assign Team Name </h3>
-                {regCollegeNames?.map((ele, index) => {
+                <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-dosisBold"> Assign Team Name </h3>
+                    <select
+                        className="border rounded px-2 py-1 bg-slate-800 text-white"
+                        value={filter}
+                        onChange={e => setFilter(e.target.value)}
+                    >
+                        <option value="all">All Teams</option>
+                        <option value="sa">Team Name: sa</option>
+                    </select>
+                </div>
+                {filteredTeams?.map((ele, index) => {
                     return (
                         <>
-                            <div className={`grid grid-cols-4 gap-x-3 gap-y-6 ${index != regCollegeNames?.length - 1 && 'border-b'} p-3`}>
+                            <div className={`grid grid-cols-4 gap-x-3 gap-y-6 ${index != filteredTeams?.length - 1 && 'border-b'} p-3`}>
                                 <div className="flex flex-col space-y-1 text-[16px] font-dosisRegular">
                                     <p> College Name</p>
                                     <p className="font-dosisMedium"> {ele?.college?.collegeName}</p>
@@ -87,12 +111,12 @@ const AssignTeamName = () => {
                                             name="teamName"
                                             label={"Team Name"}
                                             placeholder="Enter Team Name"
-                                            value={teamNames[index]}
-                                            onChange={(e) => handleChangeName(e.target.value, index)}
+                                            value={ele.teamName}
+                                            onChange={(e) => handleChangeName(e.target.value, ele?.registrationId)}
                                         />
                                     ) : (
                                         <span className="py-2 px-3 border border-gray-300 rounded-md">
-                                            {teamNames[index]}
+                                            {ele.teamName}
                                         </span>
                                     )}
 
