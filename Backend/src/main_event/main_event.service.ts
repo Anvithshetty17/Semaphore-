@@ -252,6 +252,21 @@ export class MainEventService {
     return paymentDetails;
   }
 
+  async getAllPaymentListForSU(): Promise<PaymentDetails[]> {
+    const paymentDetails = await this.paymentRepo.find({
+      relations: [
+        'registration',
+        'registration.user',
+        'registration.college',
+        'status',
+      ],
+      order: {
+        paymentDetailsId: 'DESC', // Most recent payments first
+      },
+    });
+    return paymentDetails;
+  }
+
   async getTeamScoresForEventHeads(
     userId: string,
     roundNo: number,

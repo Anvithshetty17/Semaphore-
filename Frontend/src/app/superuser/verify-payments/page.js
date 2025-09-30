@@ -29,7 +29,13 @@ const VerifyPaymentsPage = () => {
         useQueryConfig,
     )
 
-    if (isPaymentListLoading) return <Loading />
+    const { data: paymentHistory, isLoading: isPaymentHistoryLoading } = useGetData(
+        `allPayments`,
+        `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/GetPaymentHistory`,
+        useQueryConfig,
+    )
+
+    if (isPaymentListLoading || isPaymentHistoryLoading) return <Loading />
 
     const handleReject = async (e) => {
         e.preventDefault()
@@ -49,6 +55,7 @@ const VerifyPaymentsPage = () => {
                 setShowRejectPopup(false)
                 toast.success('Payment Rejected')
                 queryClient.invalidateQueries('pendingPayment')
+                queryClient.invalidateQueries('allPayments')
             }
         } catch (error) {
             toast.error(error?.response?.data?.message ?? error?.message ?? 'Payment failed')
@@ -69,6 +76,7 @@ const VerifyPaymentsPage = () => {
                 setShowAcceptPopup(false)
                 toast.success('Payment Accepted')
                 queryClient.invalidateQueries('pendingPayment')
+                queryClient.invalidateQueries('allPayments')
             }
         } catch (error) {
             toast.error(error?.response?.data?.message ?? error?.message ?? 'Payment failed')
@@ -181,6 +189,53 @@ const VerifyPaymentsPage = () => {
                         )
                     })}
                 </CustomTable> : <>
+                </>}
+            </div>
+
+            {/* Payment History Section */}
+            <div className="w-full min-h-full border border-amber-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-amber-900/20 to-slate-900 shadow-[0_0_30px_rgba(245,158,11,0.3)] backdrop-blur-sm p-4 space-y-6">
+                <h3 className="font-dosisBold mb-3 text-amber-100 tracking-wide"> Payment History (All Records) </h3>
+                {paymentHistory?.length > 0 ? <CustomTable rows={['S.I. No', 'College Name', 'Account Holder Name', 'Phone Number', 'Amount', 'UPI ID', 'Transaction ID', 'Status']} >
+                    {paymentHistory?.map((ele, index) => {
+                        const statusColor = 
+                            ele?.status?.status?.toLowerCase() === 'approved' ? 'text-green-400' :
+                            ele?.status?.status?.toLowerCase() === 'rejected' ? 'text-red-400' :
+                            'text-yellow-400';
+                        
+                        return (
+                            <tr
+                                key={ele?.paymentDetailsId || index}
+                                className={`bg-slate-800/30 ${index != paymentHistory?.length - 1 && 'border-b border-amber-400/20'
+                                    } text-[13px] text-amber-100`}
+                            >
+                                <td className="px-2 py-3">{index + 1}</td>
+                                <td className="px-2 py-3">{ele?.registration?.college?.collegeName}</td>
+                                <th
+                                    scope="row"
+                                    className="p-2 font-medium text-amber-100 whitespace-nowrap"
+                                >
+                                    {ele?.accountHolderName}
+                                </th>
+                                <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">
+                                    {ele?.phoneNumber}
+                                </td>
+                                <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">
+                                    Rs. 1500.00 /-
+                                </td>
+                                <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">
+                                    {ele?.upiId}
+                                </td>
+                                <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">
+                                    {ele?.transactionId}
+                                </td>
+                                <td className={`px-2 py-3 font-bold whitespace-nowrap ${statusColor}`}>
+                                    {ele?.status?.status}
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </CustomTable> : <>
+                    <p className="text-amber-200 text-center py-4">No payment history found</p>
                 </>}
             </div>
         </>

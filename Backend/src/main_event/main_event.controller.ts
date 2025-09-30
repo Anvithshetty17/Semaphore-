@@ -95,6 +95,12 @@ export class MainEventController {
     return await this.mainEventService.getPendingPaymentListForSU();
   }
 
+  @UseGuards(SuperUserAuthGuard)
+  @Get('/v1/GetAllPaymentList')
+  async getAllPaymentListForSU(): Promise<PaymentDetails[]> {
+    return await this.mainEventService.getAllPaymentListForSU();
+  }
+
   @Get('/v1/GetTeamScoresForEventHeads')
   async getTeamScoresForEventHeads(
     @Query('userId') userId: string,

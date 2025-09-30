@@ -205,18 +205,17 @@ const CyberpunkLoader = ({ onLoadComplete }) => {
                   style={{ filter: "drop-shadow(0 0 18px #00ffff88)" }}
                 />
               </div>
-              {/*
-                <div className="flex justify-center items-center">
-                  <Image
-                    src={textImg}
-                    alt="SEMAPHORE TEXT"
-                    width={isMobile ? 200 : 360}
-                    height={isMobile ? 45 : 85}
-                    priority
-                    style={{ filter: "drop-shadow(0 0 12px #00ffff88)", pointerEvents: "none", userSelect: "none" }}
-                  />
-                </div>
-              */}
+              {/* <div className="flex justify-center items-center">
+                {/* Main text image - centered and larger 
+                <Image
+                  src={textImg}
+                  alt="SEMAPHORE TEXT"
+                  width={isMobile ? 200 : 360}
+                  height={isMobile ? 45 : 85}
+                  priority
+                  style={{ filter: "drop-shadow(0 0 12px #00ffff88)", pointerEvents: "none", userSelect: "none" }}
+                />
+              </div> */}
               <motion.p
                 className="text-cyan-400 text-xl lg:text-2xl font-mono tracking-wider"
                 animate={{ opacity: [0.5, 1, 0.5] }}
