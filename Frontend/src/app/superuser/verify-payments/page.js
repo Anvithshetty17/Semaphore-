@@ -21,6 +21,8 @@ const VerifyPaymentsPage = () => {
   const [showRejectPopup, setShowRejectPopup] = useState(false);
   const [showAcceptPopup, setShowAcceptPopup] = useState(false);
   const [selectPaymentId, setSelectPaymentId] = useState(null);
+  // view state: 'pending' | 'history'
+  const [view, setView] = useState("pending");
 
   const { data: paymentList, isLoading: isPaymentListLoading } = useGetData(
     `pendingPayment`,
@@ -30,7 +32,7 @@ const VerifyPaymentsPage = () => {
 
   const { data: paymentHistory, isLoading: isPaymentHistoryLoading } = useGetData(
     `allPayments`,
-    `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/GetPaymentHistory`,
+    `${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/GetAllPaymentList`,
     useQueryConfig
   );
 
@@ -78,6 +80,24 @@ const VerifyPaymentsPage = () => {
 
   return (
     <>
+      {/* View selector */}
+      <div className="w-full flex justify-end mb-4">
+        <label className="mr-2 text-cyan-100 font-dosisMedium self-center">Show:</label>
+        <select
+          value={view}
+          onChange={(e) => {
+            const v = e.target.value;
+            setView(v);
+            // reset any popups / selection when switching views
+            setSelectPaymentId(null);
+            setShowAcceptPopup(false);
+            setShowRejectPopup(false);
+          }}
+          className="bg-slate-800 text-cyan-100 p-2 rounded-md">
+          <option value="pending">Pending Payments</option>
+          <option value="history">Payment History</option>
+        </select>
+      </div>
       {showRejectPopup === true && (
         <form
           onSubmit={handleReject}
@@ -142,35 +162,35 @@ const VerifyPaymentsPage = () => {
           </div>
         </div>
       )}
-      <div className="w-full min-h-full border border-cyan-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm p-4 space-y-6">
-        <h3 className="font-dosisBold mb-3 text-cyan-100 tracking-wide"> Payment List </h3>
-        {paymentList?.length > 0 ? (
-          <CustomTable
-            rows={[
-              "S.I. No",
-              "College Name",
-              "Account Holder Name",
-              "Phone Number",
-              "Amount",
-              "UPI ID",
-              "Transaction ID",
-              "Status",
-              "Action",
-            ]}>
-            {paymentList?.map((ele, index) => {
-              return (
-                <>
+      {view === "pending" && (
+        <div className="w-full min-h-full border border-cyan-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] backdrop-blur-sm p-4 space-y-6">
+          <h3 className="font-dosisBold mb-3 text-cyan-100 tracking-wide"> Payment List </h3>
+          {paymentList?.length > 0 ? (
+            <CustomTable
+              rows={[
+                "S.I. No",
+                "College Name",
+                "Account Holder Name",
+                "Phone Number",
+                "Amount",
+                "UPI ID",
+                "Transaction ID",
+                "Status",
+                "Action",
+              ]}>
+              {paymentList?.map((ele, index) => {
+                return (
                   <tr
-                    className={`bg-slate-800/50 ${
-                      index != paymentList?.length - 1 && "border-b border-cyan-400/20"
-                    } text-[13px] text-cyan-100`}>
+                    key={ele?.paymentDetailsId || index}
+                    className={`bg-slate-800/50 ${index != paymentList?.length - 1 && "border-b border-cyan-400/20"
+                      } text-[13px] text-cyan-100`}>
                     <td className="px-2 py-3">{index + 1}</td>
                     <td className="px-2 py-3">{ele?.registration?.college?.collegeName}</td>
                     <th scope="row" className="p-2 font-medium text-cyan-100 whitespace-nowrap">
                       {ele?.accountHolderName}
                     </th>
                     <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">{ele?.phoneNumber}</td>
-                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">Rs. 1500.00 /-</td>
+                    <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">Rs. 2025.00 /-</td>
                     <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">{ele?.upiId}</td>
                     <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">{ele?.transactionId}</td>
                     <td className="px-2 py-3 font-medium text-cyan-100 whitespace-nowrap">{ele?.status.status}</td>
@@ -193,64 +213,66 @@ const VerifyPaymentsPage = () => {
                       />
                     </td>
                   </tr>
-                </>
-              );
-            })}
-          </CustomTable>
-        ) : (
-          <></>
-        )}
-      </div>
+                );
+              })}
+            </CustomTable>
+          ) : (
+            <></>
+          )}
+        </div>
+      )}
 
       {/* Payment History Section */}
-      <div className="w-full min-h-full border border-amber-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-amber-900/20 to-slate-900 shadow-[0_0_30px_rgba(245,158,11,0.3)] backdrop-blur-sm p-4 space-y-6">
-        <h3 className="font-dosisBold mb-3 text-amber-100 tracking-wide"> Payment History (All Records) </h3>
-        {paymentHistory?.length > 0 ? (
-          <CustomTable
-            rows={[
-              "S.I. No",
-              "College Name",
-              "Account Holder Name",
-              "Phone Number",
-              "Amount",
-              "UPI ID",
-              "Transaction ID",
-              "Status",
-            ]}>
-            {paymentHistory?.map((ele, index) => {
-              const statusColor =
-                ele?.status?.status?.toLowerCase() === "approved"
-                  ? "text-green-400"
-                  : ele?.status?.status?.toLowerCase() === "rejected"
-                  ? "text-red-400"
-                  : "text-yellow-400";
+      {view === "history" && (
 
-              return (
-                <tr
-                  key={ele?.paymentDetailsId || index}
-                  className={`bg-slate-800/30 ${
-                    index != paymentHistory?.length - 1 && "border-b border-amber-400/20"
-                  } text-[13px] text-amber-100`}>
-                  <td className="px-2 py-3">{index + 1}</td>
-                  <td className="px-2 py-3">{ele?.registration?.college?.collegeName}</td>
-                  <th scope="row" className="p-2 font-medium text-amber-100 whitespace-nowrap">
-                    {ele?.accountHolderName}
-                  </th>
-                  <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.phoneNumber}</td>
-                  <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">Rs. 1500.00 /-</td>
-                  <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.upiId}</td>
-                  <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.transactionId}</td>
-                  <td className={`px-2 py-3 font-bold whitespace-nowrap ${statusColor}`}>{ele?.status?.status}</td>
-                </tr>
-              );
-            })}
-          </CustomTable>
-        ) : (
-          <>
-            <p className="text-amber-200 text-center py-4">No payment history found</p>
-          </>
-        )}
-      </div>
+        <div className="w-full min-h-full border border-amber-400/30 rounded-lg bg-gradient-to-r from-slate-900 via-amber-900/20 to-slate-900 shadow-[0_0_30px_rgba(245,158,11,0.3)] backdrop-blur-sm p-4 space-y-6">
+          <h3 className="font-dosisBold mb-3 text-amber-100 tracking-wide"> Payment History (All Records) </h3>
+          {paymentHistory?.length > 0 ? (
+            <CustomTable
+              rows={[
+                "S.I. No",
+                "College Name",
+                "Account Holder Name",
+                "Phone Number",
+                "Amount",
+                "UPI ID",
+                "Transaction ID",
+                "Status",
+              ]}>
+              {paymentHistory?.map((ele, index) => {
+                const statusColor =
+                  ele?.status?.status?.toLowerCase() === "approved"
+                    ? "text-green-400"
+                    : ele?.status?.status?.toLowerCase() === "rejected"
+                      ? "text-red-400"
+                      : "text-yellow-400";
+
+                return (
+                  <tr
+                    key={ele?.paymentDetailsId || index}
+                    className={`bg-slate-800/30 ${index != paymentHistory?.length - 1 && "border-b border-amber-400/20"
+                      } text-[13px] text-amber-100`}>
+                    <td className="px-2 py-3">{index + 1}</td>
+                    <td className="px-2 py-3">{ele?.registration?.college?.collegeName}</td>
+                    <th scope="row" className="p-2 font-medium text-amber-100 whitespace-nowrap">
+                      {ele?.accountHolderName}
+                    </th>
+                    <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.phoneNumber}</td>
+                    <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">Rs. 2025.00 /-</td>
+                    <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.upiId}</td>
+                    <td className="px-2 py-3 font-medium text-amber-100 whitespace-nowrap">{ele?.transactionId}</td>
+                    <td className={`px-2 py-3 font-bold whitespace-nowrap ${statusColor}`}>{ele?.status?.status}</td>
+                  </tr>
+                );
+              })}
+            </CustomTable>
+          ) : (
+            <>
+              <p className="text-amber-200 text-center py-4">No payment history found</p>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 };
