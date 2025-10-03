@@ -254,6 +254,9 @@ export class MainEventService {
 
   async getAllPaymentListForSU(): Promise<PaymentDetails[]> {
     const paymentDetails = await this.paymentRepo.find({
+      where: {
+        status: { status: Not('Waiting For Confirmation') },
+      },
       relations: [
         'registration',
         'registration.user',
