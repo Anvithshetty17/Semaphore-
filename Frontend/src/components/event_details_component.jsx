@@ -347,7 +347,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                   </div>
                   <div className="bg-purple-900/50 rounded-full h-2 overflow-hidden relative">
                     <div
-                      className="h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 transition-all duration-[1600ms] ease-out shadow-[0_0_10px_-2px_rgba(34,211,238,0.6)]"
+                      className="h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 transition-all duration-&lsqb;1600ms&rsqb; ease-out shadow-[0_0_10px_-2px_rgba(34,211,238,0.6)]"
                       style={{ width: `${cpuLoad}%` }}
                     />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
@@ -361,7 +361,7 @@ const CyberpunkDrawer = ({ eventId, eventsData = [], onClose }) => {
                   </div>
                   <div className="bg-purple-900/50 rounded-full h-2 overflow-hidden relative">
                     <div
-                      className="h-full bg-gradient-to-r from-pink-400 via-fuchsia-500 to-cyan-400 transition-all duration-[1700ms] ease-out shadow-[0_0_10px_-2px_rgba(236,72,153,0.6)]"
+                      className="h-full bg-gradient-to-r from-pink-400 via-fuchsia-500 to-cyan-400 transition-all duration-&lsqb;1700ms&rsqb; ease-out shadow-[0_0_10px_-2px_rgba(236,72,153,0.6)]"
                       style={{ width: `${memoryUsage}%` }}
                     />
                     <div className="absolute inset-0 mix-blend-overlay opacity-40 bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.15)_0px,rgba(255,255,255,0.15)_2px,transparent_2px,transparent_4px)]" />
