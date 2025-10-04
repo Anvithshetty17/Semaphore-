@@ -275,17 +275,16 @@ export class MainEventService {
     roundNo: number,
   ): Promise<TeamScores[]> {
     const eventHead = await this.eventService.findEventByUserId(userId);
-    const teamScores = await this.teamScoreRepo.find({
-      where: {
-        eventTeam: { event: { eventId: eventHead.event.eventId } },
-        roundNo: roundNo,
-      },
-      relations: [
-        'eventTeam',
-        'eventTeam.registration',
-        'eventTeam.registration.college',
-      ],
-    });
+    // Only include teams whose registration has paid = true
+    const teamScores = await this.teamScoreRepo
+      .createQueryBuilder('teamScore')
+      .leftJoinAndSelect('teamScore.eventTeam', 'eventTeam')
+      .leftJoinAndSelect('eventTeam.registration', 'registration')
+      .leftJoinAndSelect('registration.college', 'college')
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('teamScore.roundNo = :roundNo', { roundNo })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      .getMany();
     return teamScores;
   }
 
@@ -332,6 +331,7 @@ export class MainEventService {
       .addSelect('SUM(teamScores.score)', 'totalScore')
       .addSelect('MAX(roundNo)', 'maxRound')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
       .groupBy(
         'registration.registrationId, registration.teamName, college.collegeName, event.eventName',
       )
@@ -343,18 +343,18 @@ export class MainEventService {
 
   async getEventTeamsForHead(userId: string): Promise<EventTeams[]> {
     const eventHead = await this.eventService.findEventByUserId(userId);
-    return await this.eventTeamRepo.find({
-      where: {
-        event: eventHead.event,
-        eventMembers: { memberName: Not('') },
-      },
-      relations: [
-        'eventMembers',
-        'registration',
-        'event',
-        'registration.college',
-      ],
-    });
+    // Return only teams for which the registration has paid = true and have members
+    const eventTeams = await this.eventTeamRepo
+      .createQueryBuilder('eventTeam')
+      .leftJoinAndSelect('eventTeam.eventMembers', 'eventMembers')
+      .leftJoinAndSelect('eventTeam.registration', 'registration')
+      .leftJoinAndSelect('eventTeam.event', 'event')
+      .leftJoinAndSelect('registration.college', 'college')
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      .andWhere("eventMembers.memberName != ''")
+      .getMany();
+    return eventTeams;
   }
 
   // TODO: Dashboard endpoint
@@ -365,29 +365,42 @@ export class MainEventService {
       .createQueryBuilder('teamScores')
       .leftJoin('teamScores.eventTeam', 'eventTeam')
       .leftJoin('eventTeam.registration', 'registration')
+      // Filter by event first, then require paid & reported registrations
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
       .select('registration.teamName', 'teamName')
       .addSelect('SUM(teamScores.score)', 'totalScore')
-      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .groupBy('registration.registrationId')
       .orderBy('totalScore', 'DESC')
       .limit(3)
       .getRawMany();
 
-    const totalTeamCount = await this.eventTeamRepo.count({
-      where: { event: eventHead.event, eventMembers: { memberName: Not('') } },
-    });
+    // Count only teams that belong to registrations which are paid and reported
+    const totalTeamCount = await this.eventTeamRepo
+      .createQueryBuilder('eventTeam')
+      .leftJoin('eventTeam.registration', 'registration')
+      .leftJoin('eventTeam.eventMembers', 'eventMembers')
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
+      .andWhere("eventMembers.memberName != ''")
+      .getCount();
     const currentRound = await this.eventService.getCurrentRound(
       eventHead.event.eventId,
     );
-    const activeTeams = await this.teamScoreRepo.count({
-      where: {
-        eventTeam: {
-          event: eventHead.event,
-          eventMembers: { memberName: Not('') },
-        },
-        roundNo: currentRound,
-      },
-    });
+    // Count active teams for the current round but only if their registration is paid and reported
+    const activeTeams = await this.teamScoreRepo
+      .createQueryBuilder('teamScore')
+      .leftJoin('teamScore.eventTeam', 'eventTeam')
+      .leftJoin('eventTeam.registration', 'registration')
+      .leftJoin('eventTeam.eventMembers', 'eventMembers')
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('teamScore.roundNo = :roundNo', { roundNo: currentRound })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
+      .andWhere("eventMembers.memberName != ''")
+      .getCount();
 
     const cardDetailsList: CardDetailsDto[] = [];
     cardDetailsList.push(new CardDetailsDto('Total Teams', totalTeamCount));
@@ -444,6 +457,7 @@ export class MainEventService {
       .addSelect('SUM(teamScores.score)', 'totalScore')
       .addSelect('MAX(roundNo)', 'maxRound')
       .where('eventTeam.event.eventId = :eventId', { eventId: eventId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
       .groupBy(
         'registration.registrationId, college.collegeName, registration.teamName, event.eventName, eventTeam.eventTeamId',
       )
@@ -454,13 +468,15 @@ export class MainEventService {
 
   async getEventTeamsForPromotion(userId: string): Promise<TeamScores[]> {
     const eventHead = await this.eventService.findEventByUserId(userId);
-    const eventTeams = await this.teamScoreRepo.find({
-      where: {
-        eventTeam: { event: eventHead.event },
-        roundNo: eventHead.event.currentRound,
-      },
-      relations: ['eventTeam', 'eventTeam.registration'],
-    });
+    // Only include teams whose registration has paid = true
+    const eventTeams = await this.teamScoreRepo
+      .createQueryBuilder('teamScore')
+      .leftJoinAndSelect('teamScore.eventTeam', 'eventTeam')
+      .leftJoinAndSelect('eventTeam.registration', 'registration')
+      .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
+      .andWhere('teamScore.roundNo = :roundNo', { roundNo: eventHead.event.currentRound })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      .getMany();
     return eventTeams;
   }
 
@@ -542,9 +558,13 @@ export class MainEventService {
   }
 
   async getTeamMembersForAccolades(teamId: string): Promise<EventTeams> {
-    return await this.eventTeamRepo.findOne({
-      where: { eventTeamId: teamId },
-      relations: ['eventMembers'],
-    });
+    // Return members only if the parent registration has paid = true
+    return await this.eventTeamRepo
+      .createQueryBuilder('eventTeam')
+      .leftJoinAndSelect('eventTeam.eventMembers', 'eventMembers')
+      .leftJoinAndSelect('eventTeam.registration', 'registration')
+      .where('eventTeam.eventTeamId = :teamId', { teamId })
+      .andWhere('registration.isPaid = :isPaid', { isPaid: true })
+      .getOne();
   }
 }
