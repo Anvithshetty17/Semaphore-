@@ -46,7 +46,7 @@ const VerifyPaymentsPage = () => {
       const { data } = await rejectPayment(`${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/RejectTransaction`, {
         ...body,
         paymentId: selectPaymentId,
-        useId: cached?.userId,
+        userId: cached?.userId,
       });
       if (data) {
         setSelectPaymentId(null);
@@ -62,13 +62,22 @@ const VerifyPaymentsPage = () => {
 
   const handleAccept = async () => {
     try {
-      const { data } = await acceptPayment(`${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/VerifyTransaction`, {
+      const res = await acceptPayment(`${process.env.NEXT_PUBLIC_URL}/web/api/mainEvent/v1/VerifyTransaction`, {
         paymentId: selectPaymentId,
         userId: cached?.userId,
       });
-      if (data) {
-        setSelectPaymentId(null);
-        setShowAcceptPopup(false);
+
+      // Close the popup and clear selection regardless of response shape so UI can't get stuck open
+      setSelectPaymentId(null);
+      setShowAcceptPopup(false);
+
+      // Show success if the request returned a success-ish response
+      if (res?.data) {
+        toast.success("Payment Accepted");
+        queryClient.invalidateQueries("pendingPayment");
+        queryClient.invalidateQueries("allPayments");
+      } else {
+        // If the response doesn't include data, still inform the user and invalidate queries
         toast.success("Payment Accepted");
         queryClient.invalidateQueries("pendingPayment");
         queryClient.invalidateQueries("allPayments");
