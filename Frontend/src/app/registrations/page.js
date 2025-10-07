@@ -53,17 +53,38 @@ const Page = () => {
     `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/GetRegisteredCollegeList`,
     useQueryConfig,
   )
+  const [feeFilter, setFeeFilter] = useState('All')
+  const handleFeeFilterChange = (e) => setFeeFilter(e.target.value)
+  const filteredRegistrations = regCollegeNames?.filter((ele) => {
+    if (!regCollegeNames) return []
+    if (feeFilter === 'All') return true
+    if (feeFilter === 'Paid') return !!ele?.isPaid
+    if (feeFilter === 'Pending') return !ele?.isPaid
+    return true
+  })
   if (isEventLoading) return <Loading />
   return (
     <>
       <div className="flex flex-col space-y-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 p-8">
         <h2 className="font-dosisBold text-2xl font-bold mb-6 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]">Registrations List</h2>
+        <div className="flex items-center space-x-3 mb-4">
+          <label className="text-white">Filter Fees:</label>
+          <select
+            value={feeFilter}
+            onChange={handleFeeFilterChange}
+            className="rounded-md px-2 py-1 bg-slate-800 text-white border border-white/20"
+          >
+            <option value="All">All</option>
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
         <CustomTable rows={['S.I. No', 'Team Name', 'College Name', 'Fees', 'Status Of Arrival']} centerIndex={[4]}>
-          {regCollegeNames?.map((ele, index) => {
+          {filteredRegistrations?.map((ele, index) => {
             return (
-              <>
                 <tr
-                  className={` bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  text-white ${index != regCollegeNames?.length - 1 && 'border-b border-white-400/30'} text-[13px] text-black-600 hover:bg-gray-100 transition-all`}
+                  key={ele?.registrationId ?? index}
+                  className={` bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  text-white ${index != filteredRegistrations?.length - 1 && 'border-b border-white-400/30'} text-[13px] text-black-600 hover:bg-gray-100 transition-all`}
                 >
                   <td className="px-2 py-3">{index + 1}</td>
                   <td className="px-2 py-3 ">{ele?.teamName}</td>
@@ -83,7 +104,6 @@ const Page = () => {
                       Mark as reported
                     </button>}</td>
                 </tr>
-              </>
             )
           })}
         </CustomTable>
