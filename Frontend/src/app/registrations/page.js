@@ -97,12 +97,21 @@ const Page = () => {
 
                   <td className={`px-2 py-3 font-dosisBold ${ele?.isPaid ? 'text-green-400' : 'text-yellow-300'}`}>{ele?.isPaid ? "Paid" : "Pending"}</td>
                   <td className="px-2 py-3 flex flex-row justify-center">
-                    {ele?.isTeamReported === false && <button
-                      onClick={() => handleButtonClick(ele?.registrationId)}
-                      className="bg-blue-950 text-white py-1 px-2 rounded-md text-lg font-dosisMedium hover:bg-blue-700 transition duration-300 cursor-pointer"
-                    >
-                      Mark as reported
-                    </button>}</td>
+                      <div className="flex items-center space-x-2">
+                        {ele?.isTeamReported === false && <button
+                          onClick={() => handleButtonClick(ele?.registrationId)}
+                          className="bg-blue-950 text-white py-1 px-2 rounded-md text-lg font-dosisMedium hover:bg-blue-700 transition duration-300 cursor-pointer"
+                        >
+                          Mark as reported
+                        </button>}
+                        <button
+                          onClick={() => window.location.href = `/registrations/${ele?.user?.userId}`}
+                          className="bg-cyan-600 text-white py-1 px-2 rounded-md text-sm font-dosisMedium hover:opacity-90"
+                        >
+                          View
+                        </button>
+                      </div>
+                    </td>
                 </tr>
             )
           })}

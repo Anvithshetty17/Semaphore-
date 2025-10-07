@@ -7,9 +7,9 @@ import { useGetData } from "@/hooks/useGetData";
 const { MemberCard, RegistrationDetailCard1 } = require("@/app/participant/registration/page")
 const { useSearchParams } = require("next/navigation");
 
-const AdminRegistrationDetailsComponent = () => {
+const AdminRegistrationDetailsComponent = ({ userId: propUserId = null }) => {
     const searchParams = useSearchParams();
-    const userId = searchParams.get('userId')
+    const userId = propUserId || searchParams.get('userId')
 
     const { data: registrationData, isLoading: isRegistrationDataLoading } = useGetData(
         `${userId}registrationDetails`,
@@ -55,4 +55,4 @@ const AdminRegistrationDetailsComponent = () => {
     )
 }
 
-export { AdminRegistrationDetailsComponent }
+export default AdminRegistrationDetailsComponent

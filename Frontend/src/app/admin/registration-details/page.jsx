@@ -1,4 +1,4 @@
-const { AdminRegistrationDetailsComponent } = require("@/components/admin_registration_details_component")
+import AdminRegistrationDetailsComponent from "@/components/admin_registration_details_component"
 
 const RegistrationDetails = () => {
 
