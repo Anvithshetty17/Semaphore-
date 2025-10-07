@@ -94,48 +94,49 @@ export class EventsService {
     return await this.eventRepository.save(event);
   }
 
-  async addEventRules(eventRulesData: CreateEventRulesDto): Promise<Events> {
-    const event = await this.eventRepository.findOne({
-      where: { eventId: eventRulesData.eventId },
-      relations: ['eventRules'],
+ async addEventRules(eventRulesData: CreateEventRulesDto): Promise<Events> {
+  const event = await this.eventRepository.findOne({
+    where: { eventId: eventRulesData.eventId },
+    relations: ['eventRules'],
+  });
+
+  if (!event) {
+    throw new BadRequestException('Event does not exist');
+  }
+
+  for (const ele of eventRulesData.eventRules) {
+    // Check for duplicate rule number
+    const existingRuleNo = await this.eventRulesRepository.findOne({
+      where: { event, ruleNo: ele.ruleNo },
+    });
+    if (existingRuleNo) {
+      throw new BadRequestException(
+        `Rule number ${ele.ruleNo} already exists for this event`,
+      );
+    }
+
+    // Check for duplicate rule text
+    const existingRuleText = await this.eventRulesRepository.findOne({
+      where: { event, eventRule: ele.eventRule },
+    });
+    if (existingRuleText) {
+      throw new BadRequestException(
+        `Rule "${ele.eventRule}" already exists for this event`,
+      );
+    }
+
+    // Create and save new rule (UUID auto-generated)
+    const newEventRule = this.eventRulesRepository.create({
+      ...ele,
+      event,
     });
 
-    if (!event) {
-      throw new BadRequestException('Event does not exist');
-    }
-
-    for (const ele of eventRulesData.eventRules) {
-      // Check for duplicate rule number
-      const existingRuleNo = await this.eventRulesRepository.findOne({
-        where: { event, ruleNo: ele.ruleNo },
-      });
-      if (existingRuleNo) {
-        throw new BadRequestException(
-          `Rule number ${ele.ruleNo} already exists for this event`,
-        );
-      }
-
-      // Check for duplicate rule text
-      const existingRuleText = await this.eventRulesRepository.findOne({
-        where: { event, eventRule: ele.eventRule },
-      });
-      if (existingRuleText) {
-        throw new BadRequestException(
-          `Rule "${ele.eventRule}" already exists for this event`,
-        );
-      }
-
-      // Create and save new rule (UUID auto-generated)
-      const newEventRule = this.eventRulesRepository.create({
-        ...ele,
-        event,
-      });
-
-      await this.eventRulesRepository.save(newEventRule);
-    }
-
-    return event;
+    await this.eventRulesRepository.save(newEventRule);
   }
+
+  return event;
+}
+
 
   async getEventRules(eventId: string): Promise<Events> {
     const event = await this.eventRepository.findOne({

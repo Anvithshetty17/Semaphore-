@@ -1,3 +1,4 @@
+
 export class UpdateEventDto {
   eventId: string;
   eventName: string;

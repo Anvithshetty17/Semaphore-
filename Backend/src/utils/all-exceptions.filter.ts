@@ -33,8 +33,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message = errorObj?.message
       ? String(errorObj.message)
       : isHttp
-        ? JSON.stringify(responsePayload)
-        : 'Unhandled exception';
+      ? JSON.stringify(responsePayload)
+      : 'Unhandled exception';
 
     const requestInfo = req
       ? {
@@ -68,23 +68,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     // Print concise error to console
     // eslint-disable-next-line no-console
-    console.error(
-      '[Error]',
-      message,
-      '\
-Status:',
-      status,
-    );
+    console.error('[Error]', message, '\
+Status:', status);
 
     // Send response to client
     if (!res.headersSent) {
-      res
-        .status(status)
-        .json(
-          typeof responsePayload === 'object'
-            ? responsePayload
-            : { statusCode: status, message: responsePayload },
-        );
+      res.status(status).json(
+        typeof responsePayload === 'object'
+          ? responsePayload
+          : { statusCode: status, message: responsePayload },
+      );
     }
   }
 }

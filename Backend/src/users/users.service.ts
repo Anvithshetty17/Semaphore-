@@ -153,7 +153,7 @@ export class UsersService {
     if (user == null) {
       throw new BadRequestException('User not found');
     }
-
+    
     const isMatch: boolean = await this.bcrypt.matchPassword(
       oldPassword,
       user.password,

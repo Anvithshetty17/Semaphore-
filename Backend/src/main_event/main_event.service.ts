@@ -228,8 +228,7 @@ export class MainEventService {
       await this.registrationService.findRegistrationByUserId(userId);
     const paymentCount = await this.paymentRepo.count({
       where: {
-        // Consider payments that are either successful or submitted and waiting for confirmation
-        status: { status: In(['Successful', 'Waiting For Confirmation']) },
+        status: { status: In(['Successful', 'Waiting for confirmation']) },
         registration: registration,
       },
     });
@@ -281,12 +280,10 @@ export class MainEventService {
       .createQueryBuilder('teamScore')
       .leftJoinAndSelect('teamScore.eventTeam', 'eventTeam')
       .leftJoinAndSelect('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoinAndSelect('registration.college', 'college')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('teamScore.roundNo = :roundNo', { roundNo })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .getMany();
     return teamScores;
   }
@@ -325,7 +322,6 @@ export class MainEventService {
       .createQueryBuilder('teamScores')
       .leftJoin('teamScores.eventTeam', 'eventTeam')
       .leftJoin('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoin('eventTeam.event', 'event')
       .leftJoin('registration.college', 'college')
       .select('registration.registrationId', 'registrationId')
@@ -336,7 +332,6 @@ export class MainEventService {
       .addSelect('MAX(roundNo)', 'maxRound')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .groupBy(
         'registration.registrationId, registration.teamName, college.collegeName, event.eventName',
       )
@@ -353,12 +348,10 @@ export class MainEventService {
       .createQueryBuilder('eventTeam')
       .leftJoinAndSelect('eventTeam.eventMembers', 'eventMembers')
       .leftJoinAndSelect('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoinAndSelect('eventTeam.event', 'event')
       .leftJoinAndSelect('registration.college', 'college')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .andWhere("eventMembers.memberName != ''")
       .getMany();
     return eventTeams;
@@ -372,11 +365,9 @@ export class MainEventService {
       .createQueryBuilder('teamScores')
       .leftJoin('teamScores.eventTeam', 'eventTeam')
       .leftJoin('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       // Filter by event first, then require paid & reported registrations
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
       .select('registration.teamName', 'teamName')
       .addSelect('SUM(teamScores.score)', 'totalScore')
@@ -389,11 +380,9 @@ export class MainEventService {
     const totalTeamCount = await this.eventTeamRepo
       .createQueryBuilder('eventTeam')
       .leftJoin('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoin('eventTeam.eventMembers', 'eventMembers')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
       .andWhere("eventMembers.memberName != ''")
       .getCount();
@@ -405,12 +394,10 @@ export class MainEventService {
       .createQueryBuilder('teamScore')
       .leftJoin('teamScore.eventTeam', 'eventTeam')
       .leftJoin('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoin('eventTeam.eventMembers', 'eventMembers')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
       .andWhere('teamScore.roundNo = :roundNo', { roundNo: currentRound })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       // .andWhere('registration.isTeamReported = :isReported', { isReported: true })
       .andWhere("eventMembers.memberName != ''")
       .getCount();
@@ -461,7 +448,6 @@ export class MainEventService {
       .leftJoin('teamScores.eventTeam', 'eventTeam')
       .leftJoin('eventTeam.event', 'event')
       .leftJoin('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .leftJoin('registration.college', 'college')
       .select('registration.registrationId', 'registrationId')
       .addSelect('registration.teamName', 'teamName')
@@ -472,7 +458,6 @@ export class MainEventService {
       .addSelect('MAX(roundNo)', 'maxRound')
       .where('eventTeam.event.eventId = :eventId', { eventId: eventId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .groupBy(
         'registration.registrationId, college.collegeName, registration.teamName, event.eventName, eventTeam.eventTeamId',
       )
@@ -488,13 +473,9 @@ export class MainEventService {
       .createQueryBuilder('teamScore')
       .leftJoinAndSelect('teamScore.eventTeam', 'eventTeam')
       .leftJoinAndSelect('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .where('eventTeam.event = :eventId', { eventId: eventHead.event.eventId })
-      .andWhere('teamScore.roundNo = :roundNo', {
-        roundNo: eventHead.event.currentRound,
-      })
+      .andWhere('teamScore.roundNo = :roundNo', { roundNo: eventHead.event.currentRound })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .getMany();
     return eventTeams;
   }
@@ -582,10 +563,8 @@ export class MainEventService {
       .createQueryBuilder('eventTeam')
       .leftJoinAndSelect('eventTeam.eventMembers', 'eventMembers')
       .leftJoinAndSelect('eventTeam.registration', 'registration')
-      .leftJoin('registration.status', 'regStatus')
       .where('eventTeam.eventTeamId = :teamId', { teamId })
       .andWhere('registration.isPaid = :isPaid', { isPaid: true })
-      .andWhere('regStatus.status = :accepted', { accepted: 'Accepted' })
       .getOne();
   }
 }

@@ -13,19 +13,7 @@ function ensureString(value: any): string {
   }
 }
 
-function redact(
-  obj: any,
-  keysToRedact: string[] = [
-    'password',
-    'pwd',
-    'pass',
-    'authorization',
-    'cookie',
-    'token',
-    'access_token',
-    'refresh_token',
-  ],
-): any {
+function redact(obj: any, keysToRedact: string[] = ['password', 'pwd', 'pass', 'authorization', 'cookie', 'token', 'access_token', 'refresh_token']): any {
   if (!obj || typeof obj !== 'object') return obj;
   if (Array.isArray(obj)) return obj.map((v) => redact(v, keysToRedact));
   const out: PlainObject = {};

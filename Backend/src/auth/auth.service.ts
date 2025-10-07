@@ -96,7 +96,7 @@ export class AuthService {
       } else {
         throw new BadRequestException('Cannot verify the user');
       }
-    } catch {
+    } catch (e) {
       throw new BadRequestException('Cannot verify the user');
     }
   }
