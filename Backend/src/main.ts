@@ -8,7 +8,7 @@ async function bootstrap() {
 
   // Allow all origins
   app.enableCors({
-    origin: '*',  // Accept requests from anywhere
+    origin: '*', // Accept requests from anywhere
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: '*', // Allow all headers
   });
@@ -33,12 +33,14 @@ async function bootstrap() {
   });
 
   process.on('unhandledRejection', async (reason: any) => {
-    const message = typeof reason === 'object' && reason?.message
-      ? String(reason.message)
-      : 'Unhandled promise rejection';
-    const stack = typeof reason === 'object' && reason?.stack
-      ? String(reason.stack)
-      : undefined;
+    const message =
+      typeof reason === 'object' && reason?.message
+        ? String(reason.message)
+        : 'Unhandled promise rejection';
+    const stack =
+      typeof reason === 'object' && reason?.stack
+        ? String(reason.stack)
+        : undefined;
     await writeErrorLog({
       timestamp: new Date().toISOString(),
       level: 'fatal',

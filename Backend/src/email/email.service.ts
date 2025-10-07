@@ -23,43 +23,66 @@ export class EmailService {
         pass: cleanedPass,
       },
       // Basic rate limiting to avoid Gmail throttling under bursts
-      maxConnections: Number(this.configService.get('EMAIL_MAX_CONNECTIONS')) || 3,
+      maxConnections:
+        Number(this.configService.get('EMAIL_MAX_CONNECTIONS')) || 3,
       maxMessages: Number(this.configService.get('EMAIL_MAX_MESSAGES')) || 100,
       // TLS options (leave verification on for security; can be toggled via env if needed)
       tls: {
-        rejectUnauthorized: (this.configService.get<string>('EMAIL_STRICT_TLS') ?? 'true') === 'true',
+        rejectUnauthorized:
+          (this.configService.get<string>('EMAIL_STRICT_TLS') ?? 'true') ===
+          'true',
       },
     });
 
     // Proactive verification (non-blocking) so first real email isn't delayed by handshake
-    this.transporter.verify().then(() => {
-      this.logger.log('Email transporter verified successfully.');
-    }).catch(err => {
-      this.logger.warn(`Email transporter verification failed: ${err?.message}`);
-    });
+    this.transporter
+      .verify()
+      .then(() => {
+        this.logger.log('Email transporter verified successfully.');
+      })
+      .catch((err) => {
+        this.logger.warn(
+          `Email transporter verification failed: ${err?.message}`,
+        );
+      });
   }
 
-  private async sendWithTiming(options: nodemailer.SendMailOptions): Promise<void> {
+  private async sendWithTiming(
+    options: nodemailer.SendMailOptions,
+  ): Promise<void> {
     const start = Date.now();
     try {
       const info = await this.transporter.sendMail({
         priority: 'high',
         ...options,
-        from: options.from || `Semaphore 2k25 <${this.configService.get<string>('GMAIL_USER')}>`,
+        from:
+          options.from ||
+          `Semaphore 2k25 <${this.configService.get<string>('GMAIL_USER')}>`,
       });
       const duration = Date.now() - start;
-      this.logger.debug(`Email to ${options.to} accepted by SMTP in ${duration}ms (messageId=${info.messageId}).`);
+      this.logger.debug(
+        `Email to ${options.to} accepted by SMTP in ${duration}ms (messageId=${info.messageId}).`,
+      );
       if (duration > 5000) {
-        this.logger.warn(`Slow email send detected (${duration}ms). Consider switching to a transactional provider (SES/Mailgun/Resend).`);
+        this.logger.warn(
+          `Slow email send detected (${duration}ms). Consider switching to a transactional provider (SES/Mailgun/Resend).`,
+        );
       }
     } catch (error: any) {
       const duration = Date.now() - start;
-      this.logger.error(`Failed to send email to ${options.to} after ${duration}ms: ${error?.message}`);
+      this.logger.error(
+        `Failed to send email to ${options.to} after ${duration}ms: ${error?.message}`,
+      );
       throw error;
     }
   }
 
-  async sendEmail(to: string, subject: string, text: string, html?: string): Promise<void> {
+  async sendEmail(
+    to: string,
+    subject: string,
+    text: string,
+    html?: string,
+  ): Promise<void> {
     await this.sendWithTiming({ to, subject, text, html });
   }
 
@@ -144,7 +167,7 @@ export class EmailService {
     name: string,
     userId: string,
   ): Promise<void> {
-  const resetLink = `${this.configService.get<string>('EMAIL_VERIFY_HOST')}/change-password?userId=${userId}`;
+    const resetLink = `${this.configService.get<string>('EMAIL_VERIFY_HOST')}/change-password?userId=${userId}`;
     const body = `<h1>Hello ${name},</h1><p>We received a request to reset your password for your account at <strong>Semaphore 2k25</strong>. If you did not request this change, you can safely ignore this email.</p><p>To reset your password, click the link below:</p><p><a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p><p>If the button above does not work, copy and paste the following URL into your web browser:</p<p>${resetLink}</p><p><strong>Note:</strong> This password reset link is valid for 24 hours. After that, you will need to request a new link.</p><p>If you have any questions or need further assistance, feel free to contact us.</p><p>With warm regards,<br>The Semaphore 2k25 Team</p>`;
 
     const mailOptions = {
