@@ -19,9 +19,12 @@ const UpdateCurrentRound = () => {
 
     const { data: totalRounds, isLoading: isTotalRoundsLoading } = useGetData(
         `totalRounds`,
-        `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventMaxRounds?${cached?.userId}`,
+        `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventMaxRounds?userId=${cached?.userId}`,
         useQueryConfig
     );
+
+    console.log(cached?.userId);
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault()

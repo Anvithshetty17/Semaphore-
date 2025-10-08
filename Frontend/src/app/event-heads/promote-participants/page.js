@@ -20,7 +20,7 @@ export default function PromoteScores() {
 
   const { data: totalRounds, isLoading: isTotalRoundsLoading } = useGetData(
     `totalRounds`,
-    `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventMaxRounds?${cached?.userId}`,
+    `${process.env.NEXT_PUBLIC_URL}/web/api/events/v1/GetEventMaxRounds?userId=${cached?.userId}`,
     useQueryConfig
   );
 
