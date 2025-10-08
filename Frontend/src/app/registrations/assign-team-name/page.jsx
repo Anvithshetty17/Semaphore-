@@ -11,7 +11,7 @@ import { toast } from "react-toastify"
 
 const AssignTeamName = () => {
     const { submitData, isLoading: isSubmitting } = useSubmit()
-    const [teamNames, setTeamNames] = useState([])
+    const [teamNames, setTeamNames] = useState({})
     const [editingStates, setEditingStates] = useState({});
     const [filter, setFilter] = useState("all");
     const { data: regCollegeNames, isLoading: isEventLoading } = useGetData(
@@ -22,11 +22,11 @@ const AssignTeamName = () => {
 
     useEffect(() => {
         if (regCollegeNames) {
-            let nameList = []
-            regCollegeNames?.map((ele) => {
-                nameList.push(ele?.teamName)
+            const nameMap = {}
+            regCollegeNames.forEach((ele) => {
+                if (ele?.registrationId) nameMap[ele.registrationId] = ele?.teamName || ''
             })
-            setTeamNames(nameList)
+            setTeamNames(nameMap)
         }
     }, [regCollegeNames])
 
@@ -37,19 +37,19 @@ const AssignTeamName = () => {
         return true;
     });
 
-    const handleClick = async (index, registrationId) => {
+    const handleClick = async (registrationId) => {
         toast.info('Assigning team names .. please wait')
         try {
             const { data } = await submitData(
                 `${process.env.NEXT_PUBLIC_URL}/web/api/registration/v1/AssignTeamName`,
                 {
-                    teamName: teamNames[index],
+                    teamName: teamNames[registrationId],
                     registrationId,
                 }
             )
             if (data) {
                 toast.success('Successfully assigned team names')
-                setEditingStates((prev) => ({ ...prev, [index]: false }));
+                setEditingStates((prev) => ({ ...prev, [registrationId]: false }));
 
             }
         } catch (e) {
@@ -58,15 +58,7 @@ const AssignTeamName = () => {
     }
 
     const handleChangeName = (name, registrationId) => {
-        // Update teamNames for the correct registrationId
-        setTeamNames((prev) => {
-            // Find the index in regCollegeNames
-            const idx = regCollegeNames?.findIndex(ele => ele?.registrationId === registrationId);
-            if (idx === -1) return prev;
-            const nameList = [...prev];
-            nameList[idx] = name;
-            return nameList;
-        });
+        setTeamNames((prev) => ({ ...prev, [registrationId]: name }))
     }
 
     if (isEventLoading) return <Loading />
@@ -87,8 +79,7 @@ const AssignTeamName = () => {
                 </div>
                 {filteredTeams?.map((ele, index) => {
                     return (
-                        <>
-                            <div className={`grid grid-cols-4 gap-x-3 gap-y-6 ${index != filteredTeams?.length - 1 && 'border-b'} p-3`}>
+                        <div key={ele?.registrationId || index} className={`grid grid-cols-4 gap-x-3 gap-y-6 ${index != filteredTeams?.length - 1 && 'border-b'} p-3`}>
                                 <div className="flex flex-col space-y-1 text-[16px] font-dosisRegular">
                                     <p> College Name</p>
                                     <p className="font-dosisMedium"> {ele?.college?.collegeName}</p>
@@ -106,23 +97,23 @@ const AssignTeamName = () => {
                                     <p className="font-dosisMedium"> {ele?.user?.phoneNumber}</p>
                                 </div>
                                 <div className="flex flex-col space-y-1 text-[16px] font-dosisRegular">
-                                {editingStates[index] !== false ? (
+                                {editingStates[ele?.registrationId] !== false ? (
                                         <TextInput
                                             name="teamName"
                                             label={"Team Name"}
                                             placeholder="Enter Team Name"
-                                            value={ele.teamName}
+                                            value={teamNames[ele?.registrationId] ?? ele.teamName}
                                             onChange={(e) => handleChangeName(e.target.value, ele?.registrationId)}
                                         />
                                     ) : (
                                         <span className="py-2 px-3 border border-gray-300 rounded-md">
-                                            {ele.teamName}
+                                            {teamNames[ele?.registrationId] ?? ele.teamName}
                                         </span>
                                     )}
 
-                                    {editingStates[index] !== false && (
+                                    {editingStates[ele?.registrationId] !== false && (
                                         <button
-                                            onClick={() => handleClick(index, ele?.registrationId)}
+                                            onClick={() => handleClick(ele?.registrationId)}
                                             className="bg-blue-950 text-white py-1 px-10 rounded-md text-lg font-dosisMedium hover:bg-blue-700 transition duration-300 cursor-pointer"
                                         >
                                             Update Team Name
@@ -130,8 +121,7 @@ const AssignTeamName = () => {
                                     )}
                                 </div>
                             </div>
-                        </>
-                    )
+                        )
                 })}
             </div>
         </>
