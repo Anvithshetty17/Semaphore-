@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Phone, Mail, MapPin, Shield, Zap, Users, ExternalLink, ArrowLeft, Code, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 const TeamPage = () => {
   const router = useRouter();
@@ -142,17 +143,20 @@ const TeamPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
-      {/* Background with GIF Support */}
+      {/* Background with Animated Horizon Colors */}
       <div className="fixed inset-0 z-0">
-        {/* Add your GIF background here */}
+        {/* Animated Horizon Gradient Background */}
+        <div className="absolute inset-0 animated-horizon-bg"></div>
+        
+        {/* GIF Background Layer */}
         <div className="absolute inset-0">
-           <img src="/images/info.gif" alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/70" /> {/* Overlay for readability */}
+           <img src="/images/info.gif" alt="" className="w-full h-full object-cover opacity-40" />
+          <div className="absolute inset-0 bg-black/60" /> {/* Overlay for readability */}
         </div>
         
         {/* Simple Grid */}
         <div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-15"
           style={{
             backgroundImage: `
               linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
@@ -163,9 +167,31 @@ const TeamPage = () => {
         />
       </div>
 
-      <div className="relative z-10">
-        {/* Back Button */}
-        <div className="absolute top-3 left-3 z-20">
+       <div className="relative z-10">
+        {/* Notification Banner */}
+        <div className="sticky top-0 z-30 bg-gradient-to-r from-purple-900/95 via-pink-900/95 to-purple-900/95 animate-gradient backdrop-blur-xl border-b border-purple-500/30">
+          <div className="container mx-auto px-4 py-3">
+            <div 
+              onClick={() => //window.open('https://drive.google.com/drive/folders/1wlXgkJVJ8qLGHmGWaFBK8YGKvQJ_VmHc?usp=sharing', '_blank')
+                toast.info("Gallery access will be available soon!")}
+              className="group flex items-center justify-center gap-3 cursor-pointer hover-scale transition-all"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-pink-400 rounded-full animate-pulse"></div>
+                <span className="text-white font-mono text-sm tracking-wider transition-colors">
+                  📸 CLICK HERE TO ACCESS FEST PHOTOS
+                </span>
+                <ExternalLink className="w-4 h-4 text-white transition-colors" />
+              </div>
+              <div className="hidden sm:block text-xs text-purple-300/70 font-mono">
+                → GALLERY_ACCESS
+              </div>
+            </div>
+          </div>
+  </div>
+
+  {/* Back Button */}
+        <div className="absolute top-16 left-3 z-20">
           <button
             onClick={() => router.back()}
             className={`group flex items-center gap-2 bg-gradient-to-r from-gray-900/90 to-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-xl px-4 py-2 hover:border-cyan-400/60 hover:from-cyan-900/20 hover:to-purple-900/20 transition-all duration-300 ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
@@ -179,7 +205,7 @@ const TeamPage = () => {
         </div>
 
         {/* Compact Header */}
-        <header className="pt-12 pb-8">
+        <header className="pt-20 pb-8">
           <div className="container mx-auto px-6 text-center">
             <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 md:-translate-x-12 ">
@@ -648,6 +674,50 @@ const TeamPage = () => {
         .glitch-overlay.red { background: rgba(239,68,68,0.15); mix-blend-mode: multiply; }
         .glitch-overlay.green { background: rgba(74,222,128,0.15); mix-blend-mode: color-dodge; }
         .glitch-scanlines { position: absolute; inset: 0; background: repeating-linear-gradient( 0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px ); opacity: .35; border-radius: inherit; }
+
+        /* Animated Horizon Background */
+        .animated-horizon-bg {
+          background: linear-gradient(
+            45deg,
+            #1a0b2e,  /* Dark purple */
+            #16213e,  /* Dark blue */
+            #2d1b69,  /* Deep purple */
+            #0f3460,  /* Dark navy */
+            #3c1874,  /* Dark violet */
+            #1e3a5f,  /* Dark blue-gray */
+            #4a1c7e,  /* Dark magenta */
+            #2a1810   /* Dark brown-purple */
+          );
+          background-size: 800% 800%;
+          animation: horizonFlow 20s ease-in-out infinite;
+        }
+
+        @keyframes horizonFlow {
+          0% { 
+            background-position: 0% 50%;
+            filter: hue-rotate(0deg) brightness(0.7);
+          }
+          20% { 
+            background-position: 100% 0%;
+            filter: hue-rotate(60deg) brightness(0.8);
+          }
+          40% { 
+            background-position: 50% 100%;
+            filter: hue-rotate(120deg) brightness(0.6);
+          }
+          60% { 
+            background-position: 0% 50%;
+            filter: hue-rotate(180deg) brightness(0.9);
+          }
+          80% { 
+            background-position: 100% 0%;
+            filter: hue-rotate(240deg) brightness(0.7);
+          }
+          100% { 
+            background-position: 0% 50%;
+            filter: hue-rotate(360deg) brightness(0.7);
+          }
+        }
 
         /* Sequential rules timeline */
         .rules-list { position: relative; }
