@@ -31,6 +31,7 @@ const DetailsWidget = () => {
     return (
         <>
             {eventTeam?.eventMembers?.map((ele, index) => {
+                if(ele.memberName!='')
                 return (
                     <div key={index} className="grid grid-cols-3 gap-3 border rounded-lg bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  p-4">
                         <div className="flex flex-col space-y-2">
