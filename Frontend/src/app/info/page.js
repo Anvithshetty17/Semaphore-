@@ -172,8 +172,9 @@ const TeamPage = () => {
         <div className="sticky top-0 z-30 bg-gradient-to-r from-purple-900/95 via-pink-900/95 to-purple-900/95 animate-gradient backdrop-blur-xl border-b border-purple-500/30">
           <div className="container mx-auto px-4 py-3">
             <div 
-              onClick={() => //window.open('https://drive.google.com/drive/folders/1wlXgkJVJ8qLGHmGWaFBK8YGKvQJ_VmHc?usp=sharing', '_blank')
-                toast.info("Gallery access will be available soon!")}
+              onClick={() => window.open('https://drive.google.com/drive/folders/1gqKQ0R0eZS5eIvdHEvH-DL0rj2UE82Ob', '_blank')
+                //toast.info("Gallery access will be available soon!")
+                }
               className="group flex items-center justify-center gap-3 cursor-pointer hover-scale transition-all"
             >
               <div className="flex items-center gap-2">
